@@ -26,7 +26,7 @@ body {
   min-height: 100vh;
   font-family: "Inter", sans-serif;
   color: var(--ink);
-  background: linear-gradient(180deg, #f8fbff 0%, var(--bg) 42%, #f0f4fa 100%);
+  background: #dfdfdf;
   overflow-x: hidden;
 }
 
@@ -126,22 +126,123 @@ button {
   color: var(--primary);
 }
 
+.header-auth {
+  position: relative;
+  justify-self: end;
+}
+
 .header-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 42px;
+  border: none;
   border-radius: 10px;
   padding: 0.4rem 0.95rem;
   background: var(--accent);
   color: #fff;
   font-size: 0.9rem;
   font-weight: 700;
+  cursor: pointer;
   box-shadow: 0 8px 18px rgba(237, 137, 22, 0.28);
 }
 
 .header-cta:hover {
   filter: brightness(0.97);
+}
+
+.auth-popover {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: min(380px, calc(100vw - 1.2rem));
+  border: 1px solid #d7e2f0;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 28px 46px rgba(19, 45, 84, 0.2);
+  padding: 0.8rem;
+  z-index: 25;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+  margin-bottom: 0.65rem;
+}
+
+.auth-tab {
+  min-height: 36px;
+  border: 1px solid #d4e0ed;
+  border-radius: 9px;
+  background: #f6f9fe;
+  color: #456182;
+  font-size: 0.87rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-tab.active {
+  background: #eaf7f9;
+  border-color: #8ec8d0;
+  color: #0f5f71;
+}
+
+.auth-form {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.auth-form label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #546a84;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+  width: 100%;
+  min-height: 38px;
+  border: 1px solid #d4e0ed;
+  border-radius: 9px;
+  background: #f9fbff;
+  padding: 0.42rem 0.58rem;
+  font: inherit;
+}
+
+.auth-form .auth-check {
+  margin: 0.2rem 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  font-size: 0.79rem;
+  color: #556d88;
+}
+
+.auth-form .auth-check input {
+  margin-top: 0.1rem;
+  accent-color: var(--primary);
+}
+
+.auth-submit {
+  min-height: 40px;
+  border: none;
+  border-radius: 9px;
+  background: var(--primary);
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-submit:hover {
+  filter: brightness(0.96);
+}
+
+.auth-note {
+  margin: 0.55rem 0 0;
+  color: #5c728e;
+  font-size: 0.76rem;
 }
 
 .hero {
@@ -989,6 +1090,11 @@ body.question-format .consent-check {
     min-height: 38px;
     padding: 0.35rem 0.66rem;
     font-size: 0.79rem;
+  }
+
+  .auth-popover {
+    right: -0.2rem;
+    top: calc(100% + 8px);
   }
 
   .hero-copy {

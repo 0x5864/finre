@@ -135,6 +135,12 @@ const state = {
 };
 
 const ui = {
+  authToggle: document.getElementById("authToggle"),
+  authPopover: document.getElementById("authPopover"),
+  signinTabButton: document.getElementById("signinTabButton"),
+  signupTabButton: document.getElementById("signupTabButton"),
+  signinForm: document.getElementById("signinForm"),
+  signupForm: document.getElementById("signupForm"),
   apiBase: document.getElementById("apiBase"),
   stepLabel: document.getElementById("stepLabel"),
   stepCounter: document.getElementById("stepCounter"),
@@ -165,6 +171,7 @@ ui.consentCheckbox.addEventListener("change", updatePrimaryActionState);
 ui.restartButton.addEventListener("click", () => {
   void restartFlow();
 });
+setupAuthUi();
 
 void boot();
 
@@ -294,6 +301,7 @@ async function onNext() {
 }
 
 function renderConsent() {
+  closeAuthPopover();
   ui.resultView.classList.add("hidden");
   ui.questionView.classList.add("hidden");
   ui.consentView.classList.remove("hidden");
@@ -311,6 +319,7 @@ function renderConsent() {
 }
 
 function renderQuestion() {
+  closeAuthPopover();
   ui.resultView.classList.add("hidden");
   ui.consentView.classList.add("hidden");
   ui.questionView.classList.remove("hidden");
@@ -697,6 +706,7 @@ function resolvePlan90(level) {
 }
 
 function renderResult(data, source) {
+  closeAuthPopover();
   state.phase = "result";
   document.body.classList.remove("question-format");
   ui.consentView.classList.add("hidden");
@@ -866,6 +876,155 @@ async function fetchSessionAssessment(sessionId) {
   }
 
   return response.json();
+}
+
+function setupAuthUi() {
+  if (
+    !ui.authToggle ||
+    !ui.authPopover ||
+    !ui.signinTabButton ||
+    !ui.signupTabButton ||
+    !ui.signinForm ||
+    !ui.signupForm
+  ) {
+    return;
+  }
+
+  ui.authToggle.addEventListener("click", () => {
+    const isHidden = ui.authPopover.classList.contains("hidden");
+    if (isHidden) {
+      ui.authPopover.classList.remove("hidden");
+      ui.authToggle.setAttribute("aria-expanded", "true");
+      toggleAuthTab("signin");
+      return;
+    }
+
+    closeAuthPopover();
+  });
+
+  ui.signinTabButton.addEventListener("click", () => {
+    toggleAuthTab("signin");
+  });
+
+  ui.signupTabButton.addEventListener("click", () => {
+    toggleAuthTab("signup");
+  });
+
+  ui.signinForm.addEventListener("submit", handleSignInSubmit);
+  ui.signupForm.addEventListener("submit", handleSignUpSubmit);
+
+  ui.authPopover.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!target || !(target instanceof Node)) {
+      return;
+    }
+
+    if (ui.authPopover.classList.contains("hidden")) {
+      return;
+    }
+
+    if (ui.authPopover.contains(target) || ui.authToggle.contains(target)) {
+      return;
+    }
+
+    closeAuthPopover();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeAuthPopover();
+    }
+  });
+}
+
+function toggleAuthTab(tabName) {
+  const isSignIn = tabName === "signin";
+
+  ui.signinTabButton.classList.toggle("active", isSignIn);
+  ui.signupTabButton.classList.toggle("active", !isSignIn);
+  ui.signinTabButton.setAttribute("aria-selected", String(isSignIn));
+  ui.signupTabButton.setAttribute("aria-selected", String(!isSignIn));
+  ui.signinForm.classList.toggle("hidden", !isSignIn);
+  ui.signupForm.classList.toggle("hidden", isSignIn);
+}
+
+function handleSignInSubmit(event) {
+  event.preventDefault();
+
+  const formData = new FormData(ui.signinForm);
+  const email = String(formData.get("email") || "").trim();
+  const password = String(formData.get("password") || "");
+
+  if (!isValidEmail(email)) {
+    alert("Lutfen gecerli bir e-posta gir.");
+    return;
+  }
+
+  if (password.length < 6) {
+    alert("Sifre en az 6 karakter olmalidir.");
+    return;
+  }
+
+  alert(`Hos geldin ${email}. Giris basarili (demo).`);
+  ui.signinForm.reset();
+  closeAuthPopover();
+}
+
+function handleSignUpSubmit(event) {
+  event.preventDefault();
+
+  const formData = new FormData(ui.signupForm);
+  const fullName = String(formData.get("full_name") || "").trim();
+  const email = String(formData.get("email") || "").trim();
+  const password = String(formData.get("password") || "");
+  const passwordAgain = String(formData.get("password_again") || "");
+  const hasConsent = formData.get("consent") === "on";
+
+  if (fullName.length < 3) {
+    alert("Ad Soyad en az 3 karakter olmalidir.");
+    return;
+  }
+
+  if (!isValidEmail(email)) {
+    alert("Lutfen gecerli bir e-posta gir.");
+    return;
+  }
+
+  if (password.length < 6) {
+    alert("Sifre en az 6 karakter olmalidir.");
+    return;
+  }
+
+  if (password !== passwordAgain) {
+    alert("Sifreler ayni olmalidir.");
+    return;
+  }
+
+  if (!hasConsent) {
+    alert("Devam etmek icin sozlesme onayi gerekli.");
+    return;
+  }
+
+  alert(`Kayit olusturuldu: ${fullName} (demo).`);
+  ui.signupForm.reset();
+  closeAuthPopover();
+}
+
+function closeAuthPopover() {
+  if (!ui.authPopover || !ui.authToggle) {
+    return;
+  }
+
+  ui.authPopover.classList.add("hidden");
+  ui.authToggle.setAttribute("aria-expanded", "false");
+}
+
+function isValidEmail(value) {
+  return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value);
 }
 
 function metaTextForQuestion(question) {

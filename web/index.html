@@ -29,7 +29,99 @@
           <a href="#rehberler">Rehberler</a>
         </nav>
 
-        <a class="header-cta" href="#planlama-akisi">Ucretsiz Basla</a>
+        <div class="header-auth">
+          <button
+            id="authToggle"
+            class="header-cta"
+            type="button"
+            aria-haspopup="dialog"
+            aria-expanded="false"
+            aria-controls="authPopover"
+          >
+            GIRIS
+          </button>
+
+          <section id="authPopover" class="auth-popover hidden" aria-label="Kullanici girisi">
+            <div class="auth-tabs" role="tablist" aria-label="Kimlik dogrulama sekmeleri">
+              <button
+                id="signinTabButton"
+                class="auth-tab active"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="signinForm"
+                data-auth-tab="signin"
+              >
+                Giris Yap
+              </button>
+              <button
+                id="signupTabButton"
+                class="auth-tab"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="signupForm"
+                data-auth-tab="signup"
+              >
+                Kayit Ol
+              </button>
+            </div>
+
+            <form id="signinForm" class="auth-form" novalidate>
+              <label for="signinEmail">E-posta</label>
+              <input id="signinEmail" name="email" type="email" autocomplete="email" required />
+
+              <label for="signinPassword">Sifre</label>
+              <input
+                id="signinPassword"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                minlength="6"
+                required
+              />
+
+              <button class="auth-submit" type="submit">Giris Yap</button>
+            </form>
+
+            <form id="signupForm" class="auth-form hidden" novalidate>
+              <label for="signupFullName">Ad Soyad</label>
+              <input id="signupFullName" name="full_name" type="text" autocomplete="name" required />
+
+              <label for="signupEmail">E-posta</label>
+              <input id="signupEmail" name="email" type="email" autocomplete="email" required />
+
+              <label for="signupPassword">Sifre</label>
+              <input
+                id="signupPassword"
+                name="password"
+                type="password"
+                autocomplete="new-password"
+                minlength="6"
+                required
+              />
+
+              <label for="signupPasswordAgain">Sifre (Tekrar)</label>
+              <input
+                id="signupPasswordAgain"
+                name="password_again"
+                type="password"
+                autocomplete="new-password"
+                minlength="6"
+                required
+              />
+
+              <label class="auth-check">
+                <input id="signupConsent" name="consent" type="checkbox" required />
+                <span>Kullanici sozlesmesi ve KVKK metnini kabul ediyorum.</span>
+              </label>
+
+              <button class="auth-submit" type="submit">Kayit Ol</button>
+            </form>
+
+            <p class="auth-note">Bu alan demo amaclidir; backend kimlik dogrulama baglanabilir.</p>
+          </section>
+        </div>
       </div>
     </header>
 
