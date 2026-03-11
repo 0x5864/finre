@@ -1,0 +1,24 @@
+# OS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Local data
+*.sqlite3
+*.log
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Build and temp
+dist/
+build/
+tmp/
+*.tmp

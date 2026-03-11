@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finre Compass</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,700&family=IBM+Plex+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="noise"></div>
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+
+    <main class="layout">
+      <aside class="story-panel reveal">
+        <p class="eyebrow">finre compass</p>
+        <h1>Kendine uygun finans plani icin baslayalim.</h1>
+        <p class="lead">
+          Bu akista seni adim adim taniyoruz. Cevaplarina gore ilk 90 gunluk
+          yol haritasi olusuyor.
+        </p>
+
+        <ul class="timeline">
+          <li>Profil ve gelir netlesir</li>
+          <li>Gider ve borc resmi cikar</li>
+          <li>Skor ve oncelik plani verilir</li>
+        </ul>
+
+        <div class="api-box">
+          <label for="apiBase">API adresi</label>
+          <input
+            id="apiBase"
+            name="apiBase"
+            type="url"
+            value="http://127.0.0.1:8000"
+            autocomplete="off"
+          />
+          <p class="hint">API calismazsa yerel fallback hesap kullanilir.</p>
+        </div>
+      </aside>
+
+      <section class="card reveal delay-1" aria-live="polite">
+        <header class="card-header">
+          <p id="stepLabel" class="step-label">Hazirlik</p>
+          <p id="stepCounter" class="step-counter">Adim 0 / 0</p>
+        </header>
+
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+          <span id="progressFill"></span>
+        </div>
+
+        <section id="consentView" class="consent-view">
+          <h2>KVKK ve acik riza</h2>
+          <p class="question-meta">
+            Bu akista girdigin veriler sadece finansal yol haritasi uretmek icin
+            kullanilir.
+          </p>
+          <ul class="consent-list">
+            <li>Veri toplama amaci: ihtiyac analizi ve oneri olusturma.</li>
+            <li>Veri saklama suresi: urun gelistirme asamasinda sinirli.</li>
+            <li>Diledigin zaman verinin silinmesini talep edebilirsin.</li>
+          </ul>
+          <label class="consent-check">
+            <input id="consentCheckbox" type="checkbox" />
+            <span>KVKK metnini okudum, acik riza veriyorum.</span>
+          </label>
+        </section>
+
+        <section id="questionView" class="question-view hidden">
+          <div class="question-hero">
+            <button id="questionBackButton" class="hero-back" type="button" aria-label="Geri">
+              &#x2039;
+            </button>
+            <div class="hero-logo" aria-hidden="true">f</div>
+          </div>
+          <h2 id="questionTitle">Sorular yukleniyor...</h2>
+          <p id="questionMeta" class="question-meta">Ben...</p>
+          <div id="answerArea" class="answer-area"></div>
+        </section>
+
+        <section id="resultView" class="result-view hidden">
+          <h2 id="resultLevel">Sonuc</h2>
+          <p id="resultScore" class="result-score"></p>
+          <div id="scoreGrid" class="score-grid"></div>
+
+          <div class="result-columns">
+            <article>
+              <h3>Ilk 3 oncelik</h3>
+              <ul id="priorityList"></ul>
+            </article>
+            <article>
+              <h3>30-60-90 gun</h3>
+              <div id="plans"></div>
+            </article>
+          </div>
+
+          <p id="resultDisclaimer" class="disclaimer"></p>
+          <button id="restartButton" class="ghost" type="button">Yeniden basla</button>
+        </section>
+
+        <footer class="actions">
+          <button id="prevButton" class="ghost" type="button">Geri</button>
+          <button id="nextButton" class="solid" type="button">Onayi ver ve basla</button>
+        </footer>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

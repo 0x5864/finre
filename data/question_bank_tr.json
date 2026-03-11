@@ -1,0 +1,308 @@
+[
+  {
+    "id": "q01",
+    "section": "profil",
+    "prompt": "Yaş aralığın nedir?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["18-24", "25-34", "35-44", "45-54", "55+"]
+  },
+  {
+    "id": "q02",
+    "section": "profil",
+    "prompt": "Çalışma durumun nedir?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Tam zamanlı", "Yarı zamanlı", "Serbest", "İşsiz", "Öğrenci"]
+  },
+  {
+    "id": "q03",
+    "section": "profil",
+    "prompt": "Medeni durumun nedir?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Bekar", "Evli", "Diğer"]
+  },
+  {
+    "id": "q04",
+    "section": "profil",
+    "prompt": "Kaç kişiye finansal destek veriyorsun?",
+    "answer_type": "number",
+    "required": true
+  },
+  {
+    "id": "q05",
+    "section": "profil",
+    "prompt": "Yaşadığın şehir büyük gider baskısı yaratıyor mu?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Evet", "Kısmen", "Hayır"]
+  },
+  {
+    "id": "q06",
+    "section": "profil",
+    "prompt": "Gelirin düzenli mi, düzensiz mi?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Düzenli", "Kısmen düzenli", "Düzensiz"]
+  },
+  {
+    "id": "q07",
+    "section": "gelir",
+    "prompt": "Aylık net gelir tutarın nedir?",
+    "answer_type": "currency",
+    "required": true
+  },
+  {
+    "id": "q08",
+    "section": "gelir",
+    "prompt": "Ek gelir kaynağın var mı?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Evet", "Hayır"]
+  },
+  {
+    "id": "q09",
+    "section": "gelir",
+    "prompt": "Ek gelir ne kadar düzenli?",
+    "answer_type": "single_choice",
+    "required": false,
+    "options": ["Her ay", "Ara sıra", "Düzensiz"]
+  },
+  {
+    "id": "q10",
+    "section": "gelir",
+    "prompt": "Son 6 ayda gelirinde düşüş oldu mu?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Evet", "Hayır"]
+  },
+  {
+    "id": "q11",
+    "section": "gelir",
+    "prompt": "Son 6 ayda gelirinde artış oldu mu?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Evet", "Hayır"]
+  },
+  {
+    "id": "q12",
+    "section": "gelir",
+    "prompt": "Gelecek 6 ay için gelir beklentin nasıl?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Artar", "Aynı kalır", "Azalır"]
+  },
+  {
+    "id": "q13",
+    "section": "gider",
+    "prompt": "Aylık kira veya konut giderin ne kadar?",
+    "answer_type": "currency",
+    "required": true
+  },
+  {
+    "id": "q14",
+    "section": "gider",
+    "prompt": "Aylık fatura toplamın ne kadar?",
+    "answer_type": "currency",
+    "required": true
+  },
+  {
+    "id": "q15",
+    "section": "gider",
+    "prompt": "Aylık gıda giderin ne kadar?",
+    "answer_type": "currency",
+    "required": true
+  },
+  {
+    "id": "q16",
+    "section": "gider",
+    "prompt": "Aylık ulaşım giderin ne kadar?",
+    "answer_type": "currency",
+    "required": true
+  },
+  {
+    "id": "q17",
+    "section": "gider",
+    "prompt": "Aylık sağlık giderin ne kadar?",
+    "answer_type": "currency",
+    "required": true
+  },
+  {
+    "id": "q18",
+    "section": "gider",
+    "prompt": "Aylık eğitim giderin ne kadar?",
+    "answer_type": "currency",
+    "required": true
+  },
+  {
+    "id": "q19",
+    "section": "gider",
+    "prompt": "Aylık eğlence ve sosyal harcaman ne kadar?",
+    "answer_type": "currency",
+    "required": true
+  },
+  {
+    "id": "q20",
+    "section": "gider",
+    "prompt": "Ay sonunda düzenli para artırabiliyor musun?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Her ay", "Bazı aylar", "Nadiren", "Hiç"]
+  },
+  {
+    "id": "q21",
+    "section": "borc",
+    "prompt": "Kredi kartı borcun var mı?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Evet", "Hayır"]
+  },
+  {
+    "id": "q22",
+    "section": "borc",
+    "prompt": "İhtiyaç kredisi borcun var mı?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Evet", "Hayır"]
+  },
+  {
+    "id": "q23",
+    "section": "borc",
+    "prompt": "Konut veya taşıt kredin var mı?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Evet", "Hayır"]
+  },
+  {
+    "id": "q24",
+    "section": "borc",
+    "prompt": "Toplam borç tutarın nedir?",
+    "answer_type": "currency",
+    "required": true
+  },
+  {
+    "id": "q25",
+    "section": "borc",
+    "prompt": "Aylık toplam borç ödemen ne kadar?",
+    "answer_type": "currency",
+    "required": true
+  },
+  {
+    "id": "q26",
+    "section": "borc",
+    "prompt": "Son 3 ayda geciken ödeme oldu mu?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Evet", "Hayır"]
+  },
+  {
+    "id": "q27",
+    "section": "borc",
+    "prompt": "Borç faizleri seni zorluyor mu?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Çok", "Biraz", "Hayır"]
+  },
+  {
+    "id": "q28",
+    "section": "borc",
+    "prompt": "Yakın dönemde yeni borç alma ihtimalin var mı?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Yüksek", "Orta", "Düşük"]
+  },
+  {
+    "id": "q29",
+    "section": "birikim",
+    "prompt": "Nakit birikimin var mı?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Evet", "Hayır"]
+  },
+  {
+    "id": "q30",
+    "section": "birikim",
+    "prompt": "Birikimin kaç aylık temel giderini karşılar?",
+    "answer_type": "number",
+    "required": true
+  },
+  {
+    "id": "q31",
+    "section": "birikim",
+    "prompt": "Acil durumlar için ayrı hesap kullanıyor musun?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Evet", "Hayır"]
+  },
+  {
+    "id": "q32",
+    "section": "birikim",
+    "prompt": "Sağlık veya hayat sigortan var mı?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Evet", "Hayır"]
+  },
+  {
+    "id": "q33",
+    "section": "birikim",
+    "prompt": "Beklenmedik masraf çıkarsa ilk ne yaparsın?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Birikim kullanırım", "Borç alırım", "Harcamayı ertelerim"]
+  },
+  {
+    "id": "q34",
+    "section": "hedef",
+    "prompt": "En önemli kısa vadeli finans hedefin nedir?",
+    "answer_type": "text",
+    "required": true
+  },
+  {
+    "id": "q35",
+    "section": "hedef",
+    "prompt": "En önemli orta vadeli finans hedefin nedir?",
+    "answer_type": "text",
+    "required": true
+  },
+  {
+    "id": "q36",
+    "section": "hedef",
+    "prompt": "Bu hedefe ulaşma tarihi belirledin mi?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Evet", "Hayır"]
+  },
+  {
+    "id": "q37",
+    "section": "davranis",
+    "prompt": "Risk alırken kendini nasıl tanımlarsın?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Düşük risk", "Orta risk", "Yüksek risk"]
+  },
+  {
+    "id": "q38",
+    "section": "davranis",
+    "prompt": "Harcamayı planlı mı yoksa anlık mı yaparsın?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Planlı", "Karışık", "Anlık"]
+  },
+  {
+    "id": "q39",
+    "section": "davranis",
+    "prompt": "Finans konuşurken stres seviyen nedir?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Düşük", "Orta", "Yüksek"]
+  },
+  {
+    "id": "q40",
+    "section": "davranis",
+    "prompt": "Finansal karar verirken en çok zorlandığın konu nedir?",
+    "answer_type": "single_choice",
+    "required": true,
+    "options": ["Bütçe", "Borç", "Birikim", "Yatırım", "Disiplin"]
+  }
+]
