@@ -2,111 +2,111 @@ const FALLBACK_QUESTIONS = [
   {
     id: "q07",
     section: "gelir",
-    prompt: "Aylik net gelir tutarin nedir?",
+    prompt: "Aylık net gelir tutarın nedir?",
     answer_type: "currency",
     required: true,
   },
   {
     id: "q13",
     section: "gider",
-    prompt: "Aylik kira veya konut giderin ne kadar?",
+    prompt: "Aylık kira veya konut giderin ne kadar?",
     answer_type: "currency",
     required: true,
   },
   {
     id: "q14",
     section: "gider",
-    prompt: "Aylik fatura toplamin ne kadar?",
+    prompt: "Aylık fatura toplamın ne kadar?",
     answer_type: "currency",
     required: true,
   },
   {
     id: "q15",
     section: "gider",
-    prompt: "Aylik gida giderin ne kadar?",
+    prompt: "Aylık gıda giderin ne kadar?",
     answer_type: "currency",
     required: true,
   },
   {
     id: "q16",
     section: "gider",
-    prompt: "Aylik ulasim giderin ne kadar?",
+    prompt: "Aylık ulaşım giderin ne kadar?",
     answer_type: "currency",
     required: true,
   },
   {
     id: "q17",
     section: "gider",
-    prompt: "Aylik saglik giderin ne kadar?",
+    prompt: "Aylık sağlık giderin ne kadar?",
     answer_type: "currency",
     required: true,
   },
   {
     id: "q18",
     section: "gider",
-    prompt: "Aylik egitim giderin ne kadar?",
+    prompt: "Aylık eğitim giderin ne kadar?",
     answer_type: "currency",
     required: true,
   },
   {
     id: "q19",
     section: "gider",
-    prompt: "Aylik eglence ve sosyal harcaman ne kadar?",
+    prompt: "Aylık eğlence ve sosyal harcaman ne kadar?",
     answer_type: "currency",
     required: true,
   },
   {
     id: "q20",
     section: "davranis",
-    prompt: "Ay sonunda duzenli para artirabiliyor musun?",
+    prompt: "Ay sonunda düzenli para artırabiliyor musun?",
     answer_type: "single_choice",
     required: true,
-    options: ["Her ay", "Bazi aylar", "Nadiren", "Hic"],
+    options: ["Her ay", "Bazı aylar", "Nadiren", "Hiç"],
   },
   {
     id: "q25",
     section: "borc",
-    prompt: "Aylik toplam borc odemen ne kadar?",
+    prompt: "Aylık toplam borç ödemen ne kadar?",
     answer_type: "currency",
     required: true,
   },
   {
     id: "q26",
     section: "borc",
-    prompt: "Son 3 ayda geciken odeme oldu mu?",
+    prompt: "Son 3 ayda geciken ödeme oldu mu?",
     answer_type: "single_choice",
     required: true,
-    options: ["Evet", "Hayir"],
+    options: ["Evet", "Hayır"],
   },
   {
     id: "q30",
     section: "birikim",
-    prompt: "Birikimin kac aylik temel giderini karsilar?",
+    prompt: "Birikimin kaç aylık temel giderini karşılar?",
     answer_type: "number",
     required: true,
   },
   {
     id: "q34",
     section: "hedef",
-    prompt: "En onemli kisa vadeli finans hedefin nedir?",
+    prompt: "En önemli kısa vadeli finans hedefin nedir?",
     answer_type: "text",
     required: true,
   },
   {
     id: "q36",
     section: "hedef",
-    prompt: "Bu hedefe ulasma tarihi belirledin mi?",
+    prompt: "Bu hedefe ulaşma tarihi belirledin mi?",
     answer_type: "single_choice",
     required: true,
-    options: ["Evet", "Hayir"],
+    options: ["Evet", "Hayır"],
   },
   {
     id: "q38",
     section: "davranis",
-    prompt: "Harcamayi planli mi yoksa anlik mi yaparsin?",
+    prompt: "Harcamayı planlı mı yoksa anlık mı yaparsın?",
     answer_type: "single_choice",
     required: true,
-    options: ["Planli", "Karisik", "Anlik"],
+    options: ["Planlı", "Karışık", "Anlık"],
   },
 ];
 
@@ -114,10 +114,10 @@ const SECTION_LABELS = {
   profil: "Profil",
   gelir: "Gelir",
   gider: "Gider",
-  borc: "Borc",
+  borc: "Borç",
   birikim: "Birikim",
   hedef: "Hedef",
-  davranis: "Davranis",
+  davranis: "Davranış",
 };
 
 const DEFAULT_API_BASE = "http://127.0.0.1:8000";
@@ -270,7 +270,7 @@ async function onNext() {
 
   if (state.phase === "consent") {
     if (!ui.consentCheckbox.checked) {
-      alert("Devam etmek icin acik riza onayi vermelisin.");
+      alert("Devam etmek için açık rıza onayı vermelisin.");
       return;
     }
 
@@ -308,14 +308,14 @@ function renderConsent() {
 
   document.body.classList.remove("question-format");
   ui.stepLabel.textContent = "KVKK";
-  ui.stepCounter.textContent = "Adim 1 / 1";
+  ui.stepCounter.textContent = "Adım 1 / 1";
   ui.progressFill.style.width = "0%";
 
   ui.prevButton.disabled = true;
   ui.prevButton.classList.add("hidden");
   ui.nextButton.disabled = !ui.consentCheckbox.checked;
   ui.nextButton.classList.remove("hidden");
-  ui.nextButton.textContent = "Onayi ver ve basla";
+  ui.nextButton.textContent = "Onayı ver ve başla";
 }
 
 function renderQuestion() {
@@ -342,7 +342,7 @@ function renderQuestion() {
 
   ui.prevButton.classList.add("hidden");
   ui.nextButton.classList.remove("hidden");
-  ui.nextButton.textContent = step === total ? "Sonucu goster" : "Continue";
+  ui.nextButton.textContent = step === total ? "Sonucu göster" : "Devam Et";
   updatePrimaryActionState();
 }
 
@@ -391,7 +391,7 @@ function renderInputForQuestion(question, previousValue) {
     input.className = "input";
     input.min = "0";
     input.step = "1";
-    input.placeholder = "Deger gir";
+    input.placeholder = "Değer gir";
     if (previousValue !== undefined) {
       input.value = String(previousValue);
     }
@@ -404,7 +404,7 @@ function renderInputForQuestion(question, previousValue) {
     const textarea = document.createElement("textarea");
     textarea.className = "textarea";
     textarea.maxLength = 260;
-    textarea.placeholder = "Kisa ve net yaz";
+    textarea.placeholder = "Kısa ve net yaz";
     if (previousValue !== undefined) {
       textarea.value = String(previousValue);
     }
@@ -430,7 +430,7 @@ function persistCurrentAnswer() {
   if (question.answer_type === "single_choice") {
     const selected = ui.answerArea.querySelector(".choice.selected");
     if (!selected && question.required) {
-      alert("Devam etmek icin bir secim yap.");
+      alert("Devam etmek için bir seçim yap.");
       return false;
     }
     if (selected) {
@@ -443,12 +443,12 @@ function persistCurrentAnswer() {
     const input = ui.answerArea.querySelector("input");
     const raw = input ? input.value : "";
     if (!raw && question.required) {
-      alert("Devam etmek icin bir deger gir.");
+      alert("Devam etmek için bir değer gir.");
       return false;
     }
     const parsed = Number(raw);
     if (!Number.isFinite(parsed) || parsed < 0) {
-      alert("Lutfen gecerli bir sayi gir.");
+      alert("Lütfen geçerli bir sayı gir.");
       return false;
     }
     state.answers[question.id] = parsed;
@@ -459,7 +459,7 @@ function persistCurrentAnswer() {
     const textarea = ui.answerArea.querySelector("textarea");
     const value = textarea ? textarea.value.trim() : "";
     if (!value && question.required) {
-      alert("Bu alan bos birakilamaz.");
+      alert("Bu alan boş bırakılamaz.");
       return false;
     }
     state.answers[question.id] = value;
@@ -469,7 +469,7 @@ function persistCurrentAnswer() {
   const input = ui.answerArea.querySelector("input");
   const value = input ? input.value.trim() : "";
   if (!value && question.required) {
-    alert("Bu alan bos birakilamaz.");
+    alert("Bu alan boş bırakılamaz.");
     return false;
   }
   state.answers[question.id] = value;
@@ -478,7 +478,7 @@ function persistCurrentAnswer() {
 
 async function submitAssessment() {
   ui.nextButton.disabled = true;
-  ui.nextButton.textContent = "Hesaplaniyor...";
+  ui.nextButton.textContent = "Hesaplanıyor...";
 
   try {
     if (state.sessionId) {
@@ -514,7 +514,7 @@ async function submitAssessment() {
     renderResult(localData, "local-fallback");
   } finally {
     ui.nextButton.disabled = false;
-    ui.nextButton.textContent = "Sonucu goster";
+    ui.nextButton.textContent = "Sonucu göster";
   }
 }
 
@@ -576,7 +576,7 @@ function runLocalAssessment(payload) {
       plan_60_days: resolvePlan60(level),
       plan_90_days: resolvePlan90(level),
     },
-    disclaimer: "Bu cikti bilgi amaclidir ve yatirim tavsiyesi degildir.",
+    disclaimer: "Bu çıktı bilgi amaçlıdır ve yatırım tavsiyesi değildir.",
   };
 }
 
@@ -627,16 +627,16 @@ function scoreGoalDiscipline(isClear, hasDate, savesMonthly, tracks) {
 function resolveLevel(total) {
   if (total <= 39) return "Acil Toparlanma";
   if (total <= 59) return "Denge Kurma";
-  if (total <= 79) return "Guclendirme";
-  return "Buyume";
+  if (total <= 79) return "Güçlendirme";
+  return "Büyüme";
 }
 
 function resolvePriorities(scores) {
   const list = [
-    [scores.cash_flow, "Aylik gelir-gider farkini pozitife cevir."],
-    [scores.debt_pressure, "Borclari gelir oranina gore yeniden planla."],
-    [scores.safety_buffer, "Acil durum fonunu en az 3 aya cikar."],
-    [scores.goal_discipline, "Net hedef ve tarih belirleyip aylik takip yap."],
+    [scores.cash_flow, "Aylık gelir-gider farkını pozitife çevir."],
+    [scores.debt_pressure, "Borçları gelir oranına göre yeniden planla."],
+    [scores.safety_buffer, "Acil durum fonunu en az 3 aya çıkar."],
+    [scores.goal_discipline, "Net hedef ve tarih belirleyip aylık takip yap."],
   ];
 
   return list
@@ -648,19 +648,19 @@ function resolvePriorities(scores) {
 function resolvePlan30(level) {
   if (level === "Acil Toparlanma") {
     return [
-      "Tum giderleri yaz ve zorunlu olmayani azalt.",
-      "Borc takvimini netlestir.",
-      "Kucuk bir acil durum hesabi ac.",
+      "Tüm giderleri yaz ve zorunlu olmayanı azalt.",
+      "Borç takvimini netleştir.",
+      "Küçük bir acil durum hesabı aç.",
     ];
   }
 
   if (level === "Denge Kurma") {
-    return ["Aylik butce limiti belirle.", "Borc siralamasi yap.", "Haftalik takip baslat."];
+    return ["Aylık bütçe limiti belirle.", "Borç sıralaması yap.", "Haftalık takip başlat."];
   }
 
   return [
-    "Otomatik birikim talimati kur.",
-    "Acil fon hedefini yazili hale getir.",
+    "Otomatik birikim talimatı kur.",
+    "Acil fon hedefini yazılı hale getir.",
     "Gereksiz abonelikleri azalt.",
   ];
 }
@@ -668,40 +668,40 @@ function resolvePlan30(level) {
 function resolvePlan60(level) {
   if (level === "Acil Toparlanma" || level === "Denge Kurma") {
     return [
-      "Borclarda ilk kapanis hedefini tamamla.",
-      "Aylik acik varsa ikinci kesinti turu yap.",
-      "Acil fonu 1 aya tasi.",
+      "Borçlarda ilk kapanış hedefini tamamla.",
+      "Aylık açık varsa ikinci kesinti turu yap.",
+      "Acil fonu 1 aya taşı.",
     ];
   }
 
   return [
-    "Hedef tarihlerini takvime isle.",
-    "Aylik birikim yuzdesini sabitle.",
-    "Haftalik durum raporu al.",
+    "Hedef tarihlerini takvime işle.",
+    "Aylık birikim yüzdesini sabitle.",
+    "Haftalık durum raporu al.",
   ];
 }
 
 function resolvePlan90(level) {
   if (level === "Acil Toparlanma") {
     return [
-      "Butceyi kalici bir duzene oturt.",
-      "Gecikmesiz odeme serisi baslat.",
+      "Bütçeyi kalıcı bir düzene oturt.",
+      "Gecikmesiz ödeme serisi başlat.",
       "Acil fonu 1-2 ay seviyesine getir.",
     ];
   }
 
   if (level === "Denge Kurma") {
     return [
-      "Borclarda net azalis hedefini tamamla.",
-      "Acil fonu 3 aya yaklastir.",
-      "Yillik hedef karti olustur.",
+      "Borçlarda net azalış hedefini tamamla.",
+      "Acil fonu 3 aya yaklaştır.",
+      "Yıllık hedef kartı oluştur.",
     ];
   }
 
   return [
-    "Uzun vadeli birikim planina gec.",
-    "Yillik hedefleri otomatik takip et.",
-    "Risk seviyeni yilda bir olc.",
+    "Uzun vadeli birikim planına geç.",
+    "Yıllık hedefleri otomatik takip et.",
+    "Risk seviyeni yılda bir ölç.",
   ];
 }
 
@@ -717,7 +717,7 @@ function renderResult(data, source) {
   ui.prevButton.classList.add("hidden");
   ui.nextButton.classList.add("hidden");
 
-  ui.stepLabel.textContent = "Sonuc";
+  ui.stepLabel.textContent = "Sonuç";
   ui.stepCounter.textContent = source === "api" ? "API sonucu" : "Yerel fallback";
   ui.progressFill.style.width = "100%";
 
@@ -726,9 +726,9 @@ function renderResult(data, source) {
 
   ui.scoreGrid.innerHTML = "";
   const scoreEntries = [
-    ["Nakit akisi", data.scores.cash_flow],
-    ["Borc baskisi", data.scores.debt_pressure],
-    ["Guvenlik tamponu", data.scores.safety_buffer],
+    ["Nakit akışı", data.scores.cash_flow],
+    ["Borç baskısı", data.scores.debt_pressure],
+    ["Güvenlik tamponu", data.scores.safety_buffer],
     ["Hedef disiplini", data.scores.goal_discipline],
   ];
 
@@ -758,9 +758,9 @@ function renderResult(data, source) {
 
   ui.plans.innerHTML = "";
   const planGroups = [
-    ["30 gun", data.guidance.plan_30_days],
-    ["60 gun", data.guidance.plan_60_days],
-    ["90 gun", data.guidance.plan_90_days],
+    ["30 gün", data.guidance.plan_30_days],
+    ["60 gün", data.guidance.plan_60_days],
+    ["90 gün", data.guidance.plan_90_days],
   ];
 
   planGroups.forEach(([title, list]) => {
@@ -782,7 +782,7 @@ function renderResult(data, source) {
     ui.plans.appendChild(box);
   });
 
-  ui.resultDisclaimer.textContent = data.disclaimer || "Bilgi amacli cikti";
+  ui.resultDisclaimer.textContent = data.disclaimer || "Bilgi amaçlı çıktı";
 }
 
 async function restartFlow() {
@@ -960,16 +960,16 @@ function handleSignInSubmit(event) {
   const password = String(formData.get("password") || "");
 
   if (!isValidEmail(email)) {
-    alert("Lutfen gecerli bir e-posta gir.");
+    alert("Lütfen geçerli bir e-posta gir.");
     return;
   }
 
   if (password.length < 6) {
-    alert("Sifre en az 6 karakter olmalidir.");
+    alert("Şifre en az 6 karakter olmalıdır.");
     return;
   }
 
-  alert(`Hos geldin ${email}. Giris basarili (demo).`);
+  alert(`Hoş geldin ${email}. Giriş başarılı (demo).`);
   ui.signinForm.reset();
   closeAuthPopover();
 }
@@ -985,31 +985,31 @@ function handleSignUpSubmit(event) {
   const hasConsent = formData.get("consent") === "on";
 
   if (fullName.length < 3) {
-    alert("Ad Soyad en az 3 karakter olmalidir.");
+    alert("Ad Soyad en az 3 karakter olmalıdır.");
     return;
   }
 
   if (!isValidEmail(email)) {
-    alert("Lutfen gecerli bir e-posta gir.");
+    alert("Lütfen geçerli bir e-posta gir.");
     return;
   }
 
   if (password.length < 6) {
-    alert("Sifre en az 6 karakter olmalidir.");
+    alert("Şifre en az 6 karakter olmalıdır.");
     return;
   }
 
   if (password !== passwordAgain) {
-    alert("Sifreler ayni olmalidir.");
+    alert("Şifreler aynı olmalıdır.");
     return;
   }
 
   if (!hasConsent) {
-    alert("Devam etmek icin sozlesme onayi gerekli.");
+    alert("Devam etmek için sözleşme onayı gerekli.");
     return;
   }
 
-  alert(`Kayit olusturuldu: ${fullName} (demo).`);
+  alert(`Kayıt oluşturuldu: ${fullName} (demo).`);
   ui.signupForm.reset();
   closeAuthPopover();
 }
@@ -1032,12 +1032,12 @@ function metaTextForQuestion(question) {
     return "Ben...";
   }
   if (question.answer_type === "number" || question.answer_type === "currency") {
-    return "Tutari gir";
+    return "Tutarı gir";
   }
   if (question.answer_type === "text") {
-    return "Kisa ve net yaz";
+    return "Kısa ve net yaz";
   }
-  return "Cevabini sec ya da yaz";
+  return "Cevabını seç ya da yaz";
 }
 
 function hasCurrentAnswer() {

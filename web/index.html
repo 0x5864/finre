@@ -23,8 +23,8 @@
           <span class="brand-text">Bireysel finansal rehberlik</span>
         </a>
 
-        <nav class="header-nav" aria-label="Ana menu">
-          <a href="#planlama-akisi">Planlama Akisi</a>
+        <nav class="header-nav" aria-label="Ana menü">
+          <a href="#planlama-akisi">Planlama Akışı</a>
           <a href="#neden-biz">Neden Biz</a>
           <a href="#rehberler">Rehberler</a>
         </nav>
@@ -38,11 +38,11 @@
             aria-expanded="false"
             aria-controls="authPopover"
           >
-            GIRIS
+            GİRİŞ
           </button>
 
-          <section id="authPopover" class="auth-popover hidden" aria-label="Kullanici girisi">
-            <div class="auth-tabs" role="tablist" aria-label="Kimlik dogrulama sekmeleri">
+          <section id="authPopover" class="auth-popover hidden" aria-label="Kullanıcı girişi">
+            <div class="auth-tabs" role="tablist" aria-label="Kimlik doğrulama sekmeleri">
               <button
                 id="signinTabButton"
                 class="auth-tab active"
@@ -52,7 +52,7 @@
                 aria-controls="signinForm"
                 data-auth-tab="signin"
               >
-                Giris Yap
+                Giriş Yap
               </button>
               <button
                 id="signupTabButton"
@@ -63,7 +63,7 @@
                 aria-controls="signupForm"
                 data-auth-tab="signup"
               >
-                Kayit Ol
+                Kayıt Ol
               </button>
             </div>
 
@@ -71,7 +71,7 @@
               <label for="signinEmail">E-posta</label>
               <input id="signinEmail" name="email" type="email" autocomplete="email" required />
 
-              <label for="signinPassword">Sifre</label>
+              <label for="signinPassword">Şifre</label>
               <input
                 id="signinPassword"
                 name="password"
@@ -81,7 +81,7 @@
                 required
               />
 
-              <button class="auth-submit" type="submit">Giris Yap</button>
+              <button class="auth-submit" type="submit">Giriş Yap</button>
             </form>
 
             <form id="signupForm" class="auth-form hidden" novalidate>
@@ -91,7 +91,7 @@
               <label for="signupEmail">E-posta</label>
               <input id="signupEmail" name="email" type="email" autocomplete="email" required />
 
-              <label for="signupPassword">Sifre</label>
+              <label for="signupPassword">Şifre</label>
               <input
                 id="signupPassword"
                 name="password"
@@ -101,7 +101,7 @@
                 required
               />
 
-              <label for="signupPasswordAgain">Sifre (Tekrar)</label>
+              <label for="signupPasswordAgain">Şifre (Tekrar)</label>
               <input
                 id="signupPasswordAgain"
                 name="password_again"
@@ -113,89 +113,40 @@
 
               <label class="auth-check">
                 <input id="signupConsent" name="consent" type="checkbox" required />
-                <span>Kullanici sozlesmesi ve KVKK metnini kabul ediyorum.</span>
+                <span>Kullanıcı sözleşmesi ve KVKK metnini kabul ediyorum.</span>
               </label>
 
-              <button class="auth-submit" type="submit">Kayit Ol</button>
+              <button class="auth-submit" type="submit">Kayıt Ol</button>
             </form>
 
-            <p class="auth-note">Bu alan demo amaclidir; backend kimlik dogrulama baglanabilir.</p>
+            <p class="auth-note">Bu alan demo amaçlıdır; backend kimlik doğrulama bağlanabilir.</p>
           </section>
         </div>
       </div>
     </header>
 
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <p class="hero-badge">kisisel finans koçu</p>
-          <h1>Finansal durumunu tani, hedefini netlestir, 90 gunluk yol haritani al.</h1>
-          <p class="hero-lead">
-            Hesaplama odakli bir yapiyla gelir, gider, borc ve birikim dengen icin adim adim
-            yonlendirme sunuyoruz. Asagidaki analiz modulu, bu platformun cekirdek parcasi.
-          </p>
-          <div class="hero-actions">
-            <a class="hero-primary" href="#planlama-akisi">Analizi Baslat</a>
-            <a class="hero-secondary" href="#neden-biz">Nasil Calisir?</a>
-          </div>
-        </div>
-
-        <div class="hero-cards" id="neden-biz">
-          <article>
-            <p class="mini-title">1. Tespit</p>
-            <p>Sorularla nakit akisindaki sikisiklik ve borc baskisi alanlarini buluruz.</p>
-          </article>
-          <article>
-            <p class="mini-title">2. Oncelik</p>
-            <p>Skor bazli siralama ile hangi adimin once gelmesi gerektigini netlestiririz.</p>
-          </article>
-          <article>
-            <p class="mini-title">3. Eylem</p>
-            <p>30-60-90 gun eylem plani ile uygulanabilir bir finansal duzen kurarsin.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="stat-strip" aria-label="Degerler">
-      <div class="container stat-grid">
-        <article>
-          <p class="stat-k">Akis Yaklasimi</p>
-          <p class="stat-v">Soru -> Skor -> Plan</p>
-        </article>
-        <article>
-          <p class="stat-k">Cikti</p>
-          <p class="stat-v">Ilk 3 Oncelik + 90 Gun</p>
-        </article>
-        <article>
-          <p class="stat-k">Yontem</p>
-          <p class="stat-v">Pratik, sade, uygulanabilir</p>
-        </article>
-      </div>
-    </section>
-
     <main class="container page-content" id="planlama-akisi">
       <div class="section-head">
-        <p class="section-title">Finansal Saglik Analizi</p>
+        <p class="section-title">Finansal Sağlık Analizi</p>
         <h2 class="section-subtitle">
-          Platformun cekirdek modulu: sorularla ihtiyaci belirle, sonuc ekraniyla rotani ciz.
+          Platformun çekirdek modülü: sorularla ihtiyacı belirle, sonuç ekranıyla rotanı çiz.
         </h2>
       </div>
 
       <section class="layout-shell">
         <div class="layout">
           <aside class="story-panel reveal">
-            <p class="eyebrow">Akis ozeti</p>
-            <h3>Kendine uygun finans plani icin baslayalim.</h3>
+            <p class="eyebrow">Akış özeti</p>
+            <h3>Kendine uygun finans planı için başlayalım.</h3>
             <p class="lead">
-              Bu akista seni adim adim taniyoruz. Cevaplarina gore ilk 90 gunluk yol haritasi
-              olusuyor.
+              Bu akışta seni adım adım tanıyoruz. Cevaplarına göre ilk 90 günlük yol haritası
+              oluşuyor.
             </p>
 
             <ul class="timeline">
-              <li>Profil ve gelir netlesir</li>
-              <li>Gider ve borc resmi cikar</li>
-              <li>Skor ve oncelik plani verilir</li>
+              <li>Profil ve gelir netleşir</li>
+              <li>Gider ve borç resmi çıkar</li>
+              <li>Skor ve öncelik planı verilir</li>
             </ul>
 
             <div class="api-box">
@@ -207,14 +158,14 @@
                 value="http://127.0.0.1:8000"
                 autocomplete="off"
               />
-              <p class="hint">API calismazsa yerel fallback hesap kullanilir.</p>
+              <p class="hint">API çalışmazsa yerel fallback hesap kullanılır.</p>
             </div>
           </aside>
 
           <section class="card reveal delay-1" aria-live="polite">
             <header class="card-header">
-              <p id="stepLabel" class="step-label">Hazirlik</p>
-              <p id="stepCounter" class="step-counter">Adim 0 / 0</p>
+              <p id="stepLabel" class="step-label">Hazırlık</p>
+              <p id="stepCounter" class="step-counter">Adım 0 / 0</p>
             </header>
 
             <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
@@ -222,18 +173,18 @@
             </div>
 
             <section id="consentView" class="consent-view">
-              <h2>KVKK ve acik riza</h2>
+              <h2>KVKK ve açık rıza</h2>
               <p class="question-meta">
-                Bu akista girdigin veriler sadece finansal yol haritasi uretmek icin kullanilir.
+                Bu akışta girdiğin veriler sadece finansal yol haritası üretmek için kullanılır.
               </p>
               <ul class="consent-list">
-                <li>Veri toplama amaci: ihtiyac analizi ve oneri olusturma.</li>
-                <li>Veri saklama suresi: urun gelistirme asamasinda sinirli.</li>
-                <li>Diledigin zaman verinin silinmesini talep edebilirsin.</li>
+                <li>Veri toplama amacı: ihtiyaç analizi ve öneri oluşturma.</li>
+                <li>Veri saklama süresi: ürün geliştirme aşamasında sınırlı.</li>
+                <li>Dilediğin zaman verinin silinmesini talep edebilirsin.</li>
               </ul>
               <label class="consent-check">
                 <input id="consentCheckbox" type="checkbox" />
-                <span>KVKK metnini okudum, acik riza veriyorum.</span>
+                <span>KVKK metnini okudum, açık rıza veriyorum.</span>
               </label>
             </section>
 
@@ -244,59 +195,160 @@
                 </button>
                 <div class="hero-logo" aria-hidden="true">bf</div>
               </div>
-              <h2 id="questionTitle">Sorular yukleniyor...</h2>
+              <h2 id="questionTitle">Sorular yükleniyor...</h2>
               <p id="questionMeta" class="question-meta">Ben...</p>
               <div id="answerArea" class="answer-area"></div>
             </section>
 
             <section id="resultView" class="result-view hidden">
-              <h2 id="resultLevel">Sonuc</h2>
+              <h2 id="resultLevel">Sonuç</h2>
               <p id="resultScore" class="result-score"></p>
               <div id="scoreGrid" class="score-grid"></div>
 
               <div class="result-columns">
                 <article>
-                  <h3>Ilk 3 oncelik</h3>
+                  <h3>İlk 3 öncelik</h3>
                   <ul id="priorityList"></ul>
                 </article>
                 <article>
-                  <h3>30-60-90 gun</h3>
+                  <h3>30-60-90 gün</h3>
                   <div id="plans"></div>
                 </article>
               </div>
 
               <p id="resultDisclaimer" class="disclaimer"></p>
-              <button id="restartButton" class="ghost" type="button">Yeniden basla</button>
+              <button id="restartButton" class="ghost" type="button">Yeniden başla</button>
             </section>
 
             <footer class="actions">
               <button id="prevButton" class="ghost" type="button">Geri</button>
-              <button id="nextButton" class="solid" type="button">Onayi ver ve basla</button>
+              <button id="nextButton" class="solid" type="button">Onayı ver ve başla</button>
             </footer>
           </section>
         </div>
       </section>
 
-      <section class="info-cards" id="rehberler">
-        <article>
-          <h3>Borc Baski Haritasi</h3>
-          <p>Gelire gore borc yukunu dengeli seviyeye cekmek icin uygulanabilir adimlar.</p>
-        </article>
-        <article>
-          <h3>Acil Durum Fonu</h3>
-          <p>Temel giderlerini 3-6 ay araliginda guvenceye almak icin net birikim plani.</p>
-        </article>
-        <article>
-          <h3>Hedef Takip Duzeni</h3>
-          <p>Kisa vadeli hedeflerini tarihe baglayip duzenli ilerleme takip sistemi kurma.</p>
-        </article>
+      <section class="credit-guidance" id="rehberler">
+        <div class="credit-guidance-grid">
+          <article class="credit-guidance-card">
+            <span class="credit-guidance-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <rect x="3" y="6" width="18" height="8"></rect>
+                <line x1="3" y1="11" x2="21" y2="11"></line>
+                <line x1="16" y1="18" x2="21" y2="23"></line>
+                <line x1="21" y1="18" x2="16" y2="23"></line>
+              </svg>
+            </span>
+            <h4>Gerçekten ihtiyacın varsa kredi kullan</h4>
+            <p>
+              Kredi almadan önce ihtiyacını gözden geçir, ürün veya hizmetin gerekliliğini ve
+              toplam maliyeti değerlendirmeden borçlanma.
+            </p>
+          </article>
+
+          <article class="credit-guidance-card">
+            <span class="credit-guidance-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <rect x="3" y="7" width="18" height="7"></rect>
+                <line x1="4" y1="10.5" x2="20" y2="10.5"></line>
+                <line x1="6" y1="19" x2="12" y2="13"></line>
+                <line x1="11" y1="20" x2="16" y2="15"></line>
+              </svg>
+            </span>
+            <h4>Gelir ve giderlerine uygun ödeme planı oluştur</h4>
+            <p>
+              Gelir ve giderlerini hesapla, acil durum fonunu ayır ve kredi taksitlerini bütçene
+              uygun belirle.
+            </p>
+          </article>
+
+          <article class="credit-guidance-card">
+            <span class="credit-guidance-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <rect x="3" y="5" width="18" height="16"></rect>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+                <line x1="8" y1="3" x2="8" y2="7"></line>
+                <line x1="16" y1="3" x2="16" y2="7"></line>
+                <polyline points="8,15 11,18 16,13"></polyline>
+              </svg>
+            </span>
+            <h4>Vade süresini iyi planla</h4>
+            <p>
+              Kısa vadeli krediler faiz maliyetini düşürür ancak yüksek taksitler bütçeni
+              zorlayabilir. Vade uzunluğunu doğru seç.
+            </p>
+          </article>
+
+          <article class="credit-guidance-card">
+            <span class="credit-guidance-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <circle cx="12" cy="12" r="9"></circle>
+                <line x1="12" y1="12" x2="12" y2="7"></line>
+                <line x1="12" y1="12" x2="16" y2="14"></line>
+              </svg>
+            </span>
+            <h4>Ödemelerini aksatmadan tamamla</h4>
+            <p>
+              Düzenli ödeme yapmak kredi puanını korur ve gelecekteki finansal imkânlarını artırır.
+              Gecikmelerden kaçın.
+            </p>
+          </article>
+        </div>
       </section>
     </main>
+
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <h1>Finansal durumunu tanı, hedefini netleştir, 90 günlük yol haritanı al.</h1>
+          <p class="hero-lead">
+            Hesaplama odaklı bir yapıyla gelir, gider, borç ve birikim dengen için adım adım
+            yönlendirme sunuyoruz. Aşağıdaki analiz modülü, bu platformun çekirdek parçası.
+          </p>
+          <div class="hero-actions">
+            <a class="hero-primary" href="#planlama-akisi">Analizi Başlat</a>
+            <a class="hero-secondary" href="#neden-biz">Nasıl Çalışır?</a>
+          </div>
+        </div>
+
+        <div class="hero-cards" id="neden-biz">
+          <article>
+            <p class="mini-title">1. Tespit</p>
+            <p>Sorularla nakit akışındaki sıkışıklık ve borç baskısı alanlarını buluruz.</p>
+          </article>
+          <article>
+            <p class="mini-title">2. Öncelik</p>
+            <p>Skor bazlı sıralama ile hangi adımın önce gelmesi gerektiğini netleştiririz.</p>
+          </article>
+          <article>
+            <p class="mini-title">3. Eylem</p>
+            <p>30-60-90 gün eylem planı ile uygulanabilir bir finansal düzen kurarsın.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="stat-strip" aria-label="Değerler">
+      <div class="container stat-grid">
+        <article>
+          <p class="stat-k">Akış Yaklaşımı</p>
+          <p class="stat-v">Soru -> Skor -> Plan</p>
+        </article>
+        <article>
+          <p class="stat-k">Çıktı</p>
+          <p class="stat-v">İlk 3 Öncelik + 90 Gün</p>
+        </article>
+        <article>
+          <p class="stat-k">Yöntem</p>
+          <p class="stat-v">Pratik, sade, uygulanabilir</p>
+        </article>
+      </div>
+    </section>
 
     <footer class="site-footer">
       <div class="container footer-inner">
         <p>Bireysel finansal rehberlik</p>
-        <p>Bu cikti bilgi amaclidir, yatirim tavsiyesi degildir.</p>
+        <p>Bu çıktı bilgi amaçlıdır, yatırım tavsiyesi değildir.</p>
       </div>
     </footer>
 
