@@ -298,7 +298,7 @@ function renderConsent() {
   ui.questionView.classList.add("hidden");
   ui.consentView.classList.remove("hidden");
 
-  document.body.classList.add("question-format");
+  document.body.classList.remove("question-format");
   ui.stepLabel.textContent = "KVKK";
   ui.stepCounter.textContent = "Adim 1 / 1";
   ui.progressFill.style.width = "0%";

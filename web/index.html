@@ -3,113 +3,210 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Finre Compass</title>
+    <title>Bireysel finansal rehberlik</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,700&family=IBM+Plex+Sans:wght@400;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="noise"></div>
-    <div class="orb orb-a"></div>
-    <div class="orb orb-b"></div>
+    <div class="site-bg-glow site-bg-glow-a" aria-hidden="true"></div>
+    <div class="site-bg-glow site-bg-glow-b" aria-hidden="true"></div>
 
-    <main class="layout">
-      <aside class="story-panel reveal">
-        <p class="eyebrow">finre compass</p>
-        <h1>Kendine uygun finans plani icin baslayalim.</h1>
-        <p class="lead">
-          Bu akista seni adim adim taniyoruz. Cevaplarina gore ilk 90 gunluk
-          yol haritasi olusuyor.
-        </p>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#">
+          <span class="brand-mark" aria-hidden="true">BF</span>
+          <span class="brand-text">Bireysel finansal rehberlik</span>
+        </a>
 
-        <ul class="timeline">
-          <li>Profil ve gelir netlesir</li>
-          <li>Gider ve borc resmi cikar</li>
-          <li>Skor ve oncelik plani verilir</li>
-        </ul>
+        <nav class="header-nav" aria-label="Ana menu">
+          <a href="#planlama-akisi">Planlama Akisi</a>
+          <a href="#neden-biz">Neden Biz</a>
+          <a href="#rehberler">Rehberler</a>
+        </nav>
 
-        <div class="api-box">
-          <label for="apiBase">API adresi</label>
-          <input
-            id="apiBase"
-            name="apiBase"
-            type="url"
-            value="http://127.0.0.1:8000"
-            autocomplete="off"
-          />
-          <p class="hint">API calismazsa yerel fallback hesap kullanilir.</p>
-        </div>
-      </aside>
+        <a class="header-cta" href="#planlama-akisi">Ucretsiz Basla</a>
+      </div>
+    </header>
 
-      <section class="card reveal delay-1" aria-live="polite">
-        <header class="card-header">
-          <p id="stepLabel" class="step-label">Hazirlik</p>
-          <p id="stepCounter" class="step-counter">Adim 0 / 0</p>
-        </header>
-
-        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-          <span id="progressFill"></span>
-        </div>
-
-        <section id="consentView" class="consent-view">
-          <h2>KVKK ve acik riza</h2>
-          <p class="question-meta">
-            Bu akista girdigin veriler sadece finansal yol haritasi uretmek icin
-            kullanilir.
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="hero-badge">kisisel finans koçu</p>
+          <h1>Finansal durumunu tani, hedefini netlestir, 90 gunluk yol haritani al.</h1>
+          <p class="hero-lead">
+            Hesaplama odakli bir yapiyla gelir, gider, borc ve birikim dengen icin adim adim
+            yonlendirme sunuyoruz. Asagidaki analiz modulu, bu platformun cekirdek parcasi.
           </p>
-          <ul class="consent-list">
-            <li>Veri toplama amaci: ihtiyac analizi ve oneri olusturma.</li>
-            <li>Veri saklama suresi: urun gelistirme asamasinda sinirli.</li>
-            <li>Diledigin zaman verinin silinmesini talep edebilirsin.</li>
-          </ul>
-          <label class="consent-check">
-            <input id="consentCheckbox" type="checkbox" />
-            <span>KVKK metnini okudum, acik riza veriyorum.</span>
-          </label>
-        </section>
-
-        <section id="questionView" class="question-view hidden">
-          <div class="question-hero">
-            <button id="questionBackButton" class="hero-back" type="button" aria-label="Geri">
-              &#x2039;
-            </button>
-            <div class="hero-logo" aria-hidden="true">f</div>
+          <div class="hero-actions">
+            <a class="hero-primary" href="#planlama-akisi">Analizi Baslat</a>
+            <a class="hero-secondary" href="#neden-biz">Nasil Calisir?</a>
           </div>
-          <h2 id="questionTitle">Sorular yukleniyor...</h2>
-          <p id="questionMeta" class="question-meta">Ben...</p>
-          <div id="answerArea" class="answer-area"></div>
-        </section>
+        </div>
 
-        <section id="resultView" class="result-view hidden">
-          <h2 id="resultLevel">Sonuc</h2>
-          <p id="resultScore" class="result-score"></p>
-          <div id="scoreGrid" class="score-grid"></div>
+        <div class="hero-cards" id="neden-biz">
+          <article>
+            <p class="mini-title">1. Tespit</p>
+            <p>Sorularla nakit akisindaki sikisiklik ve borc baskisi alanlarini buluruz.</p>
+          </article>
+          <article>
+            <p class="mini-title">2. Oncelik</p>
+            <p>Skor bazli siralama ile hangi adimin once gelmesi gerektigini netlestiririz.</p>
+          </article>
+          <article>
+            <p class="mini-title">3. Eylem</p>
+            <p>30-60-90 gun eylem plani ile uygulanabilir bir finansal duzen kurarsin.</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-          <div class="result-columns">
-            <article>
-              <h3>Ilk 3 oncelik</h3>
-              <ul id="priorityList"></ul>
-            </article>
-            <article>
-              <h3>30-60-90 gun</h3>
-              <div id="plans"></div>
-            </article>
-          </div>
+    <section class="stat-strip" aria-label="Degerler">
+      <div class="container stat-grid">
+        <article>
+          <p class="stat-k">Akis Yaklasimi</p>
+          <p class="stat-v">Soru -> Skor -> Plan</p>
+        </article>
+        <article>
+          <p class="stat-k">Cikti</p>
+          <p class="stat-v">Ilk 3 Oncelik + 90 Gun</p>
+        </article>
+        <article>
+          <p class="stat-k">Yontem</p>
+          <p class="stat-v">Pratik, sade, uygulanabilir</p>
+        </article>
+      </div>
+    </section>
 
-          <p id="resultDisclaimer" class="disclaimer"></p>
-          <button id="restartButton" class="ghost" type="button">Yeniden basla</button>
-        </section>
+    <main class="container page-content" id="planlama-akisi">
+      <div class="section-head">
+        <p class="section-title">Finansal Saglik Analizi</p>
+        <h2 class="section-subtitle">
+          Platformun cekirdek modulu: sorularla ihtiyaci belirle, sonuc ekraniyla rotani ciz.
+        </h2>
+      </div>
 
-        <footer class="actions">
-          <button id="prevButton" class="ghost" type="button">Geri</button>
-          <button id="nextButton" class="solid" type="button">Onayi ver ve basla</button>
-        </footer>
+      <section class="layout-shell">
+        <div class="layout">
+          <aside class="story-panel reveal">
+            <p class="eyebrow">Akis ozeti</p>
+            <h3>Kendine uygun finans plani icin baslayalim.</h3>
+            <p class="lead">
+              Bu akista seni adim adim taniyoruz. Cevaplarina gore ilk 90 gunluk yol haritasi
+              olusuyor.
+            </p>
+
+            <ul class="timeline">
+              <li>Profil ve gelir netlesir</li>
+              <li>Gider ve borc resmi cikar</li>
+              <li>Skor ve oncelik plani verilir</li>
+            </ul>
+
+            <div class="api-box">
+              <label for="apiBase">API adresi</label>
+              <input
+                id="apiBase"
+                name="apiBase"
+                type="url"
+                value="http://127.0.0.1:8000"
+                autocomplete="off"
+              />
+              <p class="hint">API calismazsa yerel fallback hesap kullanilir.</p>
+            </div>
+          </aside>
+
+          <section class="card reveal delay-1" aria-live="polite">
+            <header class="card-header">
+              <p id="stepLabel" class="step-label">Hazirlik</p>
+              <p id="stepCounter" class="step-counter">Adim 0 / 0</p>
+            </header>
+
+            <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+              <span id="progressFill"></span>
+            </div>
+
+            <section id="consentView" class="consent-view">
+              <h2>KVKK ve acik riza</h2>
+              <p class="question-meta">
+                Bu akista girdigin veriler sadece finansal yol haritasi uretmek icin kullanilir.
+              </p>
+              <ul class="consent-list">
+                <li>Veri toplama amaci: ihtiyac analizi ve oneri olusturma.</li>
+                <li>Veri saklama suresi: urun gelistirme asamasinda sinirli.</li>
+                <li>Diledigin zaman verinin silinmesini talep edebilirsin.</li>
+              </ul>
+              <label class="consent-check">
+                <input id="consentCheckbox" type="checkbox" />
+                <span>KVKK metnini okudum, acik riza veriyorum.</span>
+              </label>
+            </section>
+
+            <section id="questionView" class="question-view hidden">
+              <div class="question-hero">
+                <button id="questionBackButton" class="hero-back" type="button" aria-label="Geri">
+                  &#x2039;
+                </button>
+                <div class="hero-logo" aria-hidden="true">bf</div>
+              </div>
+              <h2 id="questionTitle">Sorular yukleniyor...</h2>
+              <p id="questionMeta" class="question-meta">Ben...</p>
+              <div id="answerArea" class="answer-area"></div>
+            </section>
+
+            <section id="resultView" class="result-view hidden">
+              <h2 id="resultLevel">Sonuc</h2>
+              <p id="resultScore" class="result-score"></p>
+              <div id="scoreGrid" class="score-grid"></div>
+
+              <div class="result-columns">
+                <article>
+                  <h3>Ilk 3 oncelik</h3>
+                  <ul id="priorityList"></ul>
+                </article>
+                <article>
+                  <h3>30-60-90 gun</h3>
+                  <div id="plans"></div>
+                </article>
+              </div>
+
+              <p id="resultDisclaimer" class="disclaimer"></p>
+              <button id="restartButton" class="ghost" type="button">Yeniden basla</button>
+            </section>
+
+            <footer class="actions">
+              <button id="prevButton" class="ghost" type="button">Geri</button>
+              <button id="nextButton" class="solid" type="button">Onayi ver ve basla</button>
+            </footer>
+          </section>
+        </div>
+      </section>
+
+      <section class="info-cards" id="rehberler">
+        <article>
+          <h3>Borc Baski Haritasi</h3>
+          <p>Gelire gore borc yukunu dengeli seviyeye cekmek icin uygulanabilir adimlar.</p>
+        </article>
+        <article>
+          <h3>Acil Durum Fonu</h3>
+          <p>Temel giderlerini 3-6 ay araliginda guvenceye almak icin net birikim plani.</p>
+        </article>
+        <article>
+          <h3>Hedef Takip Duzeni</h3>
+          <p>Kisa vadeli hedeflerini tarihe baglayip duzenli ilerleme takip sistemi kurma.</p>
+        </article>
       </section>
     </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>Bireysel finansal rehberlik</p>
+        <p>Bu cikti bilgi amaclidir, yatirim tavsiyesi degildir.</p>
+      </div>
+    </footer>
 
     <script type="module" src="./app.js"></script>
   </body>
