@@ -412,6 +412,7 @@ button {
 }
 
 .layout-shell {
+  margin-top: 0.9rem;
   border: 1px solid var(--line);
   border-radius: 20px;
   background: linear-gradient(180deg, #f9fcff 0%, #f5f9ff 100%);
@@ -421,8 +422,42 @@ button {
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(280px, 350px) minmax(0, 1fr);
+  grid-template-columns: minmax(280px, 1.05fr) minmax(280px, 1.05fr) minmax(215px, 0.72fr);
   gap: 1rem;
+  align-items: stretch;
+}
+
+.intro-panel {
+  grid-column: 1;
+  grid-row: 1;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.intro-panel h2 {
+  margin: 0;
+  color: #1c2f49;
+  font-size: clamp(1.44rem, 2.1vw, 2rem);
+  font-weight: 400;
+  line-height: 1.16;
+  letter-spacing: -0.02em;
+}
+
+.intro-lead {
+  margin: 0.75rem 0 0;
+  color: #5d6d83;
+  line-height: 1.55;
+}
+
+.intro-actions {
+  margin-top: auto;
+  padding-top: 1rem;
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
 }
 
 .story-panel,
@@ -437,6 +472,35 @@ button {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
+}
+
+.compact-panel {
+  grid-column: 2;
+  grid-row: 1;
+  padding: 0.95rem;
+  gap: 0.68rem;
+}
+
+.compact-panel h3 {
+  font-size: 1.08rem;
+  line-height: 1.24;
+}
+
+.compact-panel .lead {
+  font-size: 0.93rem;
+}
+
+.compact-panel .timeline li {
+  padding: 0.45rem 0.55rem;
+  font-size: 0.84rem;
+}
+
+.compact-panel .api-box {
+  padding: 0.62rem;
+}
+
+.compact-panel .api-box input {
+  min-height: 36px;
 }
 
 .eyebrow {
@@ -515,6 +579,12 @@ button {
   display: grid;
   grid-template-rows: auto auto 1fr auto;
   gap: 0.78rem;
+}
+
+.wide-card {
+  min-height: 520px;
+  grid-column: 3;
+  grid-row: 1;
 }
 
 .card-header {
@@ -940,6 +1010,7 @@ button {
 .site-header,
 .site-footer,
 .layout-shell,
+.intro-panel,
 .story-panel,
 .card,
 .hero-copy,
@@ -988,6 +1059,10 @@ body.question-format .solid {
   animation-delay: 130ms;
 }
 
+.delay-2 {
+  animation-delay: 220ms;
+}
+
 @keyframes rise {
   to {
     opacity: 1;
@@ -1015,6 +1090,7 @@ body.question-format .page-content {
 }
 
 body.question-format .layout-shell {
+  margin-top: 0;
   background: transparent;
   border: none;
   box-shadow: none;
@@ -1026,11 +1102,20 @@ body.question-format .story-panel {
   display: none;
 }
 
+body.question-format .intro-panel {
+  display: none;
+}
+
 body.question-format .layout {
   width: min(760px, 100vw);
   margin: 0 auto;
   grid-template-columns: 1fr;
   gap: 0;
+}
+
+body.question-format .wide-card {
+  grid-column: auto;
+  grid-row: auto;
 }
 
 body.question-format .card {
@@ -1204,6 +1289,13 @@ body.question-format .consent-check {
   .credit-guidance-grid,
   .credit-opportunities-grid {
     grid-template-columns: 1fr;
+  }
+
+  .intro-panel,
+  .compact-panel,
+  .wide-card {
+    grid-column: auto;
+    grid-row: auto;
   }
 
   .stat-grid {

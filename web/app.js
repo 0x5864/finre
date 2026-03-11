@@ -324,7 +324,7 @@ function renderQuestion() {
   ui.consentView.classList.add("hidden");
   ui.questionView.classList.remove("hidden");
 
-  document.body.classList.add("question-format");
+  document.body.classList.remove("question-format");
   const question = state.questions[state.currentIndex];
   const total = state.questions.length;
   const step = state.currentIndex + 1;
@@ -340,7 +340,8 @@ function renderQuestion() {
   ui.answerArea.innerHTML = "";
   renderInputForQuestion(question, state.answers[question.id]);
 
-  ui.prevButton.classList.add("hidden");
+  ui.prevButton.classList.remove("hidden");
+  ui.prevButton.disabled = false;
   ui.nextButton.classList.remove("hidden");
   ui.nextButton.textContent = step === total ? "Sonucu göster" : "Devam Et";
   updatePrimaryActionState();

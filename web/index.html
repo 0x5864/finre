@@ -126,43 +126,21 @@
     </header>
 
     <main class="container page-content" id="planlama-akisi">
-      <div class="section-head">
-        <p class="section-title">Finansal Sağlık Analizi</p>
-        <h2 class="section-subtitle">
-          Platformun çekirdek modülü: sorularla ihtiyacı belirle, sonuç ekranıyla rotanı çiz.
-        </h2>
-      </div>
-
       <section class="layout-shell">
         <div class="layout">
-          <aside class="story-panel reveal">
-            <p class="eyebrow">Akış özeti</p>
-            <h3>Kendine uygun finans planı için başlayalım.</h3>
-            <p class="lead">
-              Bu akışta seni adım adım tanıyoruz. Cevaplarına göre ilk 90 günlük yol haritası
-              oluşuyor.
+          <article class="intro-panel reveal" id="neden-biz">
+            <h2>Finansal durumunu tanı, hedefini netleştir, 90 günlük yol haritanı al.</h2>
+            <p class="intro-lead">
+              Hesaplama odaklı bir yapıyla gelir, gider, borç ve birikim dengen için adım adım
+              yönlendirme sunuyoruz. Aşağıdaki analiz modülü, bu platformun çekirdek parçası.
             </p>
-
-            <ul class="timeline">
-              <li>Profil ve gelir netleşir</li>
-              <li>Gider ve borç resmi çıkar</li>
-              <li>Skor ve öncelik planı verilir</li>
-            </ul>
-
-            <div class="api-box">
-              <label for="apiBase">API adresi</label>
-              <input
-                id="apiBase"
-                name="apiBase"
-                type="url"
-                value="http://127.0.0.1:8000"
-                autocomplete="off"
-              />
-              <p class="hint">API çalışmazsa yerel fallback hesap kullanılır.</p>
+            <div class="intro-actions">
+              <a class="hero-primary" href="#planlama-akisi">Analizi Başlat</a>
+              <a class="hero-secondary" href="#rehberler">Nasıl Çalışır?</a>
             </div>
-          </aside>
+          </article>
 
-          <section class="card reveal delay-1" aria-live="polite">
+          <section class="card wide-card reveal delay-1" aria-live="polite">
             <header class="card-header">
               <p id="stepLabel" class="step-label">Hazırlık</p>
               <p id="stepCounter" class="step-counter">Adım 0 / 0</p>
@@ -225,6 +203,33 @@
               <button id="nextButton" class="solid" type="button">Onayı ver ve başla</button>
             </footer>
           </section>
+
+          <aside class="story-panel compact-panel reveal delay-2">
+            <p class="eyebrow">Akış özeti</p>
+            <h3>Kendine uygun finans planı için başlayalım.</h3>
+            <p class="lead">
+              Bu akışta seni adım adım tanıyoruz. Cevaplarına göre ilk 90 günlük yol haritası
+              oluşuyor.
+            </p>
+
+            <ul class="timeline">
+              <li>Profil ve gelir netleşir</li>
+              <li>Gider ve borç resmi çıkar</li>
+              <li>Skor ve öncelik planı verilir</li>
+            </ul>
+
+            <div class="api-box">
+              <label for="apiBase">API adresi</label>
+              <input
+                id="apiBase"
+                name="apiBase"
+                type="url"
+                value="http://127.0.0.1:8000"
+                autocomplete="off"
+              />
+              <p class="hint">API çalışmazsa yerel fallback hesap kullanılır.</p>
+            </div>
+          </aside>
         </div>
       </section>
 
@@ -296,37 +301,6 @@
         </div>
       </section>
     </main>
-
-    <section class="hero">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <h1>Finansal durumunu tanı, hedefini netleştir, 90 günlük yol haritanı al.</h1>
-          <p class="hero-lead">
-            Hesaplama odaklı bir yapıyla gelir, gider, borç ve birikim dengen için adım adım
-            yönlendirme sunuyoruz. Aşağıdaki analiz modülü, bu platformun çekirdek parçası.
-          </p>
-          <div class="hero-actions">
-            <a class="hero-primary" href="#planlama-akisi">Analizi Başlat</a>
-            <a class="hero-secondary" href="#neden-biz">Nasıl Çalışır?</a>
-          </div>
-        </div>
-
-        <div class="hero-cards" id="neden-biz">
-          <article>
-            <p class="mini-title">1. Tespit</p>
-            <p>Sorularla nakit akışındaki sıkışıklık ve borç baskısı alanlarını buluruz.</p>
-          </article>
-          <article>
-            <p class="mini-title">2. Öncelik</p>
-            <p>Skor bazlı sıralama ile hangi adımın önce gelmesi gerektiğini netleştiririz.</p>
-          </article>
-          <article>
-            <p class="mini-title">3. Eylem</p>
-            <p>30-60-90 gün eylem planı ile uygulanabilir bir finansal düzen kurarsın.</p>
-          </article>
-        </div>
-      </div>
-    </section>
 
     <section class="stat-strip" aria-label="Değerler">
       <div class="container stat-grid">
