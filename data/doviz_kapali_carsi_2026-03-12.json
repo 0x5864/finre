@@ -1,0 +1,97 @@
+{
+  "kaynak": "Kapalı Çarşı",
+  "fetched_at_utc": "2026-03-12T20:06:45+00:00",
+  "count": 10,
+  "rows": [
+    {
+      "kaynak": "Kapalı Çarşı",
+      "doviz_adi": "Dolar",
+      "alis_fiyati": 43.96,
+      "satis_fiyati": 43.98,
+      "gunluk_degisim_yuzde": -0.16,
+      "gunluk_degisim_tutari": 0.0,
+      "guncellenme_tarihi": "2026-03-12T13:48:17.840Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "doviz_adi": "Euro",
+      "alis_fiyati": 50.6,
+      "satis_fiyati": 50.65,
+      "gunluk_degisim_yuzde": -0.59,
+      "gunluk_degisim_tutari": 0.0,
+      "guncellenme_tarihi": "2026-03-12T13:48:17.509Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "doviz_adi": "Sterlin",
+      "alis_fiyati": 58.5466,
+      "satis_fiyati": 58.8401,
+      "gunluk_degisim_yuzde": -0.64,
+      "gunluk_degisim_tutari": 0.0,
+      "guncellenme_tarihi": "2026-03-12T20:03:52.103Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "doviz_adi": "İsviçre Frangı",
+      "alis_fiyati": 55.8158,
+      "satis_fiyati": 56.0956,
+      "gunluk_degisim_yuzde": -0.84,
+      "gunluk_degisim_tutari": 0.0,
+      "guncellenme_tarihi": "2026-03-12T20:03:55.373Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "doviz_adi": "Japon Yeni",
+      "alis_fiyati": 27.5192,
+      "satis_fiyati": 27.6571,
+      "gunluk_degisim_yuzde": -0.43,
+      "gunluk_degisim_tutari": 0.0,
+      "guncellenme_tarihi": "2026-03-12T20:03:56.109Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "doviz_adi": "Suudi Arabistan Riyali",
+      "alis_fiyati": 11.6879,
+      "satis_fiyati": 11.7465,
+      "gunluk_degisim_yuzde": -0.18,
+      "gunluk_degisim_tutari": 0.0,
+      "guncellenme_tarihi": "2026-03-12T19:58:48.592Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "doviz_adi": "BAE Dirhemi",
+      "alis_fiyati": 11.9407,
+      "satis_fiyati": 12.0006,
+      "gunluk_degisim_yuzde": -0.17,
+      "gunluk_degisim_tutari": 0.0,
+      "guncellenme_tarihi": "2026-03-12T17:27:48.624Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "doviz_adi": "Katar Riyali",
+      "alis_fiyati": 12.0453,
+      "satis_fiyati": 12.1057,
+      "gunluk_degisim_yuzde": -0.18,
+      "gunluk_degisim_tutari": 0.0,
+      "guncellenme_tarihi": "2026-03-12T19:53:48.593Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "doviz_adi": "Kuveyt Dinarı",
+      "alis_fiyati": 142.8248,
+      "satis_fiyati": 143.5407,
+      "gunluk_degisim_yuzde": -0.23,
+      "gunluk_degisim_tutari": 0.0,
+      "guncellenme_tarihi": "2026-03-12T19:57:51.018Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "doviz_adi": "Gürcistan Larisi",
+      "alis_fiyati": 16.1547,
+      "satis_fiyati": 16.2357,
+      "gunluk_degisim_yuzde": 0.01,
+      "gunluk_degisim_tutari": 0.0,
+      "guncellenme_tarihi": "2026-03-12T18:21:13.939Z"
+    }
+  ]
+}

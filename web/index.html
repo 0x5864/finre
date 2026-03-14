@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bireysel finansal rehberlik</title>
+  <title>FinansalRehber</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
@@ -18,15 +18,143 @@
 
     <header class="site-header">
       <div class="container header-inner">
-        <a class="brand" href="#">
-          <span class="brand-mark" aria-hidden="true">BF</span>
-          <span class="brand-text">Bireysel finansal rehberlik</span>
+        <a id="brandHome" class="brand" href="#anasayfa">
+          <img class="brand-mark" src="./assets/ok.avif" alt="" aria-hidden="true" />
+          <span class="brand-text">FinansalRehber</span>
         </a>
 
         <nav class="header-nav" aria-label="Ana menü">
-          <a href="#planlama-akisi">Planlama Akışı</a>
-          <a href="#neden-biz">Neden Biz</a>
-          <a href="#rehberler">Rehberler</a>
+          <div class="header-nav-item">
+            <a id="openHomePage" class="header-nav-trigger" href="#anasayfa">Anasayfa</a>
+          </div>
+
+          <div class="header-nav-item">
+            <a id="openLoanPage" class="header-nav-trigger" href="#kredi">Kredi</a>
+            <div class="header-mega-menu" aria-label="Kredi hızlı menü">
+              <div class="header-mega-grid">
+                <button class="header-mega-card" type="button" data-nav-action="loan-rates" data-loan-rates-tab="need">
+                  <span class="calc-icon calc-icon-a" aria-hidden="true">₺</span>
+                  <p>İhtiyaç Kredisi</p>
+                </button>
+                <button class="header-mega-card" type="button" data-nav-action="loan-rates" data-loan-rates-tab="housing">
+                  <span class="calc-icon calc-icon-b" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/ev.png" alt="" />
+                  </span>
+                  <p>Konut Kredisi</p>
+                </button>
+                <button class="header-mega-card" type="button" data-nav-action="loan-rates" data-loan-rates-tab="vehicle">
+                  <span class="calc-icon calc-icon-c" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/car.png" alt="" />
+                  </span>
+                  <p>Taşıt Kredisi</p>
+                </button>
+                <button class="header-mega-card" type="button" data-nav-action="calculator" data-loan-type="deposit">
+                  <span class="calc-icon calc-icon-d" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/sifir.png" alt="" />
+                  </span>
+                  <p>Faizsiz Kredi</p>
+                </button>
+                <button class="header-mega-card" type="button" data-nav-action="calculator" data-loan-type="deposit">
+                  <span class="calc-icon calc-icon-h" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/mevduat.svg" alt="" />
+                  </span>
+                  <p>Kredili Mevduat Hesabı</p>
+                </button>
+                <button class="header-mega-card" type="button" data-nav-action="calculator" data-loan-type="compound">
+                  <span class="calc-icon calc-icon-e" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/yuzde.png" alt="" />
+                  </span>
+                  <p>Kredi Kartı</p>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="header-nav-item">
+            <a id="openInvestmentPage" class="header-nav-trigger" href="#yatirim">Yatırım</a>
+            <div class="header-mega-menu" aria-label="Yatırım hızlı menü">
+              <div class="header-mega-grid">
+                <button class="header-mega-card" type="button" data-nav-action="investment-section" data-section-key="silver">
+                  <span class="calc-icon calc-icon-h" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/mevduat.svg" alt="" />
+                  </span>
+                  <p>Mevduat</p>
+                </button>
+                <button class="header-mega-card" type="button" data-nav-action="investment-section" data-section-key="fx">
+                  <span class="calc-icon calc-icon-i" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/fx.png" alt="" />
+                  </span>
+                  <p>Döviz</p>
+                </button>
+                <button class="header-mega-card" type="button" data-nav-action="investment-section" data-section-key="gold">
+                  <span class="calc-icon calc-icon-g" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/gold.png" alt="" />
+                  </span>
+                  <p>Altın</p>
+                </button>
+                <button class="header-mega-card" type="button" data-nav-action="investment-section" data-section-key="stock">
+                  <span class="calc-icon calc-icon-j" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/hisse.png" alt="" />
+                  </span>
+                  <p>Borsa</p>
+                </button>
+                <button class="header-mega-card" type="button" data-nav-action="investment-section" data-section-key="fund">
+                  <span class="calc-icon calc-icon-k" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/fon.png" alt="" />
+                  </span>
+                  <p>Yatırım Fonu</p>
+                </button>
+                <button class="header-mega-card" type="button" data-nav-action="investment-page">
+                  <span class="calc-icon calc-icon-m" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/bono.svg" alt="" />
+                  </span>
+                  <p>Bono Tahvil Eurobond</p>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="header-nav-item">
+            <a id="openCalculationPage" class="header-nav-trigger" href="#hesaplama">Hesaplama</a>
+            <div class="header-mega-menu" aria-label="Hesaplama hızlı menü">
+              <div class="header-mega-grid">
+                <button class="header-mega-card" type="button" data-nav-action="calculator" data-loan-type="need">
+                  <span class="calc-icon calc-icon-a" aria-hidden="true">₺</span>
+                  <p>İhtiyaç Kredisi<br />Hesaplama</p>
+                </button>
+                <button class="header-mega-card" type="button" data-nav-action="calculator" data-loan-type="housing">
+                  <span class="calc-icon calc-icon-b" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/ev.png" alt="" />
+                  </span>
+                  <p>Konut Kredisi<br />Hesaplama</p>
+                </button>
+                <button class="header-mega-card" type="button" data-nav-action="calculator" data-loan-type="vehicle">
+                  <span class="calc-icon calc-icon-c" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/car.png" alt="" />
+                  </span>
+                  <p>Taşıt Kredisi<br />Hesaplama</p>
+                </button>
+                <button class="header-mega-card" type="button" data-nav-action="calculator" data-loan-type="deposit">
+                  <span class="calc-icon calc-icon-d" aria-hidden="true">
+                    <span class="calc-icon-mask calc-icon-mask-faiz"></span>
+                  </span>
+                  <p>Mevduat Faizi<br />Hesaplama</p>
+                </button>
+                <button class="header-mega-card" type="button" data-nav-action="calculator" data-loan-type="compound">
+                  <span class="calc-icon calc-icon-e" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/yuzde.png" alt="" />
+                  </span>
+                  <p>Bileşik Faiz<br />Hesaplama</p>
+                </button>
+                <button class="header-mega-card" type="button" data-nav-action="calculator" data-loan-type="real">
+                  <span class="calc-icon calc-icon-l" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/reel.png" alt="" />
+                  </span>
+                  <p>Reel Faiz<br />Hesaplama</p>
+                </button>
+              </div>
+            </div>
+          </div>
         </nav>
 
         <div class="header-auth">
@@ -38,7 +166,7 @@
             aria-expanded="false"
             aria-controls="authPopover"
           >
-            GİRİŞ
+            Giriş
           </button>
 
           <section id="authPopover" class="auth-popover hidden" aria-label="Kullanıcı girişi">
@@ -126,7 +254,41 @@
     </header>
 
     <main class="container page-content" id="planlama-akisi">
-      <section class="layout-shell">
+      <section id="layoutShell" class="layout-shell">
+        <section class="home-bank-wall" aria-label="Banka logoları">
+          <div class="home-bank-wall-grid">
+            <button id="openIsbankProfile" class="home-bank-wall-card home-bank-wall-button" type="button" aria-label="İş Bankası ürün sayfasını aç">
+              <img src="./assets/banks/is-bankasi.svg" alt="İş Bankası logosu" loading="lazy" />
+            </button>
+            <article class="home-bank-wall-card"><img src="./assets/banks/garanti-bbva.svg" alt="Garanti BBVA logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/akbank.svg" alt="Akbank logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/yapi-kredi.svg" alt="Yapı Kredi logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/denizbank.svg" alt="DenizBank logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/qnb.svg" alt="QNB logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/ziraat-bankasi.svg" alt="Ziraat Bankası logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/vakifbank.svg" alt="VakıfBank logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/halkbank.svg" alt="Halkbank logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/teb.svg" alt="TEB logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/hsbc.svg" alt="HSBC logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/fibabanka.svg" alt="Fibabanka logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/cepteteb.svg" alt="CEPTETEB logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/ing-official-transparent.png?v=1" alt="ING logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/alternatif-bank.svg" alt="Alternatif Bank logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/anadolubank.svg" alt="Anadolubank logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/odeabank.svg" alt="Odeabank logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/sekerbank.svg" alt="Şekerbank logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/zk.svg" alt="Ziraat Katılım logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/vakif-katilim.svg" alt="Vakıf Katılım logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/albaraka-turk.svg" alt="Albaraka Türk logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/kuveyt-turk.svg" alt="Kuveyt Türk logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/turkiye-finans.svg" alt="Türkiye Finans logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/icbc-turkey.svg" alt="ICBC Turkey logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/enpara.svg" alt="Enpara logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/aktif-bank.svg" alt="Aktif Bank logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/on-dijital-bankacilik.svg" alt="ON Dijital logosu" loading="lazy" /></article>
+            <article class="home-bank-wall-card"><img src="./assets/banks/getirfinans.svg" alt="GetirFinans logosu" loading="lazy" /></article>
+          </div>
+        </section>
         <div class="layout">
           <article class="intro-panel reveal" id="neden-biz">
             <h2>Finansal durumunu tanı, hedefini netleştir, 90 günlük yol haritanı al.</h2>
@@ -136,11 +298,11 @@
             </p>
             <div class="intro-actions">
               <a class="hero-primary" href="#planlama-akisi">Analizi Başlat</a>
-              <a class="hero-secondary" href="#rehberler">Nasıl Çalışır?</a>
+              <a class="hero-secondary" href="#anasayfa">Nasıl Çalışır?</a>
             </div>
           </article>
 
-          <section class="card wide-card reveal delay-1" aria-live="polite">
+          <section id="mainCard" class="card wide-card reveal delay-1" aria-live="polite">
             <header class="card-header">
               <p id="stepLabel" class="step-label">Hazırlık</p>
               <p id="stepCounter" class="step-counter">Adım 0 / 0</p>
@@ -171,41 +333,19 @@
                 <button id="questionBackButton" class="hero-back" type="button" aria-label="Geri">
                   &#x2039;
                 </button>
-                <div class="hero-logo" aria-hidden="true">bf</div>
               </div>
               <h2 id="questionTitle">Sorular yükleniyor...</h2>
-              <p id="questionMeta" class="question-meta">Ben...</p>
+              <p id="questionMeta" class="question-meta hidden"></p>
               <div id="answerArea" class="answer-area"></div>
             </section>
 
-            <section id="resultView" class="result-view hidden">
-              <h2 id="resultLevel">Sonuç</h2>
-              <p id="resultScore" class="result-score"></p>
-              <div id="scoreGrid" class="score-grid"></div>
-
-              <div class="result-columns">
-                <article>
-                  <h3>İlk 3 öncelik</h3>
-                  <ul id="priorityList"></ul>
-                </article>
-                <article>
-                  <h3>30-60-90 gün</h3>
-                  <div id="plans"></div>
-                </article>
-              </div>
-
-              <p id="resultDisclaimer" class="disclaimer"></p>
-              <button id="restartButton" class="ghost" type="button">Yeniden başla</button>
-            </section>
-
-            <footer class="actions">
+            <footer id="mainActions" class="actions">
               <button id="prevButton" class="ghost" type="button">Geri</button>
-              <button id="nextButton" class="solid" type="button">Onayı ver ve başla</button>
+              <button id="nextButton" class="solid" type="button">Doğrula ve başla</button>
             </footer>
           </section>
 
           <aside class="story-panel compact-panel reveal delay-2">
-            <p class="eyebrow">Akış özeti</p>
             <h3>Kendine uygun finans planı için başlayalım.</h3>
             <p class="lead">
               Bu akışta seni adım adım tanıyoruz. Cevaplarına göre ilk 90 günlük yol haritası
@@ -217,111 +357,1068 @@
               <li>Gider ve borç resmi çıkar</li>
               <li>Skor ve öncelik planı verilir</li>
             </ul>
-
-            <div class="api-box">
-              <label for="apiBase">API adresi</label>
-              <input
-                id="apiBase"
-                name="apiBase"
-                type="url"
-                value="http://127.0.0.1:8000"
-                autocomplete="off"
-              />
-              <p class="hint">API çalışmazsa yerel fallback hesap kullanılır.</p>
-            </div>
           </aside>
+
         </div>
       </section>
 
-      <section class="credit-guidance" id="rehberler">
-        <div class="credit-guidance-grid">
-          <article class="credit-guidance-card">
-            <span class="credit-guidance-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" focusable="false">
-                <rect x="3" y="6" width="18" height="8"></rect>
-                <line x1="3" y1="11" x2="21" y2="11"></line>
-                <line x1="16" y1="18" x2="21" y2="23"></line>
-                <line x1="21" y1="18" x2="16" y2="23"></line>
-              </svg>
-            </span>
+      <section id="resultShell" class="result-shell hidden" aria-live="polite">
+        <section id="resultView" class="result-view hidden">
+          <h2 id="resultLevel">Sonuç</h2>
+          <p id="resultScore" class="result-score"></p>
+          <div id="scoreGrid" class="score-grid"></div>
+
+          <div class="result-columns">
+            <article>
+              <h3>İlk 3 öncelik</h3>
+              <ul id="priorityList"></ul>
+            </article>
+            <article>
+              <h3>30-60-90 gün</h3>
+              <div id="plans"></div>
+            </article>
+          </div>
+
+          <p id="resultDisclaimer" class="disclaimer"></p>
+          <button id="restartButton" class="ghost" type="button">Yeniden başla</button>
+        </section>
+      </section>
+
+    </main>
+
+    <section id="loanRatesPage" class="loan-rates-page hidden" aria-live="polite" aria-modal="true">
+      <div class="container loan-rates-shell">
+        <article class="investment-gold-table-panel loan-rates-table-panel">
+          <div class="investment-gold-table-head loan-rates-table-head">
+            <h3 id="loanRatesTitle">İhtiyaç Kredisi Banka Karşılaştırması</h3>
+          </div>
+          <p id="loanRatesDate" class="tefas-meta">Güncelleme: 13 Mart 2026</p>
+
+          <div class="investment-gold-table-wrap loan-rates-table-wrap">
+            <table class="investment-gold-table loan-rates-table">
+              <thead>
+                <tr>
+                  <th>Banka</th>
+                  <th>Faiz Oranı</th>
+                  <th>Aylık Taksit</th>
+                  <th>Toplam Ödeme</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="loanRatesTableBody">
+                <tr>
+                  <td>
+                    <div class="bank-logo-cell">
+                      <img class="bank-logo-image" src="./assets/banks/akbank.svg" alt="Akbank logosu" loading="lazy" />
+                      <span class="bank-logo-name">Akbank</span>
+                    </div>
+                  </td>
+                  <td>% 0,99</td>
+                  <td>4.523 ₺</td>
+                  <td>54.531 ₺</td>
+                  <td><button class="loan-apply-btn" type="button">Başvur</button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="bank-logo-cell">
+                      <img class="bank-logo-image" src="./assets/banks/qnb.svg" alt="QNB logosu" loading="lazy" />
+                      <span class="bank-logo-name">QNB</span>
+                    </div>
+                  </td>
+                  <td>% 1,99</td>
+                  <td>4.900 ₺</td>
+                  <td>59.051 ₺</td>
+                  <td><button class="loan-apply-btn" type="button">Başvur</button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="bank-logo-cell">
+                      <img class="bank-logo-image" src="./assets/banks/ing-official-transparent.png?v=1" alt="ING logosu" loading="lazy" />
+                      <span class="bank-logo-name">ING</span>
+                    </div>
+                  </td>
+                  <td>% 3,29</td>
+                  <td>5.414 ₺</td>
+                  <td>65.213 ₺</td>
+                  <td><button class="loan-apply-btn" type="button">Başvur</button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="bank-logo-cell">
+                      <img class="bank-logo-image" src="./assets/banks/denizbank.svg" alt="DenizBank logosu" loading="lazy" />
+                      <span class="bank-logo-name">DenizBank</span>
+                    </div>
+                  </td>
+                  <td>% 3,61</td>
+                  <td>5.544 ₺</td>
+                  <td>66.778 ₺</td>
+                  <td><button class="loan-apply-btn" type="button">Başvur</button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="bank-logo-cell">
+                      <img class="bank-logo-image" src="./assets/banks/is-bankasi.svg" alt="İş Bankası logosu" loading="lazy" />
+                      <span class="bank-logo-name">İş Bankası</span>
+                    </div>
+                  </td>
+                  <td>% 3,74</td>
+                  <td>5.601 ₺</td>
+                  <td>67.212 ₺</td>
+                  <td><button class="loan-apply-btn" type="button">Başvur</button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="bank-logo-cell">
+                      <img class="bank-logo-image" src="./assets/banks/garanti-bbva.svg" alt="Garanti BBVA logosu" loading="lazy" />
+                      <span class="bank-logo-name">Garanti BBVA</span>
+                    </div>
+                  </td>
+                  <td>% 3,78</td>
+                  <td>5.617 ₺</td>
+                  <td>67.404 ₺</td>
+                  <td><button class="loan-apply-btn" type="button">Başvur</button></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="bank-logo-cell">
+                      <img class="bank-logo-image" src="./assets/banks/yapi-kredi.svg" alt="Yapı Kredi logosu" loading="lazy" />
+                      <span class="bank-logo-name">Yapı Kredi</span>
+                    </div>
+                  </td>
+                  <td>% 3,82</td>
+                  <td>5.633 ₺</td>
+                  <td>67.596 ₺</td>
+                  <td><button class="loan-apply-btn" type="button">Başvur</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <section class="trust-strip loan-trust-strip" aria-label="Kredi kullanım rehberi">
+          <article class="trust-box trust-box-copy">
             <h4>Gerçekten ihtiyacın varsa kredi kullan</h4>
             <p>
               Kredi almadan önce ihtiyacını gözden geçir, ürün veya hizmetin gerekliliğini ve
               toplam maliyeti değerlendirmeden borçlanma.
             </p>
           </article>
-
-          <article class="credit-guidance-card">
-            <span class="credit-guidance-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" focusable="false">
-                <rect x="3" y="7" width="18" height="7"></rect>
-                <line x1="4" y1="10.5" x2="20" y2="10.5"></line>
-                <line x1="6" y1="19" x2="12" y2="13"></line>
-                <line x1="11" y1="20" x2="16" y2="15"></line>
-              </svg>
-            </span>
+          <article class="trust-box trust-box-copy">
             <h4>Gelir ve giderlerine uygun ödeme planı oluştur</h4>
             <p>
               Gelir ve giderlerini hesapla, acil durum fonunu ayır ve kredi taksitlerini bütçene
               uygun belirle.
             </p>
           </article>
-
-          <article class="credit-guidance-card">
-            <span class="credit-guidance-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" focusable="false">
-                <rect x="3" y="5" width="18" height="16"></rect>
-                <line x1="3" y1="10" x2="21" y2="10"></line>
-                <line x1="8" y1="3" x2="8" y2="7"></line>
-                <line x1="16" y1="3" x2="16" y2="7"></line>
-                <polyline points="8,15 11,18 16,13"></polyline>
-              </svg>
-            </span>
+          <article class="trust-box trust-box-copy">
             <h4>Vade süresini iyi planla</h4>
             <p>
               Kısa vadeli krediler faiz maliyetini düşürür ancak yüksek taksitler bütçeni
               zorlayabilir. Vade uzunluğunu doğru seç.
             </p>
           </article>
-
-          <article class="credit-guidance-card">
-            <span class="credit-guidance-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" focusable="false">
-                <circle cx="12" cy="12" r="9"></circle>
-                <line x1="12" y1="12" x2="12" y2="7"></line>
-                <line x1="12" y1="12" x2="16" y2="14"></line>
-              </svg>
-            </span>
+          <article class="trust-box trust-box-copy">
             <h4>Ödemelerini aksatmadan tamamla</h4>
             <p>
               Düzenli ödeme yapmak kredi puanını korur ve gelecekteki finansal imkânlarını artırır.
               Gecikmelerden kaçın.
             </p>
           </article>
-        </div>
-      </section>
-    </main>
+        </section>
+      </div>
+    </section>
 
-    <section class="stat-strip" aria-label="Değerler">
-      <div class="container stat-grid">
-        <article>
-          <p class="stat-k">Akış Yaklaşımı</p>
-          <p class="stat-v">Soru -> Skor -> Plan</p>
+    <section id="bankDetailPage" class="bank-detail-page hidden" aria-live="polite" aria-modal="true">
+      <div class="container bank-detail-shell">
+        <article class="bank-detail-hero">
+          <div class="bank-detail-brand">
+            <img class="bank-detail-logo" src="./assets/banks/is-bankasi.svg" alt="İş Bankası logosu" loading="lazy" />
+            <div class="bank-detail-copy">
+              <p class="bank-detail-kicker">Banka Ürün Sayfası</p>
+              <h2>İş Bankası Kredi Faiz Oranları</h2>
+              <p>
+                İlk taslak ekranda İş Bankası için kredi türlerini ayrı kutular içinde
+                gösteriyoruz. Her kutuda vade bazlı örnek faiz oranı tablosu var.
+              </p>
+            </div>
+          </div>
         </article>
-        <article>
-          <p class="stat-k">Çıktı</p>
-          <p class="stat-v">İlk 3 Öncelik + 90 Gün</p>
-        </article>
-        <article>
-          <p class="stat-k">Yöntem</p>
-          <p class="stat-v">Pratik, sade, uygulanabilir</p>
-        </article>
+
+        <section class="bank-product-grid" aria-label="İş Bankası kredi ürünleri">
+          <article class="bank-product-card">
+            <header class="bank-product-head">
+              <h3>İhtiyaç Kredisi</h3>
+              <p>Standart tüketici kredisi</p>
+            </header>
+            <table class="bank-product-table">
+              <thead>
+                <tr>
+                  <th>Vade</th>
+                  <th>Faiz Oranı</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>12 Ay</td><td>% 3,54</td></tr>
+                <tr><td>24 Ay</td><td>% 3,64</td></tr>
+                <tr><td>36 Ay</td><td>% 3,74</td></tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article class="bank-product-card">
+            <header class="bank-product-head">
+              <h3>Konut Kredisi</h3>
+              <p>Uzun vadeli konut finansmanı</p>
+            </header>
+            <table class="bank-product-table">
+              <thead>
+                <tr>
+                  <th>Vade</th>
+                  <th>Faiz Oranı</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>60 Ay</td><td>% 2,84</td></tr>
+                <tr><td>120 Ay</td><td>% 2,94</td></tr>
+                <tr><td>180 Ay</td><td>% 3,04</td></tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article class="bank-product-card">
+            <header class="bank-product-head">
+              <h3>Taşıt Kredisi</h3>
+              <p>Sıfır ve ikinci el araç finansmanı</p>
+            </header>
+            <table class="bank-product-table">
+              <thead>
+                <tr>
+                  <th>Vade</th>
+                  <th>Faiz Oranı</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>12 Ay</td><td>% 3,29</td></tr>
+                <tr><td>24 Ay</td><td>% 3,39</td></tr>
+                <tr><td>36 Ay</td><td>% 3,49</td></tr>
+              </tbody>
+            </table>
+          </article>
+
+          <article class="bank-product-card">
+            <header class="bank-product-head">
+              <h3>KOBİ Kredisi</h3>
+              <p>İşletme ve ticari nakit ihtiyacı</p>
+            </header>
+            <table class="bank-product-table">
+              <thead>
+                <tr>
+                  <th>Vade</th>
+                  <th>Faiz Oranı</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>12 Ay</td><td>% 3,68</td></tr>
+                <tr><td>24 Ay</td><td>% 3,79</td></tr>
+                <tr><td>36 Ay</td><td>% 3,92</td></tr>
+              </tbody>
+            </table>
+          </article>
+        </section>
+      </div>
+    </section>
+
+    <section id="calculationPage" class="calculation-page hidden" aria-live="polite" aria-modal="true">
+      <div class="container calculation-shell">
+        <section id="needLoanCalculator" class="need-calc-wrap hidden" aria-live="polite">
+          <div class="need-calc-stack">
+            <div class="need-calc-tabs" role="tablist" aria-label="İhtiyaç kredisi hesaplama tipi">
+              <button
+                id="needCalcTabPrincipal"
+                class="need-calc-tab active"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="needCalcPanePrincipal"
+              >
+                Kredi Tutarına Göre
+              </button>
+              <button
+                id="needCalcTabInstallment"
+                class="need-calc-tab"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="needCalcPaneInstallment"
+              >
+                Taksit Tutarına Göre
+              </button>
+            </div>
+
+            <div
+              id="needCalcPanePrincipal"
+              class="need-calc-pane"
+              role="tabpanel"
+              aria-labelledby="needCalcTabPrincipal"
+            >
+              <article class="need-calc-block">
+                <form id="needCalcForm" class="need-calc-form" novalidate>
+                  <label class="need-calc-field" for="needPrincipal">
+                    <span>Kredi Tutarı</span>
+                    <input
+                      id="needPrincipal"
+                      name="principal"
+                      type="text"
+                      inputmode="numeric"
+                      autocomplete="off"
+                      value="50,000"
+                      required
+                    />
+                  </label>
+
+                  <label class="need-calc-field" for="needTerm">
+                    <span>Kredi Vadesi</span>
+                    <select id="needTerm" name="term" required>
+                      <option value="6">6 Ay</option>
+                      <option value="12" selected>12 Ay</option>
+                      <option value="24">24 Ay</option>
+                      <option value="36">36 Ay</option>
+                    </select>
+                  </label>
+
+                  <label class="need-calc-field" for="needRate">
+                    <span>Faiz Oranı (%)</span>
+                    <input id="needRate" name="rate" type="number" min="0" step="0.01" value="2.49" required />
+                  </label>
+
+                  <button class="need-calc-submit" type="submit">Hesapla</button>
+                </form>
+
+                <p class="need-calc-helper">
+                  Girdiğin tutar, vade ve faiz oranına göre aylık taksit ile toplam ödeme tutarını hesapla.
+                </p>
+
+                <div id="needCalcResult" class="need-calc-result hidden">
+                  <div class="need-calc-summary">
+                    <article class="need-calc-metric">
+                      <p class="need-calc-metric-label">Aylık Taksit</p>
+                      <div class="need-calc-item">
+                        <strong id="needCalcMonthly">-</strong>
+                      </div>
+                    </article>
+                    <article class="need-calc-metric">
+                      <p class="need-calc-metric-label">Toplam Ödeme</p>
+                      <div class="need-calc-item">
+                        <strong id="needCalcTotal">-</strong>
+                      </div>
+                    </article>
+                    <article class="need-calc-metric">
+                      <p class="need-calc-metric-label">Toplam Faiz</p>
+                      <div class="need-calc-item">
+                        <strong id="needCalcInterest">-</strong>
+                      </div>
+                    </article>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+            <div
+              id="needCalcPaneInstallment"
+              class="need-calc-pane hidden"
+              role="tabpanel"
+              aria-labelledby="needCalcTabInstallment"
+            >
+              <article class="need-calc-block">
+                <form id="needInstallmentForm" class="need-calc-form" novalidate>
+                  <label class="need-calc-field" for="needInstallmentAmount">
+                    <span>Aylık Taksit Tutarı</span>
+                    <input
+                      id="needInstallmentAmount"
+                      name="installment_amount"
+                      type="text"
+                      inputmode="numeric"
+                      autocomplete="off"
+                      value="5,000"
+                      required
+                    />
+                  </label>
+
+                  <label class="need-calc-field" for="needInstallmentTerm">
+                    <span>Kredi Vadesi</span>
+                    <select id="needInstallmentTerm" name="installment_term" required>
+                      <option value="6">6 Ay</option>
+                      <option value="12" selected>12 Ay</option>
+                      <option value="24">24 Ay</option>
+                      <option value="36">36 Ay</option>
+                    </select>
+                  </label>
+
+                  <label class="need-calc-field" for="needInstallmentRateInput">
+                    <span>Faiz Oranı (%)</span>
+                    <input
+                      id="needInstallmentRateInput"
+                      name="installment_rate"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value="2.49"
+                      required
+                    />
+                  </label>
+
+                  <button class="need-calc-submit" type="submit">Hesapla</button>
+                </form>
+
+                <p class="need-calc-helper">
+                  Aylık ödeyebileceğin taksite, vade ve faiz oranına göre çekilebilir kredi tutarını hesapla.
+                </p>
+
+                <div id="needInstallmentResult" class="need-calc-result hidden">
+                  <div class="need-calc-summary">
+                    <article class="need-calc-metric">
+                      <p class="need-calc-metric-label">Tahmini Kredi Tutarı</p>
+                      <div class="need-calc-item">
+                        <strong id="needInstallmentPrincipal">-</strong>
+                      </div>
+                    </article>
+                    <article class="need-calc-metric">
+                      <p class="need-calc-metric-label">Toplam Ödeme</p>
+                      <div class="need-calc-item">
+                        <strong id="needInstallmentTotal">-</strong>
+                      </div>
+                    </article>
+                    <article class="need-calc-metric">
+                      <p class="need-calc-metric-label">Toplam Faiz</p>
+                      <div class="need-calc-item">
+                        <strong id="needInstallmentInterest">-</strong>
+                      </div>
+                    </article>
+                  </div>
+                </div>
+              </article>
+            </div>
+
+          </div>
+        </section>
+
+        <section id="depositCalculator" class="need-calc-wrap hidden" aria-live="polite">
+          <article class="deposit-calc-panel">
+            <h3 class="need-calc-block-title">Mevduat Faizi Hesaplama</h3>
+
+            <div class="deposit-calc-tabs" role="tablist" aria-label="Mevduat hesaplama tipi">
+              <button class="deposit-tab active" type="button" role="tab" aria-selected="true">Vade Seç</button>
+              <button class="deposit-tab" type="button" role="tab" aria-selected="false" disabled>
+                Tarihe Göre Hesapla
+              </button>
+            </div>
+
+            <form id="depositCalcForm" class="deposit-calc-form" novalidate>
+              <label class="need-calc-field" for="depositPrincipal">
+                <span>Mevduat Tutarı</span>
+                <input
+                  id="depositPrincipal"
+                  name="deposit_principal"
+                  type="text"
+                  inputmode="numeric"
+                  autocomplete="off"
+                  value="100,000"
+                  required
+                />
+              </label>
+
+              <label class="need-calc-field" for="depositTermDays">
+                <span>Vade</span>
+                <select id="depositTermDays" name="deposit_term_days" required>
+                  <option value="32" selected>32 gün</option>
+                  <option value="46">46 gün</option>
+                  <option value="92">92 gün</option>
+                  <option value="181">181 gün</option>
+                  <option value="365">365 gün</option>
+                </select>
+              </label>
+
+              <label class="need-calc-field" for="depositRate">
+                <span>Yıllık Faiz Oranı (%)</span>
+                <input id="depositRate" name="deposit_rate" type="number" min="0" step="0.01" value="43.50" required />
+              </label>
+
+              <button class="need-calc-submit" type="submit">Faiz hesapla</button>
+            </form>
+
+            <div id="depositCalcResult" class="need-calc-result hidden">
+              <div class="need-calc-summary deposit-calc-summary">
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Brüt Getiri</p>
+                  <div class="need-calc-item">
+                    <strong id="depositGrossReturn">-</strong>
+                  </div>
+                </article>
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Stopaj Tutarı</p>
+                  <div class="need-calc-item">
+                    <strong id="depositWithholdingAmount">-</strong>
+                  </div>
+                </article>
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Net Getiri</p>
+                  <div class="need-calc-item">
+                    <strong id="depositNetReturn">-</strong>
+                  </div>
+                </article>
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Vade Sonu Tutarı</p>
+                  <div class="need-calc-item">
+                    <strong id="depositMaturityAmount">-</strong>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+          </article>
+        </section>
+
+        <section id="compoundCalculator" class="need-calc-wrap hidden" aria-live="polite">
+          <article class="compound-calc-panel">
+            <h3 class="need-calc-block-title">Bileşik Faiz Hesaplama</h3>
+
+            <form id="compoundCalcForm" class="compound-calc-form" novalidate>
+              <label class="need-calc-field" for="compoundPrincipal">
+                <span>Anapara</span>
+                <input
+                  id="compoundPrincipal"
+                  name="compound_principal"
+                  type="text"
+                  inputmode="numeric"
+                  autocomplete="off"
+                  value="100,000"
+                  required
+                />
+              </label>
+
+              <label class="need-calc-field" for="compoundFrequency">
+                <span>Faiz Ekleme Sıklığı</span>
+                <select id="compoundFrequency" name="compound_frequency" required>
+                  <option value="monthly" selected>Aylık</option>
+                  <option value="quarterly">3 Aylık</option>
+                  <option value="semiannual">6 Aylık</option>
+                  <option value="annual">Yıllık</option>
+                </select>
+              </label>
+
+              <label class="need-calc-field" for="compoundRate">
+                <span>Faiz Oranı</span>
+                <div class="compound-inline">
+                  <input id="compoundRate" name="compound_rate" type="number" min="0" step="0.01" value="43.50" required />
+                  <select id="compoundRateType" name="compound_rate_type" required>
+                    <option value="annual" selected>Yıllık</option>
+                    <option value="monthly">Aylık</option>
+                  </select>
+                </div>
+              </label>
+
+              <label class="need-calc-field" for="compoundTerm">
+                <span>Vade</span>
+                <div class="compound-inline">
+                  <input id="compoundTerm" name="compound_term" type="number" min="1" step="1" value="365" required />
+                  <select id="compoundTermUnit" name="compound_term_unit" required>
+                    <option value="day" selected>Gün</option>
+                    <option value="month">Ay</option>
+                    <option value="year">Yıl</option>
+                  </select>
+                </div>
+              </label>
+
+              <button class="need-calc-submit" type="submit">Hesapla</button>
+            </form>
+
+            <div id="compoundCalcResult" class="need-calc-result hidden">
+              <div class="need-calc-summary compound-calc-summary">
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Vade Sonu Tutar</p>
+                  <div class="need-calc-item">
+                    <strong id="compoundFinalAmount">-</strong>
+                  </div>
+                </article>
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Toplam Getiri</p>
+                  <div class="need-calc-item">
+                    <strong id="compoundTotalGain">-</strong>
+                  </div>
+                </article>
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Yıllık Eşdeğer Getiri</p>
+                  <div class="need-calc-item">
+                    <strong id="compoundEffectiveAnnualRate">-</strong>
+                  </div>
+                </article>
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Dönemsel Getiri</p>
+                  <div class="need-calc-item">
+                    <strong id="compoundPeriodGain">-</strong>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section id="realCalculator" class="need-calc-wrap hidden" aria-live="polite">
+          <article class="real-calc-panel">
+            <h3 class="need-calc-block-title">Reel Faiz Hesaplama</h3>
+
+            <form id="realCalcForm" class="real-calc-form" novalidate>
+              <div class="real-calc-input-grid">
+                <label class="need-calc-field" for="realInitialAmount">
+                  <span>Yatırım Tutarı</span>
+                  <input
+                    id="realInitialAmount"
+                    name="real_initial_amount"
+                    type="text"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    value="81,750"
+                    required
+                  />
+                </label>
+
+                <label class="need-calc-field" for="realFinalAmount">
+                  <span>Vade Sonu Tutarı</span>
+                  <input
+                    id="realFinalAmount"
+                    name="real_final_amount"
+                    type="text"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    value="109,251"
+                    required
+                  />
+                </label>
+
+                <label class="need-calc-field" for="realInflationRate">
+                  <span>Yıllık Enflasyon Oranı (%)</span>
+                  <input
+                    id="realInflationRate"
+                    name="real_inflation_rate"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value="38.00"
+                    required
+                  />
+                </label>
+              </div>
+
+              <div class="real-calc-date-row">
+                <label class="need-calc-field" for="realBuyDate">
+                  <span>Alış Tarihi</span>
+                  <input id="realBuyDate" name="real_buy_date" type="date" value="2026-01-01" required />
+                </label>
+
+                <label class="need-calc-field" for="realSellDate">
+                  <span>Satış Tarihi</span>
+                  <input id="realSellDate" name="real_sell_date" type="date" value="2026-03-01" required />
+                </label>
+
+                <button class="need-calc-submit" type="submit">Hesapla</button>
+              </div>
+            </form>
+
+            <div id="realCalcResult" class="need-calc-result hidden">
+              <div class="need-calc-summary real-calc-summary">
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Yatırım Tutarı</p>
+                  <div class="need-calc-item">
+                    <strong id="realResultInitial">-</strong>
+                  </div>
+                </article>
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Vade Sonu Tutarı</p>
+                  <div class="need-calc-item">
+                    <strong id="realResultFinal">-</strong>
+                  </div>
+                </article>
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Nominal Getiri</p>
+                  <div class="need-calc-item">
+                    <strong id="realResultNominalGain">-</strong>
+                  </div>
+                </article>
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Nominal Getiri Oranı</p>
+                  <div class="need-calc-item">
+                    <strong id="realResultNominalRate">-</strong>
+                  </div>
+                </article>
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Dönem Enflasyon Oranı</p>
+                  <div class="need-calc-item">
+                    <strong id="realResultInflationPeriod">-</strong>
+                  </div>
+                </article>
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Reel Getiri</p>
+                  <div class="need-calc-item">
+                    <strong id="realResultRealGain">-</strong>
+                  </div>
+                </article>
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Reel Getiri Oranı</p>
+                  <div class="need-calc-item">
+                    <strong id="realResultRealRate">-</strong>
+                  </div>
+                </article>
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Enflasyondan Arındırılmış Değer</p>
+                  <div class="need-calc-item">
+                    <strong id="realResultInflationAdjusted">-</strong>
+                  </div>
+                </article>
+              </div>
+              <p id="realCalcInfo" class="real-calc-note">
+                Reel faiz formülü: ((1 + nominal getiri oranı) / (1 + dönem enflasyonu)) - 1
+              </p>
+            </div>
+          </article>
+        </section>
+      </div>
+    </section>
+
+    <section id="investmentPage" class="investment-page hidden" aria-live="polite" aria-modal="true">
+      <div class="container investment-shell">
+        <section id="investmentGoldSection" class="investment-gold-section hidden" aria-live="polite">
+          <article class="investment-gold-table-panel">
+            <div class="investment-gold-table-head">
+              <h3>Piyasalarda Altın Fiyatları</h3>
+            </div>
+            <p id="investmentGoldMeta" class="tefas-meta">Kaynak: Kapalıçarşı</p>
+
+            <div class="investment-gold-table-wrap">
+              <table class="investment-gold-table">
+                <thead>
+                  <tr>
+                    <th>Altın Adı</th>
+                    <th>Alış Fiyatı</th>
+                    <th>Satış Fiyatı</th>
+                    <th>Güncellenme Saati</th>
+                    <th>Yön</th>
+                    <th>Değişim Tutarı</th>
+                    <th>Değişim (%)</th>
+                  </tr>
+                </thead>
+                <tbody id="investmentGoldBody">
+                  <tr>
+                    <td colspan="7" class="table-empty">Altın verisi yükleniyor...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <section id="investmentFxSection" class="investment-gold-section hidden" aria-live="polite">
+          <article class="investment-gold-table-panel">
+            <div class="investment-gold-table-head">
+              <h3>Piyasalarda Döviz Kurları</h3>
+            </div>
+            <p id="investmentFxMeta" class="tefas-meta">Kaynak: Kapalıçarşı</p>
+
+            <div class="investment-gold-table-wrap">
+              <table class="investment-gold-table">
+                <thead>
+                  <tr>
+                    <th>Döviz Çifti</th>
+                    <th>Alış Fiyatı</th>
+                    <th>Satış Fiyatı</th>
+                    <th>Güncellenme Saati</th>
+                    <th>Yön</th>
+                    <th>Değişim Tutarı</th>
+                    <th>Değişim (%)</th>
+                  </tr>
+                </thead>
+                <tbody id="investmentFxBody">
+                  <tr>
+                    <td colspan="7" class="table-empty">Döviz verisi yükleniyor...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </section>
+
+        <section id="investmentStockSection" class="investment-gold-section hidden" aria-live="polite">
+          <div class="investment-stock-grid">
+            <article class="investment-stock-panel">
+              <div class="investment-stock-head">
+                <h3>Günün yükselenleri</h3>
+                <span>Son Fiyat / Değişim (%)</span>
+              </div>
+
+              <div class="investment-stock-list">
+                <div class="investment-stock-row">
+                  <div class="investment-stock-name-wrap">
+                    <span class="investment-stock-logo">SASA</span>
+                    <div>
+                      <p class="investment-stock-name">SASA</p>
+                      <p class="investment-stock-meta">16:45 • Sasa Polyester Sanayi A.Ş.</p>
+                    </div>
+                  </div>
+                  <p class="investment-stock-price">2,42 TL</p>
+                  <p class="investment-stock-change up">%10,00</p>
+                </div>
+
+                <div class="investment-stock-row">
+                  <div class="investment-stock-name-wrap">
+                    <span class="investment-stock-logo">MCRD</span>
+                    <div>
+                      <p class="investment-stock-name">MCARD</p>
+                      <p class="investment-stock-meta">16:44 • Metropol Kurumsal Hizmetler</p>
+                    </div>
+                  </div>
+                  <p class="investment-stock-price">96,80 TL</p>
+                  <p class="investment-stock-change up">%10,00</p>
+                </div>
+
+                <div class="investment-stock-row">
+                  <div class="investment-stock-name-wrap">
+                    <span class="investment-stock-logo">PLTR</span>
+                    <div>
+                      <p class="investment-stock-name">PLTUR</p>
+                      <p class="investment-stock-meta">16:43 • Platform Turizm Taşımacılık</p>
+                    </div>
+                  </div>
+                  <p class="investment-stock-price">25,08 TL</p>
+                  <p class="investment-stock-change up">%10,00</p>
+                </div>
+
+                <div class="investment-stock-row">
+                  <div class="investment-stock-name-wrap">
+                    <span class="investment-stock-logo">MNS</span>
+                    <div>
+                      <p class="investment-stock-name">MANAS</p>
+                      <p class="investment-stock-meta">16:45 • Manas Enerji Yönetimi</p>
+                    </div>
+                  </div>
+                  <p class="investment-stock-price">18,70 TL</p>
+                  <p class="investment-stock-change up">%10,00</p>
+                </div>
+
+                <div class="investment-stock-row">
+                  <div class="investment-stock-name-wrap">
+                    <span class="investment-stock-logo">TRX</span>
+                    <div>
+                      <p class="investment-stock-name">TUREX</p>
+                      <p class="investment-stock-meta">16:44 • Tureks Turizm Taşımacılık</p>
+                    </div>
+                  </div>
+                  <p class="investment-stock-price">7,81 TL</p>
+                  <p class="investment-stock-change up">%10,00</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="investment-stock-panel">
+              <div class="investment-stock-head">
+                <h3>Günün düşenleri</h3>
+                <span>Son Fiyat / Değişim (%)</span>
+              </div>
+
+              <div class="investment-stock-list">
+                <div class="investment-stock-row">
+                  <div class="investment-stock-name-wrap">
+                    <span class="investment-stock-logo">SNGY</span>
+                    <div>
+                      <p class="investment-stock-name">SNGYO</p>
+                      <p class="investment-stock-meta">16:46 • Sinpaş Gayrimenkul Yatırım</p>
+                    </div>
+                  </div>
+                  <p class="investment-stock-price">4,06 TL</p>
+                  <p class="investment-stock-change down">%-9,98</p>
+                </div>
+
+                <div class="investment-stock-row">
+                  <div class="investment-stock-name-wrap">
+                    <span class="investment-stock-logo">KLNM</span>
+                    <div>
+                      <p class="investment-stock-name">KLNMA</p>
+                      <p class="investment-stock-meta">14:00 • Türkiye Kalkınma ve Yatırım</p>
+                    </div>
+                  </div>
+                  <p class="investment-stock-price">10,85 TL</p>
+                  <p class="investment-stock-change down">%-9,96</p>
+                </div>
+
+                <div class="investment-stock-row">
+                  <div class="investment-stock-name-wrap">
+                    <span class="investment-stock-logo">KZBG</span>
+                    <div>
+                      <p class="investment-stock-name">KZBGY</p>
+                      <p class="investment-stock-meta">16:46 • Kızılbük Gayrimenkul Yatırım</p>
+                    </div>
+                  </div>
+                  <p class="investment-stock-price">3,45 TL</p>
+                  <p class="investment-stock-change down">%-9,69</p>
+                </div>
+
+                <div class="investment-stock-row">
+                  <div class="investment-stock-name-wrap">
+                    <span class="investment-stock-logo">GOKN</span>
+                    <div>
+                      <p class="investment-stock-name">GOKNR</p>
+                      <p class="investment-stock-meta">16:47 • Göknur Gıda Maddeleri</p>
+                    </div>
+                  </div>
+                  <p class="investment-stock-price">21,28 TL</p>
+                  <p class="investment-stock-change down">%-9,68</p>
+                </div>
+
+                <div class="investment-stock-row">
+                  <div class="investment-stock-name-wrap">
+                    <span class="investment-stock-logo">EYG</span>
+                    <div>
+                      <p class="investment-stock-name">EYGYO</p>
+                      <p class="investment-stock-meta">16:47 • EYG Gayrimenkul Yatırım Ort.</p>
+                    </div>
+                  </div>
+                  <p class="investment-stock-price">3,45 TL</p>
+                  <p class="investment-stock-change down">%-8,97</p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="investmentFundSection" class="investment-gold-section hidden" aria-live="polite">
+          <article class="investment-gold-table-panel">
+            <div class="investment-gold-table-head">
+              <h3>TEFAS Fon Karşılaştırma</h3>
+              <span id="tefasFundMeta" class="tefas-meta">Veri yükleniyor...</span>
+            </div>
+
+            <div class="tefas-search-row">
+              <label class="tefas-search-label" for="tefasFundSearchInput">Arama Yap</label>
+              <div class="tefas-search-input-wrap">
+                <input
+                  id="tefasFundSearchInput"
+                  type="search"
+                  inputmode="search"
+                  autocomplete="off"
+                  placeholder="Fon kodu veya fon adı ile ara"
+                />
+                <button id="tefasFundSearchClear" class="tefas-search-clear" type="button" disabled>Temizle</button>
+              </div>
+            </div>
+            <p id="tefasFundSearchInfo" class="tefas-search-info">Fon listesi hazırlanıyor...</p>
+
+            <div class="investment-gold-table-wrap">
+              <table class="investment-gold-table">
+                <thead>
+                  <tr>
+                    <th>Fon Kodu</th>
+                    <th class="tefas-head-left">Fon Ünvanı</th>
+                    <th class="tefas-head-right">Fiyat</th>
+                    <th class="tefas-head-right">Portföy Büyüklüğü</th>
+                    <th>1 Aylık Getiri</th>
+                    <th>1 Yıllık Getiri</th>
+                  </tr>
+                </thead>
+                <tbody id="tefasFundBody">
+                  <tr>
+                    <td colspan="6" class="table-empty">TEFAS verisi yükleniyor...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="tefas-note">Kaynak: TEFAŞ</p>
+          </article>
+        </section>
+
+        <section id="investmentSilverSection" class="investment-gold-section hidden" aria-live="polite">
+          <article class="investment-gold-table-panel">
+            <div class="investment-gold-table-head">
+              <h3>Piyasalarda Mevduat Faiz Oranları</h3>
+            </div>
+            <p id="investmentSilverMeta" class="tefas-meta">Güncelleme: 13.03.2026</p>
+
+            <form id="investmentDepositForm" class="deposit-calc-form investment-deposit-form" novalidate>
+              <label class="need-calc-field" for="investmentDepositPrincipal">
+                <span>Mevduat Tutarı</span>
+                <input
+                  id="investmentDepositPrincipal"
+                  name="investment_deposit_principal"
+                  type="text"
+                  inputmode="numeric"
+                  autocomplete="off"
+                  value="100,000"
+                  required
+                />
+              </label>
+
+              <label class="need-calc-field" for="investmentDepositTermDays">
+                <span>Vade</span>
+                <select id="investmentDepositTermDays" name="investment_deposit_term_days" required>
+                  <option value="32" selected>32 gün</option>
+                  <option value="46">46 gün</option>
+                  <option value="92">92 gün</option>
+                  <option value="181">181 gün</option>
+                  <option value="365">365 gün</option>
+                </select>
+              </label>
+
+              <button class="need-calc-submit" type="submit">Teklifleri güncelle</button>
+            </form>
+
+            <section class="deposit-offers-panel" aria-live="polite">
+              <div class="deposit-offers-head">
+                <div>
+                  <p class="deposit-offers-kicker">Mevduat Teklifleri</p>
+                  <h4 id="investmentDepositOfferTitle" class="deposit-offers-title">
+                    100,000 TL için 32 gün vadeli mevduat karşılaştırması
+                  </h4>
+                </div>
+                <p class="deposit-offers-meta">Net getiriye göre örnek sıralama</p>
+              </div>
+
+              <div class="deposit-offers-filters">
+                <label class="need-calc-field" for="investmentDepositAccountTypeFilter">
+                  <span>Hesap Tipi</span>
+                  <select id="investmentDepositAccountTypeFilter" name="investment_deposit_account_type_filter">
+                    <option value="all" selected>Tümü</option>
+                    <option value="new">Yeni Müşteri</option>
+                    <option value="standard">Standart Vadeli</option>
+                    <option value="daily">Günlük Kazandıran</option>
+                  </select>
+                </label>
+
+                <label class="need-calc-field" for="investmentDepositBankTypeFilter">
+                  <span>Banka Tipi</span>
+                  <select id="investmentDepositBankTypeFilter" name="investment_deposit_bank_type_filter">
+                    <option value="all" selected>Tümü</option>
+                    <option value="digital">Dijital Banka</option>
+                    <option value="traditional">Mevduat Bankası</option>
+                  </select>
+                </label>
+              </div>
+
+              <div id="investmentDepositOffersList" class="deposit-offers-grid">
+                <article class="deposit-offer-card">
+                  <p class="deposit-offer-empty">Teklifler hazırlanıyor...</p>
+                </article>
+              </div>
+
+              <p class="deposit-offers-note">
+                Kartlardaki değerler örnek ürünler üzerinden hesaplanır. Nihai oran bankanın güncel teklifine göre değişebilir.
+              </p>
+            </section>
+          </article>
+        </section>
       </div>
     </section>
 
     <footer class="site-footer">
       <div class="container footer-inner">
-        <p>Bireysel finansal rehberlik</p>
+          <p>FinansalRehber</p>
         <p>Bu çıktı bilgi amaçlıdır, yatırım tavsiyesi değildir.</p>
       </div>
     </footer>

@@ -2,7 +2,7 @@
   --bg: #f3f6fb;
   --bg-soft: #edf4fb;
   --panel: #ffffff;
-  --line: #d7e0ec;
+  --line: #b8c8dc;
   --ink: #1d2939;
   --muted: #5f6c80;
   --primary: #007d91;
@@ -22,11 +22,15 @@ body {
   padding: 0;
 }
 
+html {
+  font-size: 15px;
+}
+
 body {
   min-height: 100vh;
   font-family: "Inter", sans-serif;
   color: var(--ink);
-  background: #dfdfdf;
+  background: #f2f3f5;
   overflow-x: hidden;
 }
 
@@ -80,43 +84,175 @@ button {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 0.68rem;
+  gap: 0.65rem;
 }
 
 .brand-mark {
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  font-size: 0.82rem;
-  font-weight: 800;
-  color: #fff;
-  background: linear-gradient(135deg, #00a7bf 0%, var(--primary) 65%);
+  width: 4.8375rem;
+  height: 4.8375rem;
+  object-fit: contain;
+  flex: 0 0 auto;
 }
 
 .brand-text {
-  font-size: 1.03rem;
+  font-family: "Plus Jakarta Sans", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-style: normal;
+  font-size: clamp(2.05rem, 3.45vw, 3.05rem);
   font-weight: 800;
-  color: #0f3b46;
-  letter-spacing: -0.01em;
+  color: #797152;
+  letter-spacing: -0.015em;
+  line-height: 1.04;
 }
 
 .header-nav {
   justify-self: center;
+  position: relative;
   display: flex;
   align-items: center;
   gap: 1.2rem;
+  padding-top: 0.7rem;
 }
 
-.header-nav a {
-  font-size: 0.95rem;
+.header-nav-item {
+  position: relative;
+  padding-bottom: 0.9rem;
+  margin-bottom: -0.9rem;
+}
+
+.header-nav-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding-bottom: 0;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #36465d;
 }
 
-.header-nav a:hover {
+.header-nav-trigger::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.32rem;
+  height: 2px;
+  background: #243958;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.header-nav-trigger:hover {
   color: var(--primary);
+}
+
+.header-nav-trigger.is-active {
+  color: #c50003;
+}
+
+.header-nav-trigger.is-active::after {
+  background: #c50003;
+  transform: scaleX(1);
+}
+
+.header-nav-trigger:hover::after,
+.header-nav-trigger:focus-visible::after,
+.header-nav-item.menu-open .header-nav-trigger::after,
+.header-nav-item:focus-within .header-nav-trigger::after {
+  transform: scaleX(1);
+}
+
+body.suppress-header-hover .header-nav-item:hover .header-nav-trigger::after,
+body.suppress-header-hover .header-nav-item:focus-within .header-nav-trigger::after {
+  transform: scaleX(0);
+}
+
+.header-mega-menu {
+  position: absolute;
+  top: calc(100% + 0.18rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  width: min(900px, calc(100vw - 3rem));
+  padding: 0.7rem;
+  border: 1px solid #b8c8dc;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 22px 40px rgba(31, 47, 70, 0.14);
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+}
+
+.header-nav-item:hover .header-mega-menu,
+.header-nav-item.menu-open .header-mega-menu,
+.header-nav-item:focus-within .header-mega-menu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+body.suppress-header-hover .header-nav-item:hover .header-mega-menu,
+body.suppress-header-hover .header-nav-item:focus-within .header-mega-menu {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(8px);
+}
+
+.header-mega-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.header-mega-card {
+  min-height: 112px;
+  border: 1px solid #b8c8dc;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #26374e;
+  padding: 0.7rem 0.45rem;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.45rem;
+  text-align: center;
+  font: inherit;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.header-mega-card:hover,
+.header-mega-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: #b8c8dc;
+  box-shadow: 0 12px 24px rgba(36, 57, 88, 0.12);
+}
+
+.header-mega-card .calc-icon {
+  width: 40px;
+  height: 40px;
+  font-size: 1.15rem;
+}
+
+.header-mega-card .calc-icon-image {
+  width: 24px;
+  height: 24px;
+}
+
+.header-mega-card .calc-icon-k .calc-icon-image {
+  width: 30px;
+  height: 30px;
+}
+
+.header-mega-card p {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.3;
 }
 
 .header-auth {
@@ -132,12 +268,12 @@ button {
   border: none;
   border-radius: 10px;
   padding: 0.4rem 0.95rem;
-  background: var(--accent);
+  background: #32445e;
   color: #fff;
   font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 8px 18px rgba(237, 137, 22, 0.28);
+  box-shadow: 0 8px 18px rgba(50, 68, 94, 0.3);
 }
 
 .header-cta:hover {
@@ -413,18 +549,92 @@ button {
 
 .layout-shell {
   margin-top: 0.9rem;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  background: linear-gradient(180deg, #f9fcff 0%, #f5f9ff 100%);
-  padding: 1rem;
-  box-shadow: var(--shadow);
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
 }
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(280px, 1.05fr) minmax(280px, 1.05fr) minmax(215px, 0.72fr);
+  grid-template-columns: minmax(280px, 1.03fr) minmax(280px, 1fr) minmax(245px, 0.85fr);
   gap: 1rem;
   align-items: stretch;
+}
+
+.home-bank-wall {
+  margin-bottom: 1rem;
+}
+
+.home-bank-wall-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid #b8c8dc;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.home-bank-wall-card {
+  min-height: 94px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0.8rem;
+  background: #ffffff;
+  border-right: 1px solid #e5edf5;
+  border-bottom: 1px solid #e5edf5;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.home-bank-wall-button {
+  width: 100%;
+  border-top: none;
+  border-left: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.home-bank-wall-card:nth-child(6n) {
+  border-right: none;
+}
+
+.home-bank-wall-card:hover,
+.home-bank-wall-card:focus-within {
+  background: #f7f9fc;
+  box-shadow: inset 0 0 0 1px rgba(184, 200, 220, 0.45);
+}
+
+.home-bank-wall-card img {
+  width: 100%;
+  max-width: 132px;
+  max-height: 34px;
+  object-fit: contain;
+  filter: grayscale(1) contrast(0.94) brightness(0.85);
+  opacity: 0.92;
+  transition: filter 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+.home-bank-wall-card:hover img,
+.home-bank-wall-card:focus-within img {
+  filter: none;
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+.home-bank-wall-card-wordmark {
+  background: #ffffff;
+}
+
+.bank-wordmark-home {
+  min-width: 132px;
+  justify-content: center;
+}
+
+.bank-wordmark-home .bank-wordmark-text {
+  font-size: 2rem;
 }
 
 .intro-panel {
@@ -435,6 +645,104 @@ button {
   padding: 1.1rem;
   display: flex;
   flex-direction: column;
+}
+
+.bank-detail-page {
+  padding-bottom: 1.4rem;
+}
+
+.bank-detail-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.bank-detail-hero {
+  border: 1px solid #b8c8dc;
+  border-radius: 14px;
+  background: #ecf4fa;
+  padding: 1.1rem;
+}
+
+.bank-detail-brand {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.bank-detail-logo {
+  width: 156px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.bank-detail-kicker {
+  margin: 0 0 0.25rem;
+  color: #607189;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.bank-detail-copy h2 {
+  margin: 0;
+  color: #22344f;
+}
+
+.bank-detail-copy p:last-child {
+  margin: 0.5rem 0 0;
+  color: #5f6f84;
+  line-height: 1.55;
+}
+
+.bank-product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.bank-product-card {
+  border: 1px solid #b8c8dc;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 0.95rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.bank-product-head h3 {
+  margin: 0;
+  color: #1f2f46;
+  font-size: 1.08rem !important;
+}
+
+.bank-product-head p {
+  margin: 0.28rem 0 0;
+  color: #66768d;
+  font-size: 0.88rem;
+}
+
+.bank-product-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bank-product-table th,
+.bank-product-table td {
+  padding: 0.72rem 0.4rem;
+  border-top: 1px solid #e4ebf3;
+  font-size: 0.93rem;
+}
+
+.bank-product-table th {
+  color: #61728b;
+  font-weight: 600;
+  text-align: left;
+}
+
+.bank-product-table td:last-child,
+.bank-product-table th:last-child {
+  text-align: right;
 }
 
 .intro-panel h2 {
@@ -501,6 +809,1405 @@ button {
 
 .compact-panel .api-box input {
   min-height: 36px;
+}
+
+.trust-strip {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.trust-box {
+  min-height: 210px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+}
+
+.trust-box-copy {
+  padding: 1.05rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.trust-box-copy h4 {
+  margin: 0;
+  color: #171a23;
+  font-size: 1.08rem;
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+.trust-box-copy p {
+  margin: 0;
+  color: #575f6d;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.loan-trust-strip {
+  margin-top: 1.2rem;
+  grid-column: auto;
+  grid-row: auto;
+}
+
+body.subpage-open {
+  overflow: hidden;
+}
+
+.loan-rates-page {
+  position: fixed;
+  top: 74px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 8;
+  background: #f2f3f5;
+  overflow-y: auto;
+}
+
+.calculation-page {
+  position: fixed;
+  top: 74px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 8;
+  background: #f2f3f5;
+  overflow-y: auto;
+  --calc-highlight-bg: #ecf4fa;
+}
+
+.investment-page {
+  position: fixed;
+  top: 74px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 8;
+  background: #f2f3f5;
+  overflow-y: auto;
+  --calc-highlight-bg: #ecf4fa;
+}
+
+.calculation-page[data-loan-type="need"] {
+  --calc-highlight-bg: #ecf4fa;
+}
+
+.calculation-page[data-loan-type="housing"] {
+  --calc-highlight-bg: #ecf4fa;
+}
+
+.calculation-page[data-loan-type="vehicle"] {
+  --calc-highlight-bg: #ecf4fa;
+}
+
+.calculation-page[data-loan-type="deposit"] {
+  --calc-highlight-bg: #ecf4fa;
+}
+
+.calculation-page[data-loan-type="deposit"] #calcDepositCard.calculation-card.is-active {
+  background: #ecf4fa;
+}
+
+.calculation-page[data-loan-type="compound"] {
+  --calc-highlight-bg: #ecf4fa;
+}
+
+.calculation-page[data-loan-type="real"] {
+  --calc-highlight-bg: #ecf4fa;
+}
+
+body.subpage-open .header-auth {
+  display: none;
+}
+
+body.subpage-open .header-inner {
+  grid-template-columns: auto 1fr;
+}
+
+.loan-rates-shell {
+  padding-top: 0.7rem;
+  padding-bottom: 1.5rem;
+}
+
+.calculation-shell {
+  padding-top: 0.7rem;
+  padding-bottom: 1.2rem;
+}
+
+.investment-shell {
+  padding-top: 0.7rem;
+  padding-bottom: 1.2rem;
+}
+
+.subpage-breadcrumb {
+  margin: 0 0 1rem;
+}
+
+.subpage-breadcrumb a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #333333;
+  font-size: 1.02rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.subpage-breadcrumb a::before {
+  content: "<";
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.subpage-breadcrumb a:hover {
+  color: #8f9eb3;
+  text-decoration: none;
+}
+
+.loan-rates-title {
+  margin: 0 0 1rem;
+  color: #101824;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.calculation-title {
+  margin: 0 0 1.15rem;
+  color: #101824;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.calculation-cards {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.95rem;
+}
+
+.investment-cards {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.95rem;
+}
+
+.investment-card {
+  aspect-ratio: 1 / 1;
+  min-height: 170px;
+  background: #ecf4fa;
+}
+
+.investment-card-trigger.is-active {
+  border-color: #243958;
+  box-shadow: 0 10px 24px rgba(36, 57, 88, 0.2);
+}
+
+.investment-gold-section {
+  margin-top: 1.05rem;
+  display: grid;
+  gap: 1rem;
+}
+
+#investmentGoldSection,
+#investmentFxSection,
+#investmentSilverSection,
+#investmentFundSection {
+  background: #ecf4fa;
+  border: 1px solid #d7e0ec;
+  border-radius: 10px;
+  padding: 0.9rem;
+}
+
+.investment-gold-hero {
+  border-radius: 10px;
+  background: #071d4f;
+  padding: 0.9rem;
+}
+
+.investment-gold-title {
+  margin: 0 0 0.75rem;
+  color: #ffffff;
+  font-size: 1.35rem;
+  font-weight: 400;
+}
+
+.investment-gold-top {
+  display: grid;
+  grid-template-columns: minmax(0, 2.4fr) minmax(260px, 0.95fr);
+  gap: 0.9rem;
+  align-items: start;
+}
+
+.investment-gold-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.investment-gold-card {
+  border: 1px solid #d8e0ea;
+  border-radius: 8px;
+  background: #ecf4fa;
+  padding: 0.72rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.investment-gold-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.investment-gold-head p {
+  margin: 0;
+  color: #202c3f;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.investment-gold-change {
+  color: #20ab4f;
+  font-size: 0.96rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.investment-gold-time {
+  margin: 0;
+  color: #5e6b80;
+  font-size: 0.86rem;
+}
+
+.investment-gold-prices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.investment-gold-prices span {
+  display: block;
+  color: #4f5d73;
+  font-size: 0.86rem;
+}
+
+.investment-gold-prices strong {
+  display: block;
+  margin-top: 0.15rem;
+  color: #16243a;
+  font-size: 1.22rem;
+  font-weight: 600;
+}
+
+.investment-gold-calc {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  background: rgba(7, 29, 79, 0.65);
+  padding: 0.7rem;
+  display: grid;
+  gap: 0.62rem;
+}
+
+.investment-gold-calc-title {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.22rem;
+  font-weight: 400;
+}
+
+.investment-gold-radio {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.investment-gold-radio label {
+  color: #ffffff;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.investment-gold-inputs {
+  display: grid;
+  gap: 0.48rem;
+}
+
+.investment-gold-input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.45rem;
+}
+
+.investment-gold-input-row input,
+.investment-gold-input-row select {
+  min-height: 42px;
+  border: 1px solid #cfd8e4;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #27364a;
+  font: inherit;
+  padding: 0 0.58rem;
+}
+
+.investment-gold-table-panel {
+  border-radius: 10px;
+  background: transparent;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.investment-gold-table-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  background: #ecf4fa;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.investment-gold-table-head h3 {
+  margin: 0;
+}
+
+.investment-gold-table-head select {
+  min-height: 42px;
+  min-width: 170px;
+  border: 1px solid #cfd8e4;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #27364a;
+  font: inherit;
+  padding: 0 0.58rem;
+}
+
+.investment-gold-table-wrap {
+  border: 1px solid #d7e0ec;
+  border-radius: 8px;
+  background: #ffffff;
+  overflow-x: auto;
+}
+
+.investment-gold-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.investment-gold-table th {
+  text-align: left;
+  background: #f6f8fb;
+  color: #25354a;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.62rem;
+}
+
+.investment-gold-table td {
+  border-top: 1px solid #e2e8f0;
+  color: #24364e;
+  font-size: 0.95rem;
+  padding: 0.62rem;
+}
+
+.table-empty {
+  text-align: center;
+  color: #5f6c80;
+  font-style: italic;
+}
+
+.tefas-meta {
+  color: #5f6c80;
+  font-size: 0.86rem;
+}
+
+.tefas-search-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.tefas-search-label {
+  color: #30445f;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.tefas-search-input-wrap {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 42px;
+  border: 1px solid #cfd8e4;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 0 0.45rem;
+}
+
+.tefas-search-input-wrap input {
+  min-height: 36px;
+  border: none;
+  background: transparent;
+  color: #25374f;
+  font: inherit;
+  padding: 0;
+}
+
+.tefas-search-input-wrap input:focus {
+  outline: none;
+}
+
+.tefas-search-clear {
+  min-height: 30px;
+  border: 1px solid #b8c8dc;
+  border-radius: 6px;
+  background: #eef3fb;
+  color: #32445e;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0 0.6rem;
+  cursor: pointer;
+}
+
+.tefas-search-clear:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.tefas-search-info {
+  margin: 0;
+  color: #607189;
+  font-size: 0.84rem;
+}
+
+.tefas-note {
+  margin: 0;
+  color: #71809a;
+  font-size: 0.83rem;
+}
+
+.investment-gold-table th:nth-child(4),
+.investment-gold-table th:nth-child(5),
+.investment-gold-table th:nth-child(6),
+.investment-gold-table th:nth-child(7),
+.investment-gold-table td:nth-child(4),
+.investment-gold-table td:nth-child(5),
+.investment-gold-table td:nth-child(6),
+.investment-gold-table td:nth-child(7) {
+  text-align: center;
+}
+
+.investment-gold-table th:nth-child(2),
+.investment-gold-table th:nth-child(3),
+.investment-gold-table td:nth-child(2),
+.investment-gold-table td:nth-child(3) {
+  text-align: right;
+}
+
+.table-trend-up,
+.table-change-up {
+  color: #1f9d4e;
+}
+
+.table-trend-down,
+.table-change-down {
+  color: #cc3d3d;
+}
+
+.table-trend-up,
+.table-trend-down {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.investment-stock-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.investment-stock-panel {
+  border: 1px solid #b8c8dc;
+  border-radius: 10px;
+  background: #ecf4fa;
+  padding: 0.8rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.investment-stock-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.investment-stock-head h3 {
+  margin: 0;
+  color: #101824;
+  font-size: 1.12rem;
+  font-weight: 500;
+}
+
+.investment-stock-head span {
+  color: #5f6c80;
+  font-size: 0.86rem;
+}
+
+.investment-stock-list {
+  display: grid;
+}
+
+.investment-stock-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.75rem;
+  border-top: 1px solid #e3e9f1;
+  padding: 0.6rem 0;
+}
+
+.investment-stock-row:first-child {
+  border-top: 1px solid #d7e0ec;
+}
+
+.investment-stock-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.investment-stock-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: #edf2fa;
+  color: #32445e;
+  font-size: 0.66rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0.03em;
+  flex: 0 0 auto;
+}
+
+.investment-stock-name {
+  margin: 0;
+  color: #101824;
+  font-size: 1.01rem;
+  font-weight: 500;
+}
+
+.investment-stock-meta {
+  margin: 0.15rem 0 0;
+  color: #71809a;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.investment-stock-price {
+  margin: 0;
+  color: #13253f;
+  font-size: 1.02rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.investment-stock-change {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.investment-stock-change.up {
+  color: #1f9d4e;
+}
+
+.investment-stock-change.down {
+  color: #cc3d3d;
+}
+
+.calculation-card {
+  border: 1px solid #b8c8dc;
+  border-radius: 8px;
+  background: #ffffff;
+  min-height: 168px;
+  padding: 0.85rem 0.7rem;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.75rem;
+  text-align: center;
+  box-shadow: 0 3px 12px rgba(17, 41, 79, 0.05);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.calculation-card p {
+  margin: 0;
+  color: #28374b;
+  font-size: 1.03rem;
+  line-height: 1.35;
+}
+
+.calculation-card-button {
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+  appearance: none;
+}
+
+.calculation-card-button:hover,
+.calculation-card-button:focus-visible {
+  border-color: #b8c8dc;
+  box-shadow: 0 10px 24px rgba(25, 57, 103, 0.12);
+  transform: translateY(-2px);
+}
+
+.calculation-card.is-active {
+  border-color: #b8c8dc;
+  background: var(--calc-highlight-bg);
+  box-shadow: 0 10px 24px rgba(50, 68, 94, 0.2);
+}
+
+.calc-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.65rem;
+  line-height: 1;
+}
+
+.calc-icon-image {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  display: block;
+}
+
+.calc-icon-mask {
+  width: 34px;
+  height: 34px;
+  display: block;
+  background-color: #333333;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.calc-icon-mask-faiz {
+  width: 38px;
+  height: 38px;
+  -webkit-mask-image: url("./assets/faiz.svg?v=2");
+  mask-image: url("./assets/faiz.svg?v=2");
+}
+
+.calc-icon-a {
+  background: transparent;
+  color: #333333;
+  transform: translateY(4px);
+}
+
+.calc-icon-b {
+  background: transparent;
+  color: #d14d66;
+}
+
+.calc-icon-c {
+  background: transparent;
+  color: #2f7dc3;
+}
+
+.calc-icon-d {
+  background: transparent;
+  color: #333333;
+}
+
+.calc-icon-d .calc-icon-image {
+  width: 44px;
+  height: 44px;
+}
+
+.calc-icon-e {
+  background: transparent;
+  color: #357ed4;
+}
+
+.calc-icon-e .calc-icon-image {
+  width: 26px;
+  height: 26px;
+}
+
+.calc-icon-f {
+  background: #fff5e3;
+  color: #c1831b;
+}
+
+.calc-icon-g {
+  background: transparent;
+}
+
+.calc-icon-g .calc-icon-image {
+  width: 38px;
+  height: 38px;
+}
+
+.calc-icon-h {
+  background: transparent;
+}
+
+.calc-icon-h .calc-icon-image {
+  width: 38px;
+  height: 38px;
+}
+
+.calc-icon-i {
+  background: transparent;
+}
+
+.calc-icon-i .calc-icon-image {
+  width: 42px;
+  height: 42px;
+}
+
+.calc-icon-j {
+  background: transparent;
+}
+
+.calc-icon-k {
+  background: transparent;
+}
+
+.calc-icon-k .calc-icon-image {
+  width: 50px;
+  height: 50px;
+}
+
+.calc-icon-l {
+  background: transparent;
+}
+
+.calc-icon-l .calc-icon-image {
+  width: 22px;
+  height: 22px;
+}
+
+.calc-icon-m {
+  background: transparent;
+}
+
+.calc-icon-m .calc-icon-image {
+  width: 38px;
+  height: 38px;
+}
+
+.need-calc-wrap {
+  margin-top: 1.15rem;
+  border: 1px solid #b8c8dc;
+  border-radius: 8px;
+  background: var(--calc-highlight-bg);
+  padding: 0.8rem;
+  box-shadow: 0 8px 24px rgba(22, 45, 80, 0.08);
+}
+
+.need-calc-stack {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.need-calc-tabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  align-items: flex-end;
+  border-bottom: 1px solid #cdd6e2;
+  padding-bottom: 0;
+}
+
+.need-calc-tab {
+  min-height: 38px;
+  border: 1px solid #243958;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  padding: 0 0.95rem;
+  background: #243958;
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 500;
+  margin-bottom: -1px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.need-calc-tab.active,
+.need-calc-tab[aria-selected="true"] {
+  background: var(--calc-highlight-bg);
+  border-color: #b8c8dc;
+  color: #1f2f46;
+}
+
+.need-calc-pane {
+  width: 100%;
+}
+
+.need-calc-block {
+  border: none;
+  border-radius: 0;
+  background: var(--calc-highlight-bg);
+  padding: 0;
+}
+
+.need-calc-block + .need-calc-block {
+  border-top: 1px solid #d6dde7;
+  padding-top: 0.8rem;
+}
+
+.need-calc-block-title {
+  margin: 0 0 0.55rem;
+  color: #203048;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.need-calc-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 0.9fr) auto;
+  gap: 0.55rem;
+  align-items: end;
+}
+
+.need-calc-field {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.need-calc-field span {
+  color: #2f4059;
+  font-size: 0.93rem;
+  font-weight: 400;
+}
+
+.need-calc-field input,
+.need-calc-field select {
+  min-height: 42px;
+  border: 1px solid #cfd8e4;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #28374b;
+  font: inherit;
+  font-weight: 400;
+  padding: 0 0.55rem;
+}
+
+.need-calc-submit {
+  min-height: 42px;
+  border: none;
+  border-radius: 6px;
+  padding: 0 1.25rem;
+  background: #243958;
+  color: #ffffff;
+  font-size: 1.03rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.need-calc-submit:hover {
+  filter: brightness(0.96);
+}
+
+.need-calc-helper {
+  margin: 0;
+  padding: 0.55rem 0 0;
+  color: #485b73;
+  font-size: 0.95rem;
+}
+
+.need-calc-result {
+  padding: 0.55rem 0 0;
+}
+
+.need-calc-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.7rem;
+  align-items: start;
+}
+
+.need-calc-metric {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.need-calc-metric-label {
+  margin: 0;
+  color: #5a6b80;
+  font-size: 0.84rem;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.need-calc-item {
+  border: 1px solid #b8c8dc;
+  border-radius: 8px;
+  background: #f9fbff;
+  min-height: 46px;
+  padding: 0.55rem 0.6rem;
+  display: flex;
+  align-items: center;
+}
+
+.need-calc-item strong {
+  color: #1f2f46;
+  font-size: 1.08rem;
+  font-weight: 400;
+}
+
+.deposit-calc-panel {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.deposit-calc-tabs {
+  display: inline-flex;
+  gap: 0.3rem;
+  align-items: flex-end;
+  border-bottom: 1px solid #cdd6e2;
+  padding-bottom: 0;
+}
+
+.deposit-tab {
+  min-height: 38px;
+  border: 1px solid #243958;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  padding: 0 0.95rem;
+  background: #243958;
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 500;
+  margin-bottom: -1px;
+  cursor: default;
+}
+
+.deposit-tab.active {
+  background: var(--calc-highlight-bg);
+  border-color: #b8c8dc;
+  color: #1f2f46;
+}
+
+.deposit-tab:disabled {
+  opacity: 1;
+  background: #243958;
+  color: #ffffff;
+  border-color: #243958;
+}
+
+.deposit-calc-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 0.55rem;
+  align-items: end;
+  border: 1px solid #b8c8dc;
+  border-radius: 8px;
+  background: #ecf4fa;
+  padding: 0.65rem;
+}
+
+.deposit-calc-summary {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.investment-deposit-form {
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.95fr) auto;
+  margin-top: 0.1rem;
+}
+
+.deposit-offers-panel {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.loan-offers-panel {
+  padding-top: 0.15rem;
+}
+
+.deposit-offers-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.deposit-offers-kicker {
+  margin: 0 0 0.2rem;
+  color: #607189;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.deposit-offers-title {
+  margin: 0;
+  color: #213149;
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+.deposit-offers-meta {
+  margin: 0;
+  color: #607189;
+  font-size: 0.88rem;
+}
+
+.deposit-offers-filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.deposit-offers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.deposit-offer-card {
+  border: 1px solid #d7e0ec;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 0.8rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.deposit-offer-heading {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.deposit-offer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 0.8rem;
+}
+
+.deposit-offer-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 0 0.6rem;
+  border-radius: 999px;
+  background: #eef3fb;
+  color: #32445e;
+  font-size: 0.79rem;
+}
+
+.deposit-offer-badge.is-best {
+  background: #32445e;
+  color: #ffffff;
+}
+
+.deposit-offer-bank {
+  margin: 0.42rem 0 0.1rem;
+  color: #1f2f46;
+  font-size: 1.05rem;
+  font-weight: 400;
+}
+
+.deposit-offer-logo {
+  width: 104px;
+  height: 28px;
+  object-fit: contain;
+  object-position: left center;
+}
+
+.bank-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+  white-space: nowrap;
+}
+
+.bank-wordmark-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #ff671d;
+  flex: 0 0 auto;
+}
+
+.bank-wordmark-text {
+  color: #00205b;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.bank-wordmark-card {
+  min-width: 104px;
+  height: 28px;
+}
+
+.bank-wordmark-card .bank-wordmark-text {
+  font-size: 1.55rem;
+}
+
+.deposit-offer-product {
+  margin: 0;
+  color: #607189;
+  font-size: 0.9rem;
+}
+
+.deposit-offer-rate-wrap {
+  display: grid;
+  justify-items: end;
+  gap: 0.15rem;
+  text-align: right;
+}
+
+.deposit-offer-rate-label {
+  color: #607189;
+  font-size: 0.78rem;
+}
+
+.deposit-offer-rate {
+  color: #243958;
+  font-size: 1.26rem;
+  font-weight: 400;
+}
+
+.deposit-offer-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.deposit-offer-metric {
+  border: 1px solid #e1e8f1;
+  border-radius: 8px;
+  background: #f8fbff;
+  padding: 0.55rem;
+  display: grid;
+  gap: 0.18rem;
+}
+
+.deposit-offer-metric span {
+  color: #607189;
+  font-size: 0.8rem;
+}
+
+.deposit-offer-metric strong {
+  color: #1f2f46;
+  font-size: 0.98rem;
+  font-weight: 400;
+}
+
+.deposit-offer-note {
+  margin: 0;
+  color: #53657e;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.deposit-offer-action {
+  min-height: 40px;
+  border: 1px solid #32445e;
+  border-radius: 8px;
+  background: #32445e;
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.93rem;
+  font-weight: 400;
+  padding: 0 0.9rem;
+  justify-self: start;
+  cursor: pointer;
+}
+
+.deposit-offer-empty {
+  margin: 0;
+  color: #607189;
+  font-size: 0.92rem;
+}
+
+.deposit-offers-note {
+  margin: 0;
+  color: #607189;
+  font-size: 0.84rem;
+}
+
+.tefas-cell-left {
+  text-align: left;
+}
+
+.tefas-cell-right {
+  text-align: right;
+}
+
+.tefas-head-left {
+  text-align: left !important;
+}
+
+.tefas-head-right {
+  text-align: right !important;
+}
+
+#tefasFundBody td.tefas-cell-left {
+  text-align: left !important;
+}
+
+#tefasFundBody td.tefas-cell-right {
+  text-align: right !important;
+}
+
+.compound-calc-panel {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.compound-calc-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1.15fr) auto;
+  gap: 0.55rem;
+  align-items: end;
+  border: 1px solid #b8c8dc;
+  border-radius: 8px;
+  background: #ecf4fa;
+  padding: 0.65rem;
+}
+
+.compound-inline {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: 0.45rem;
+}
+
+.compound-calc-summary {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.real-calc-panel {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.real-calc-form {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.real-calc-input-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  border: 1px solid #b8c8dc;
+  border-radius: 8px;
+  background: #ecf4fa;
+  padding: 0.65rem;
+}
+
+.real-calc-date-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: 0.55rem;
+  align-items: end;
+  border: 1px solid #b8c8dc;
+  border-radius: 8px;
+  background: #ecf4fa;
+  padding: 0.65rem;
+}
+
+.real-calc-summary {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.real-calc-note {
+  margin: 0.65rem 0 0;
+  border: 1px solid #b8c8dc;
+  border-radius: 8px;
+  background: #f8fbff;
+  padding: 0.6rem 0.7rem;
+  color: #394f69;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.loan-rates-table-panel {
+  display: grid;
+  gap: 0.7rem;
+  border: 1px solid #b8c8dc;
+  border-radius: 10px;
+  background: #ecf4fa;
+  padding: 0.75rem;
+}
+
+.loan-rates-table-head h3 {
+  margin: 0;
+}
+
+.bank-logo-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.bank-logo-image {
+  width: 92px;
+  height: 24px;
+  object-fit: contain;
+  object-position: left center;
+  flex: 0 0 auto;
+}
+
+.bank-wordmark-table {
+  min-width: 92px;
+  height: 24px;
+  flex: 0 0 auto;
+}
+
+.bank-wordmark-table .bank-wordmark-text {
+  font-size: 1.34rem;
+}
+
+.bank-logo-name {
+  display: inline-block;
+}
+
+.loan-apply-btn {
+  border: none;
+  background: transparent;
+  color: #0b7d94;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .eyebrow {
@@ -726,6 +2433,10 @@ button {
   gap: 0.7rem;
 }
 
+.actions.consent-align-right {
+  justify-content: flex-end;
+}
+
 .ghost,
 .solid {
   min-height: 44px;
@@ -747,6 +2458,11 @@ button {
   color: #fff;
 }
 
+.actions #nextButton.solid:not(:disabled) {
+  background: #32445e;
+  border-color: #32445e;
+}
+
 .solid:hover {
   filter: brightness(0.98);
 }
@@ -754,6 +2470,13 @@ button {
 .solid:disabled {
   cursor: not-allowed;
   opacity: 0.7;
+}
+
+#nextButton.solid.consent-pending:disabled {
+  background: #c7ccd2;
+  border-color: #c7ccd2;
+  color: #f3f4f6;
+  opacity: 1;
 }
 
 .result-score {
@@ -846,6 +2569,36 @@ button {
   margin: 0.8rem 0 0.55rem;
   color: #637792;
   font-size: 0.83rem;
+}
+
+.result-shell {
+  margin-top: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel);
+  padding: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.result-shell .result-view {
+  padding: 0;
+}
+
+.result-shell .score-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.result-shell .result-columns {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  align-items: start;
+}
+
+.result-shell #plans {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.result-shell #restartButton {
+  margin-top: 0.2rem;
 }
 
 .credit-guidance {
@@ -1070,6 +2823,155 @@ body.question-format .solid {
   }
 }
 
+/* Referans soru formatini sayfa disina cikmadan kart icinde korur. */
+#mainCard.question-format-in-card {
+  min-height: 0;
+  padding: 0;
+  grid-template-rows: 1fr auto;
+  align-content: start;
+  overflow: hidden;
+  background: var(--panel);
+}
+
+#mainCard.question-format-in-card .card-header,
+#mainCard.question-format-in-card .progress {
+  display: none;
+}
+
+#mainCard.question-format-in-card .question-view {
+  padding: 0 1rem 0.2rem;
+  background: var(--panel);
+  overflow-y: auto;
+}
+
+#mainCard.question-format-in-card .consent-view {
+  overflow-y: auto;
+}
+
+#mainCard.question-format-in-card .question-hero {
+  display: flex;
+  position: relative;
+  margin: 0 -1rem 0.8rem;
+  height: 86px;
+  background: var(--panel);
+  border-bottom: 1px solid #dfe6f0;
+  justify-content: center;
+  align-items: center;
+}
+
+#mainCard.question-format-in-card .hero-back {
+  display: inline-flex;
+  position: absolute;
+  top: 1rem;
+  left: 0.8rem;
+  border: none;
+  background: transparent;
+  color: #4e81b8;
+  font-size: 2.6rem;
+  line-height: 1;
+  padding: 0;
+}
+
+#mainCard.question-format-in-card .hero-logo {
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 24px;
+  color: #ffffff;
+  font-size: 2.4rem;
+  font-weight: 800;
+  text-transform: lowercase;
+  background: linear-gradient(135deg, #29bdd0 0%, #7f2fd8 60%, #ce31a7 100%);
+}
+
+#mainCard.question-format-in-card #questionTitle {
+  margin: 0;
+  font-size: 1.08rem;
+  line-height: 1.24;
+  font-weight: 700;
+  color: #2f3748;
+  letter-spacing: -0.01em;
+}
+
+#mainCard.question-format-in-card .question-meta {
+  margin: 0.7rem 0 1rem;
+  color: #444e5f;
+  font-size: 0.93rem;
+}
+
+#mainCard.question-format-in-card .answer-area {
+  gap: 0;
+  border-top: none;
+}
+
+#mainCard.question-format-in-card .choice {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  align-items: center;
+  border: none;
+  border-bottom: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0.56rem 0;
+}
+
+#mainCard.question-format-in-card .choice:hover {
+  transform: none;
+  border-color: transparent;
+}
+
+#mainCard.question-format-in-card .choice-dot,
+#mainCard.question-format-in-card .choice-text {
+  display: block;
+}
+
+#mainCard.question-format-in-card .choice-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #c4ccd8;
+  background: #f6f7fa;
+  margin-left: 0.58rem;
+}
+
+#mainCard.question-format-in-card .choice.selected {
+  box-shadow: none;
+  background: transparent;
+}
+
+#mainCard.question-format-in-card .choice.selected .choice-dot {
+  border-color: #5f7290;
+  box-shadow: inset 0 0 0 4px #5f7290;
+}
+
+#mainCard.question-format-in-card .choice-text {
+  color: #232c3a;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  padding-right: 0.4rem;
+}
+
+#mainCard.question-format-in-card .actions {
+  padding: 0.15rem 1rem 0.8rem;
+  background: var(--panel);
+  justify-content: center;
+}
+
+#mainCard.question-format-in-card .solid {
+  width: 100%;
+  border-radius: 10px;
+  background: #aeb6bf;
+  color: #f3f4f6;
+  font-size: 1.05rem;
+  padding: 0.82rem 1.1rem;
+}
+
+#mainCard.question-format-in-card .solid:not(:disabled) {
+  background: #32445e;
+  color: #ffffff;
+}
+
 body.question-format {
   background: #dfdfdf;
 }
@@ -1103,6 +3005,14 @@ body.question-format .story-panel {
 }
 
 body.question-format .intro-panel {
+  display: none;
+}
+
+body.question-format .panel-clone {
+  display: none;
+}
+
+body.question-format .trust-strip {
   display: none;
 }
 
@@ -1298,6 +3208,86 @@ body.question-format .consent-check {
     grid-row: auto;
   }
 
+  .trust-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .loan-rates-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .calculation-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .investment-cards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .investment-gold-top {
+    grid-template-columns: 1fr;
+  }
+
+  .investment-gold-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .investment-stock-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tefas-search-row {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .need-calc-form {
+    grid-template-columns: 1fr;
+  }
+
+  .deposit-calc-form {
+    grid-template-columns: 1fr;
+  }
+
+  .investment-deposit-form {
+    grid-template-columns: 1fr;
+  }
+
+  .compound-calc-form {
+    grid-template-columns: 1fr;
+  }
+
+  .real-calc-input-grid,
+  .real-calc-date-row {
+    grid-template-columns: 1fr;
+  }
+
+  .need-calc-submit {
+    width: 100%;
+  }
+
+  .need-calc-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .deposit-calc-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .deposit-offers-filters,
+  .deposit-offers-grid,
+  .deposit-offer-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .compound-calc-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .real-calc-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .stat-grid {
     grid-template-columns: 1fr;
   }
@@ -1325,7 +3315,7 @@ body.question-format .consent-check {
   }
 
   .brand-text {
-    font-size: 0.92rem;
+    font-size: 1.51rem;
   }
 
   .header-cta {
@@ -1344,7 +3334,7 @@ body.question-format .consent-check {
   }
 
   .layout-shell {
-    padding: 0.6rem;
+    padding: 0;
   }
 
   .card,
@@ -1356,4 +3346,130 @@ body.question-format .consent-check {
   .result-columns {
     grid-template-columns: 1fr;
   }
+
+  .trust-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .home-bank-wall-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .home-bank-wall-card:nth-child(6n) {
+    border-right: 1px solid #e5edf5;
+  }
+
+  .home-bank-wall-card:nth-child(3n) {
+    border-right: none;
+  }
+
+  .loan-rates-title {
+    font-size: 1.55rem;
+  }
+
+  .calculation-title {
+    font-size: 1.55rem;
+  }
+
+  .loan-rates-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .calculation-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+
+  .investment-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+
+  .investment-gold-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .bank-product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .investment-gold-input-row {
+    grid-template-columns: 1fr;
+  }
+
+  .investment-stock-row {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+
+  .investment-stock-price,
+  .investment-stock-change {
+    justify-self: start;
+  }
+
+  .calculation-card {
+    min-height: 156px;
+    padding: 0.85rem 0.6rem;
+  }
+
+  .calc-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.4rem;
+  }
+
+  .need-calc-block-title {
+    font-size: 1.1rem;
+  }
+
+  .need-calc-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .deposit-calc-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .compound-calc-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .real-calc-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .compound-inline {
+    grid-template-columns: 1fr;
+  }
+
+  .need-calc-item strong {
+    font-size: 1rem;
+  }
+
+  .loan-rates-table th,
+  .loan-rates-table td {
+    font-size: 0.9rem;
+    padding: 0.6rem 0.5rem;
+    white-space: nowrap;
+  }
+
+  .result-shell .score-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .result-shell .result-columns,
+  .result-shell #plans {
+    grid-template-columns: 1fr;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 1.42rem !important;
+  font-weight: 400 !important;
+  line-height: 1.2;
 }

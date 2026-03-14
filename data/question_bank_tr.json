@@ -13,7 +13,7 @@
     "prompt": "Çalışma durumun nedir?",
     "answer_type": "single_choice",
     "required": true,
-    "options": ["Tam zamanlı", "Yarı zamanlı", "Serbest", "İşsiz", "Öğrenci"]
+    "options": ["Tam zamanlı", "Yarı zamanlı", "Serbest", "İşsiz", "Emekli", "Öğrenci"]
   },
   {
     "id": "q03",

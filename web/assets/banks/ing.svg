@@ -1,0 +1,6 @@
+<svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="160" height="40" rx="8" fill="white"/>
+  <circle cx="20" cy="20" r="7" fill="#FF671D"/>
+  <path d="M20 10C24.8 10 28.5 13.7 28.5 18.5C28.5 23.3 24.8 27 20 27C15.2 27 11.5 23.3 11.5 18.5" stroke="#FF671D" stroke-width="2.6" stroke-linecap="round"/>
+  <text x="40" y="27" fill="#00205B" font-family="Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="0.5">ING</text>
+</svg>

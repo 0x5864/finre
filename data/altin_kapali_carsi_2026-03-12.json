@@ -1,0 +1,79 @@
+{
+  "kaynak": "Kapalı Çarşı",
+  "fetched_at_utc": "2026-03-12T19:25:36+00:00",
+  "count": 9,
+  "rows": [
+    {
+      "kaynak": "Kapalı Çarşı",
+      "altin_adi": "Gram Altın",
+      "alis_fiyati": 7216.874,
+      "satis_fiyati": 7217.753,
+      "gunluk_degisim_yuzde": -1.62,
+      "guncellenme_tarihi": "2026-03-12T19:22:00.659Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "altin_adi": "Çeyrek Altın",
+      "alis_fiyati": 11762.72,
+      "satis_fiyati": 12039.96,
+      "gunluk_degisim_yuzde": -0.52,
+      "guncellenme_tarihi": "2026-03-12T13:36:58.140Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "altin_adi": "Cumhuriyet Altını",
+      "alis_fiyati": 48806.0,
+      "satis_fiyati": 49543.0,
+      "gunluk_degisim_yuzde": -0.48,
+      "guncellenme_tarihi": "2026-03-12T13:37:24.026Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "altin_adi": "Ata Altın",
+      "alis_fiyati": 48521.24,
+      "satis_fiyati": 49779.88,
+      "gunluk_degisim_yuzde": -0.52,
+      "guncellenme_tarihi": "2026-03-12T13:36:58.140Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "altin_adi": "14 Ayar Bilezik",
+      "alis_fiyati": 4190.47,
+      "satis_fiyati": 4197.42,
+      "gunluk_degisim_yuzde": -0.52,
+      "guncellenme_tarihi": "2026-03-12T13:36:58.140Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "altin_adi": "18 Ayar Bilezik",
+      "alis_fiyati": 5366.74,
+      "satis_fiyati": 5375.64,
+      "gunluk_degisim_yuzde": -0.52,
+      "guncellenme_tarihi": "2026-03-12T13:36:58.140Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "altin_adi": "22 Ayar Bilezik",
+      "alis_fiyati": 6704.75,
+      "satis_fiyati": 6715.86,
+      "gunluk_degisim_yuzde": -0.52,
+      "guncellenme_tarihi": "2026-03-12T13:36:58.140Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "altin_adi": "Yarım Altın",
+      "alis_fiyati": 23451.93,
+      "satis_fiyati": 24079.91,
+      "gunluk_degisim_yuzde": -0.52,
+      "guncellenme_tarihi": "2026-03-12T13:36:58.140Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "altin_adi": "Gram Altın (Serb.)",
+      "alis_fiyati": 7351.703,
+      "satis_fiyati": 7363.887,
+      "gunluk_degisim_yuzde": -0.52,
+      "guncellenme_tarihi": "2026-03-12T13:36:58.140Z"
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+[
+  {
+    "fon_kodu": "GRO",
+    "fon_unvani": "GARANTİ PORTFÖY OTUZUNCU SERBEST (DÖVİZ) FON",
+    "fiyat": 49.073087,
+    "kisi_sayisi": 26896.0,
+    "portfoy_buyuklugu": 193036581521.93,
+    "tarih_ms": "1773273600000",
+    "bir_aylik_getiri": 1.2312,
+    "bir_yillik_getiri": 25.2639
+  },
+  {
+    "fon_kodu": "PAL",
+    "fon_unvani": "AK PORTFÖY ALTINCI SERBEST(DÖVİZ) FON",
+    "fiyat": 51.641909,
+    "kisi_sayisi": 33165.0,
+    "portfoy_buyuklugu": 172062236137.39,
+    "tarih_ms": "1773273600000",
+    "bir_aylik_getiri": 1.2366,
+    "bir_yillik_getiri": 25.222
+  },
+  {
+    "fon_kodu": "TI1",
+    "fon_unvani": "İŞ PORTFÖY PARA PİYASASI (TL) FONU",
+    "fiyat": 1405.364062,
+    "kisi_sayisi": 219299.0,
+    "portfoy_buyuklugu": 166615116993.02,
+    "tarih_ms": "1773273600000",
+    "bir_aylik_getiri": 2.6576,
+    "bir_yillik_getiri": 49.9555
+  },
+  {
+    "fon_kodu": "ILH",
+    "fon_unvani": "İŞ PORTFÖY BİRİNCİ PARA PİYASASI SERBEST (TL) FON",
+    "fiyat": 3.360922,
+    "kisi_sayisi": 10429.0,
+    "portfoy_buyuklugu": 153698880452.88,
+    "tarih_ms": "1773273600000",
+    "bir_aylik_getiri": 2.8356,
+    "bir_yillik_getiri": 51.2039
+  },
+  {
+    "fon_kodu": "ONS",
+    "fon_unvani": "İŞ PORTFÖY ONİKİNCİ SERBEST (DÖVİZ) FON",
+    "fiyat": 49.005091,
+    "kisi_sayisi": 22703.0,
+    "portfoy_buyuklugu": 144533496127.9,
+    "tarih_ms": "1773273600000",
+    "bir_aylik_getiri": 1.2679,
+    "bir_yillik_getiri": 25.042
+  },
+  {
+    "fon_kodu": "GTL",
+    "fon_unvani": "GARANTİ PORTFÖY BİRİNCİ PARA PİYASASI (TL) FONU",
+    "fiyat": 0.113742,
+    "kisi_sayisi": 315959.0,
+    "portfoy_buyuklugu": 138757239115.74,
+    "tarih_ms": "1773273600000",
+    "bir_aylik_getiri": 2.6237,
+    "bir_yillik_getiri": 50.5201
+  },
+  {
+    "fon_kodu": "DAS",
+    "fon_unvani": "DENİZ PORTFÖY ONİKİNCİ SERBEST (DÖVİZ) FON",
+    "fiyat": 49.884021,
+    "kisi_sayisi": 27120.0,
+    "portfoy_buyuklugu": 138305994529.55,
+    "tarih_ms": "1773273600000",
+    "bir_aylik_getiri": 1.2384,
+    "bir_yillik_getiri": 25.0239
+  },
+  {
+    "fon_kodu": "YP4",
+    "fon_unvani": "YAPI KREDİ PORTFÖY FERİKÖY SERBEST (DÖVİZ) FON",
+    "fiyat": 49.337805,
+    "kisi_sayisi": 30984.0,
+    "portfoy_buyuklugu": 137313722787.42,
+    "tarih_ms": "1773273600000",
+    "bir_aylik_getiri": 1.2445,
+    "bir_yillik_getiri": 24.7472
+  },
+  {
+    "fon_kodu": "EUZ",
+    "fon_unvani": "GARANTİ PORTFÖY SERBEST (DÖVİZ-AVRO) FON",
+    "fiyat": 57.212607,
+    "kisi_sayisi": 39949.0,
+    "portfoy_buyuklugu": 131563204187.5,
+    "tarih_ms": "1773273600000",
+    "bir_aylik_getiri": -1.4362,
+    "bir_yillik_getiri": 31.4385
+  },
+  {
+    "fon_kodu": "DCB",
+    "fon_unvani": "DENİZ PORTFÖY PARA PİYASASI SERBEST (TL) FON",
+    "fiyat": 4.004994,
+    "kisi_sayisi": 23153.0,
+    "portfoy_buyuklugu": 128508600050.44,
+    "tarih_ms": "1773273600000",
+    "bir_aylik_getiri": 2.8171,
+    "bir_yillik_getiri": 51.4299
+  },
+  {
+    "fon_kodu": "FPZ",
+    "fon_unvani": "QNB PORTFÖY BİRİNCİ SERBEST (DÖVİZ) FON",
+    "fiyat": 62.587196,
+    "kisi_sayisi": 19652.0,
+    "portfoy_buyuklugu": 127677765155.4,
+    "tarih_ms": "1773273600000",
+    "bir_aylik_getiri": 1.2879,
+    "bir_yillik_getiri": 25.1329
+  },
+  {
+    "fon_kodu": "GJH",
+    "fon_unvani": "GARANTİ PORTFÖY PARA PİYASASI SERBEST (TL) FON",
+    "fiyat": 3.315245,
+    "kisi_sayisi": 24499.0,
+    "portfoy_buyuklugu": 127323926880.51,
+    "tarih_ms": "1773273600000",
+    "bir_aylik_getiri": 2.8134,
+    "bir_yillik_getiri": 50.4497
+  }
+]

@@ -6,6 +6,7 @@ import os
 import tempfile
 import unittest
 from typing import Any
+from unittest.mock import patch
 
 try:
     from fastapi.testclient import TestClient
@@ -13,6 +14,7 @@ except ImportError:  # pragma: no cover - optional dependency
     TestClient = None  # type: ignore[assignment]
 
 from finre.api import create_app
+from finre.tefas import TefasFetchError
 
 
 @unittest.skipIf(TestClient is None, "FastAPI dependencies are not installed.")
@@ -116,6 +118,75 @@ class ApiTests(unittest.TestCase):
         )
 
         self.assertEqual(assessment_response.status_code, 422)
+
+    def test_tefas_funds_returns_live_data(self) -> None:
+        """TEFAS route should return normalized live data from provider."""
+
+        mocked_rows: list[dict[str, Any]] = [
+            {
+                "TARIH": "1773273600000",
+                "FONKODU": "AAA",
+                "FONUNVAN": "ORNEK FON A",
+                "FIYAT": 12.34,
+                "KISISAYISI": 1234,
+                "PORTFOYBUYUKLUK": 5_000_000,
+            },
+            {
+                "TARIH": "1773273600000",
+                "FONKODU": "BBB",
+                "FONUNVAN": "ORNEK FON B",
+                "FIYAT": 1.23,
+                "KISISAYISI": 987,
+                "PORTFOYBUYUKLUK": 4_000_000,
+            },
+        ]
+        enriched_rows: list[dict[str, Any]] = [
+            {
+                "fon_kodu": "AAA",
+                "fon_unvani": "ORNEK FON A",
+                "fiyat": 12.34,
+                "portfoy_buyuklugu": 5_000_000,
+                "bir_aylik_getiri": 4.5,
+                "bir_yillik_getiri": 45.0,
+            }
+        ]
+        with patch("finre.api.fetch_tefas_rows", return_value=mocked_rows), patch(
+            "finre.api.enrich_tefas_rows_with_returns",
+            return_value=enriched_rows,
+        ):
+            response = self.client.get("/api/v1/tefas/funds?limit=1")
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["source"], "tefas-live")
+        self.assertEqual(payload["count"], 1)
+        self.assertEqual(payload["funds"][0]["fon_kodu"], "AAA")
+
+    def test_tefas_funds_uses_local_fallback_when_live_fetch_fails(self) -> None:
+        """TEFAS route should serve local fallback data when provider fails."""
+
+        fallback_rows: list[dict[str, Any]] = [
+            {
+                "fon_kodu": "ZZZ",
+                "fon_unvani": "YEDEK FON",
+                "fiyat": 9.99,
+                "portfoy_buyuklugu": 12_345,
+                "bir_aylik_getiri": None,
+                "bir_yillik_getiri": None,
+            }
+        ]
+
+        with patch(
+            "finre.api.fetch_tefas_rows",
+            side_effect=TefasFetchError("provider failed"),
+        ), patch("finre.api._load_local_tefas_snapshot", return_value=fallback_rows):
+            response = self.client.get("/api/v1/tefas/funds?limit=5&force_refresh=true")
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["source"], "local-fallback")
+        self.assertEqual(payload["count"], 1)
+        self.assertEqual(payload["funds"][0]["fon_kodu"], "ZZZ")
 
 
 if __name__ == "__main__":
