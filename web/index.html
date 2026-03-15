@@ -253,6 +253,104 @@
       </div>
     </header>
 
+    <section
+      id="bankAppQrModal"
+      class="bank-app-qr-modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="bankAppQrTitle"
+    >
+      <div id="bankAppQrBackdrop" class="bank-app-qr-backdrop"></div>
+      <div class="bank-app-qr-dialog">
+        <button id="bankAppQrClose" class="bank-app-qr-close" type="button" aria-label="QR popup kapat">×</button>
+        <div id="bankAppQrBrand" class="bank-app-qr-brand"></div>
+        <div class="bank-app-qr-body">
+          <div class="bank-app-qr-copy">
+            <h3 id="bankAppQrTitle">Mobil bankacılık uygulamasına geç</h3>
+            <p id="bankAppQrDescription" class="bank-app-qr-description">
+              QR kodu okut. Telefonun Android ise Google Play, iPhone ise App Store otomatik açılır.
+            </p>
+
+            <ul id="bankAppQrPoints" class="bank-app-qr-points">
+              <li>Telefonuna uygun mağazaya otomatik geç.</li>
+              <li>Mobil bankacılık uygulamasını güvenli şekilde indir.</li>
+              <li>Ürün başvurusunu mobil kanalda tamamla.</li>
+            </ul>
+
+            <div class="bank-app-qr-links">
+              <a
+                id="bankAppQrAndroidLink"
+                class="bank-app-qr-direct-link"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Google Play
+              </a>
+              <a
+                id="bankAppQrIosLink"
+                class="bank-app-qr-direct-link bank-app-qr-direct-link-secondary"
+                href="#"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                App Store
+              </a>
+            </div>
+          </div>
+
+          <div class="bank-app-qr-code-card">
+            <img id="bankAppQrImage" class="bank-app-qr-image" alt="Banka uygulaması için QR kod" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="bankAppRedirectPage" class="bank-app-redirect-page hidden" aria-live="polite">
+      <div class="bank-app-redirect-shell">
+        <div class="bank-app-redirect-brand-row">
+          <div class="bank-app-redirect-platform">
+            <img class="brand-mark" src="./assets/ok.avif" alt="" aria-hidden="true" />
+            <strong>FinansalRehber</strong>
+          </div>
+          <span class="bank-app-redirect-arrow">»</span>
+          <div id="bankAppRedirectBankBrand" class="bank-app-redirect-bank-brand"></div>
+        </div>
+
+        <h1 id="bankAppRedirectTitle" class="bank-app-redirect-title">Mobil bankacılık uygulamasına yönlendiriliyorsunuz</h1>
+        <p class="bank-app-redirect-copy">
+          Yönlendirme otomatik başlamazsa aşağıdaki uygun mağaza bağlantısını kullan.
+        </p>
+
+        <div class="bank-app-redirect-badge">Güvenli yönlendirme</div>
+
+        <div class="bank-app-redirect-actions">
+          <a
+            id="bankAppRedirectAndroidLink"
+            class="bank-app-redirect-link"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Google Play
+          </a>
+          <a
+            id="bankAppRedirectIosLink"
+            class="bank-app-redirect-link"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            App Store
+          </a>
+        </div>
+
+        <p id="bankAppRedirectManual" class="bank-app-redirect-manual">
+          Yönlendirme gerçekleşmediyse yukarıdaki bağlantılardan devam et.
+        </p>
+      </div>
+    </section>
+
     <main class="container page-content" id="planlama-akisi">
       <section id="layoutShell" class="layout-shell">
         <section class="home-bank-wall" aria-label="Banka logoları">
@@ -289,7 +387,7 @@
             <article class="home-bank-wall-card"><img src="./assets/banks/getirfinans.svg" alt="GetirFinans logosu" loading="lazy" /></article>
           </div>
         </section>
-        <div class="layout">
+        <div class="layout hidden" aria-hidden="true">
           <article class="intro-panel reveal" id="neden-biz">
             <h2>Finansal durumunu tanı, hedefini netleştir, 90 günlük yol haritanı al.</h2>
             <p class="intro-lead">
@@ -344,20 +442,6 @@
               <button id="nextButton" class="solid" type="button">Doğrula ve başla</button>
             </footer>
           </section>
-
-          <aside class="story-panel compact-panel reveal delay-2">
-            <h3>Kendine uygun finans planı için başlayalım.</h3>
-            <p class="lead">
-              Bu akışta seni adım adım tanıyoruz. Cevaplarına göre ilk 90 günlük yol haritası
-              oluşuyor.
-            </p>
-
-            <ul class="timeline">
-              <li>Profil ve gelir netleşir</li>
-              <li>Gider ve borç resmi çıkar</li>
-              <li>Skor ve öncelik planı verilir</li>
-            </ul>
-          </aside>
 
         </div>
       </section>
@@ -495,141 +579,21 @@
           </div>
         </article>
 
-        <section class="trust-strip loan-trust-strip" aria-label="Kredi kullanım rehberi">
-          <article class="trust-box trust-box-copy">
-            <h4>Gerçekten ihtiyacın varsa kredi kullan</h4>
-            <p>
-              Kredi almadan önce ihtiyacını gözden geçir, ürün veya hizmetin gerekliliğini ve
-              toplam maliyeti değerlendirmeden borçlanma.
-            </p>
-          </article>
-          <article class="trust-box trust-box-copy">
-            <h4>Gelir ve giderlerine uygun ödeme planı oluştur</h4>
-            <p>
-              Gelir ve giderlerini hesapla, acil durum fonunu ayır ve kredi taksitlerini bütçene
-              uygun belirle.
-            </p>
-          </article>
-          <article class="trust-box trust-box-copy">
-            <h4>Vade süresini iyi planla</h4>
-            <p>
-              Kısa vadeli krediler faiz maliyetini düşürür ancak yüksek taksitler bütçeni
-              zorlayabilir. Vade uzunluğunu doğru seç.
-            </p>
-          </article>
-          <article class="trust-box trust-box-copy">
-            <h4>Ödemelerini aksatmadan tamamla</h4>
-            <p>
-              Düzenli ödeme yapmak kredi puanını korur ve gelecekteki finansal imkânlarını artırır.
-              Gecikmelerden kaçın.
-            </p>
-          </article>
-        </section>
       </div>
     </section>
 
     <section id="bankDetailPage" class="bank-detail-page hidden" aria-live="polite" aria-modal="true">
       <div class="container bank-detail-shell">
         <article class="bank-detail-hero">
-          <div class="bank-detail-brand">
-            <img class="bank-detail-logo" src="./assets/banks/is-bankasi.svg" alt="İş Bankası logosu" loading="lazy" />
-            <div class="bank-detail-copy">
-              <p class="bank-detail-kicker">Banka Ürün Sayfası</p>
-              <h2>İş Bankası Kredi Faiz Oranları</h2>
-              <p>
-                İlk taslak ekranda İş Bankası için kredi türlerini ayrı kutular içinde
-                gösteriyoruz. Her kutuda vade bazlı örnek faiz oranı tablosu var.
-              </p>
-            </div>
-          </div>
+          <div id="bankDetailBrand" class="bank-detail-brand"></div>
         </article>
-
-        <section class="bank-product-grid" aria-label="İş Bankası kredi ürünleri">
-          <article class="bank-product-card">
-            <header class="bank-product-head">
-              <h3>İhtiyaç Kredisi</h3>
-              <p>Standart tüketici kredisi</p>
-            </header>
-            <table class="bank-product-table">
-              <thead>
-                <tr>
-                  <th>Vade</th>
-                  <th>Faiz Oranı</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>12 Ay</td><td>% 3,54</td></tr>
-                <tr><td>24 Ay</td><td>% 3,64</td></tr>
-                <tr><td>36 Ay</td><td>% 3,74</td></tr>
-              </tbody>
-            </table>
-          </article>
-
-          <article class="bank-product-card">
-            <header class="bank-product-head">
-              <h3>Konut Kredisi</h3>
-              <p>Uzun vadeli konut finansmanı</p>
-            </header>
-            <table class="bank-product-table">
-              <thead>
-                <tr>
-                  <th>Vade</th>
-                  <th>Faiz Oranı</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>60 Ay</td><td>% 2,84</td></tr>
-                <tr><td>120 Ay</td><td>% 2,94</td></tr>
-                <tr><td>180 Ay</td><td>% 3,04</td></tr>
-              </tbody>
-            </table>
-          </article>
-
-          <article class="bank-product-card">
-            <header class="bank-product-head">
-              <h3>Taşıt Kredisi</h3>
-              <p>Sıfır ve ikinci el araç finansmanı</p>
-            </header>
-            <table class="bank-product-table">
-              <thead>
-                <tr>
-                  <th>Vade</th>
-                  <th>Faiz Oranı</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>12 Ay</td><td>% 3,29</td></tr>
-                <tr><td>24 Ay</td><td>% 3,39</td></tr>
-                <tr><td>36 Ay</td><td>% 3,49</td></tr>
-              </tbody>
-            </table>
-          </article>
-
-          <article class="bank-product-card">
-            <header class="bank-product-head">
-              <h3>KOBİ Kredisi</h3>
-              <p>İşletme ve ticari nakit ihtiyacı</p>
-            </header>
-            <table class="bank-product-table">
-              <thead>
-                <tr>
-                  <th>Vade</th>
-                  <th>Faiz Oranı</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>12 Ay</td><td>% 3,68</td></tr>
-                <tr><td>24 Ay</td><td>% 3,79</td></tr>
-                <tr><td>36 Ay</td><td>% 3,92</td></tr>
-              </tbody>
-            </table>
-          </article>
-        </section>
+        <div id="bankDetailSections" class="bank-detail-sections"></div>
       </div>
     </section>
 
     <section id="calculationPage" class="calculation-page hidden" aria-live="polite" aria-modal="true">
       <div class="container calculation-shell">
+        <h2 id="needLoanCalculatorTitle" class="need-calc-page-heading hidden">İhtiyaç Kredisi Hesaplama</h2>
         <section id="needLoanCalculator" class="need-calc-wrap hidden" aria-live="polite">
           <div class="need-calc-stack">
             <div class="need-calc-tabs" role="tablist" aria-label="İhtiyaç kredisi hesaplama tipi">
@@ -671,9 +635,9 @@
                       type="text"
                       inputmode="numeric"
                       autocomplete="off"
-                      value="50,000"
                       required
                     />
+                    <p class="need-calc-field-error hidden" aria-live="polite"></p>
                   </label>
 
                   <label class="need-calc-field" for="needTerm">
@@ -684,19 +648,18 @@
                       <option value="24">24 Ay</option>
                       <option value="36">36 Ay</option>
                     </select>
+                    <p class="need-calc-field-hint">Vade seç.</p>
+                    <p class="need-calc-field-error hidden" aria-live="polite"></p>
                   </label>
 
                   <label class="need-calc-field" for="needRate">
                     <span>Faiz Oranı (%)</span>
-                    <input id="needRate" name="rate" type="number" min="0" step="0.01" value="2.49" required />
+                    <input id="needRate" name="rate" type="number" min="0" step="0.01" required />
+                    <p class="need-calc-field-error hidden" aria-live="polite"></p>
                   </label>
 
                   <button class="need-calc-submit" type="submit">Hesapla</button>
                 </form>
-
-                <p class="need-calc-helper">
-                  Girdiğin tutar, vade ve faiz oranına göre aylık taksit ile toplam ödeme tutarını hesapla.
-                </p>
 
                 <div id="needCalcResult" class="need-calc-result hidden">
                   <div class="need-calc-summary">
@@ -707,18 +670,19 @@
                       </div>
                     </article>
                     <article class="need-calc-metric">
-                      <p class="need-calc-metric-label">Toplam Ödeme</p>
-                      <div class="need-calc-item">
-                        <strong id="needCalcTotal">-</strong>
-                      </div>
-                    </article>
-                    <article class="need-calc-metric">
                       <p class="need-calc-metric-label">Toplam Faiz</p>
                       <div class="need-calc-item">
                         <strong id="needCalcInterest">-</strong>
                       </div>
                     </article>
+                    <article class="need-calc-metric">
+                      <p class="need-calc-metric-label">Toplam Ödeme</p>
+                      <div class="need-calc-item">
+                        <strong id="needCalcTotal">-</strong>
+                      </div>
+                    </article>
                   </div>
+                  <p id="needCalcNote" class="need-calc-note">Sonuçlar KKDF/BSMV dahil, diğer masraflar hariçtir.</p>
                 </div>
               </article>
             </div>
@@ -739,9 +703,9 @@
                       type="text"
                       inputmode="numeric"
                       autocomplete="off"
-                      value="5,000"
                       required
                     />
+                    <p class="need-calc-field-error hidden" aria-live="polite"></p>
                   </label>
 
                   <label class="need-calc-field" for="needInstallmentTerm">
@@ -752,6 +716,8 @@
                       <option value="24">24 Ay</option>
                       <option value="36">36 Ay</option>
                     </select>
+                    <p class="need-calc-field-hint">Vade seç.</p>
+                    <p class="need-calc-field-error hidden" aria-live="polite"></p>
                   </label>
 
                   <label class="need-calc-field" for="needInstallmentRateInput">
@@ -762,17 +728,13 @@
                       type="number"
                       min="0"
                       step="0.01"
-                      value="2.49"
                       required
                     />
+                    <p class="need-calc-field-error hidden" aria-live="polite"></p>
                   </label>
 
                   <button class="need-calc-submit" type="submit">Hesapla</button>
                 </form>
-
-                <p class="need-calc-helper">
-                  Aylık ödeyebileceğin taksite, vade ve faiz oranına göre çekilebilir kredi tutarını hesapla.
-                </p>
 
                 <div id="needInstallmentResult" class="need-calc-result hidden">
                   <div class="need-calc-summary">
@@ -783,33 +745,52 @@
                       </div>
                     </article>
                     <article class="need-calc-metric">
-                      <p class="need-calc-metric-label">Toplam Ödeme</p>
-                      <div class="need-calc-item">
-                        <strong id="needInstallmentTotal">-</strong>
-                      </div>
-                    </article>
-                    <article class="need-calc-metric">
                       <p class="need-calc-metric-label">Toplam Faiz</p>
                       <div class="need-calc-item">
                         <strong id="needInstallmentInterest">-</strong>
                       </div>
                     </article>
+                    <article class="need-calc-metric">
+                      <p class="need-calc-metric-label">Toplam Ödeme</p>
+                      <div class="need-calc-item">
+                        <strong id="needInstallmentTotal">-</strong>
+                      </div>
+                    </article>
                   </div>
+                  <p id="needInstallmentNote" class="need-calc-note">Sonuçlar KKDF/BSMV dahil, diğer masraflar hariçtir.</p>
                 </div>
               </article>
             </div>
 
           </div>
         </section>
+        <section id="needCalcScheduleSection" class="need-calc-schedule hidden">
+          <h3 id="needCalcScheduleTitle" class="need-calc-page-heading">Ödeme Planı</h3>
+          <div class="need-calc-schedule-wrap">
+            <table class="need-calc-schedule-table">
+              <thead>
+                <tr>
+                  <th>Taksit</th>
+                  <th>Taksit Tutarı</th>
+                  <th>Anapara</th>
+                  <th>Faiz</th>
+                  <th>KKDF</th>
+                  <th>BSMV</th>
+                  <th>Kalan Borç</th>
+                </tr>
+              </thead>
+              <tbody id="needCalcScheduleBody"></tbody>
+            </table>
+          </div>
+        </section>
 
+        <h2 id="depositCalculatorTitle" class="need-calc-page-heading hidden">Mevduat Faizi Hesaplama</h2>
         <section id="depositCalculator" class="need-calc-wrap hidden" aria-live="polite">
           <article class="deposit-calc-panel">
-            <h3 class="need-calc-block-title">Mevduat Faizi Hesaplama</h3>
-
             <div class="deposit-calc-tabs" role="tablist" aria-label="Mevduat hesaplama tipi">
-              <button class="deposit-tab active" type="button" role="tab" aria-selected="true">Vade Seç</button>
+              <button class="deposit-tab active" type="button" role="tab" aria-selected="true">Vadeye göre</button>
               <button class="deposit-tab" type="button" role="tab" aria-selected="false" disabled>
-                Tarihe Göre Hesapla
+                Tarihe göre
               </button>
             </div>
 
@@ -822,7 +803,6 @@
                   type="text"
                   inputmode="numeric"
                   autocomplete="off"
-                  value="100,000"
                   required
                 />
               </label>
@@ -840,7 +820,7 @@
 
               <label class="need-calc-field" for="depositRate">
                 <span>Yıllık Faiz Oranı (%)</span>
-                <input id="depositRate" name="deposit_rate" type="number" min="0" step="0.01" value="43.50" required />
+                <input id="depositRate" name="deposit_rate" type="number" min="0" step="0.01" required />
               </label>
 
               <button class="need-calc-submit" type="submit">Faiz hesapla</button>
@@ -878,10 +858,9 @@
           </article>
         </section>
 
+        <h2 id="compoundCalculatorTitle" class="need-calc-page-heading hidden">Bileşik Faiz Hesaplama</h2>
         <section id="compoundCalculator" class="need-calc-wrap hidden" aria-live="polite">
           <article class="compound-calc-panel">
-            <h3 class="need-calc-block-title">Bileşik Faiz Hesaplama</h3>
-
             <form id="compoundCalcForm" class="compound-calc-form" novalidate>
               <label class="need-calc-field" for="compoundPrincipal">
                 <span>Anapara</span>
@@ -891,7 +870,6 @@
                   type="text"
                   inputmode="numeric"
                   autocomplete="off"
-                  value="100,000"
                   required
                 />
               </label>
@@ -909,7 +887,7 @@
               <label class="need-calc-field" for="compoundRate">
                 <span>Faiz Oranı</span>
                 <div class="compound-inline">
-                  <input id="compoundRate" name="compound_rate" type="number" min="0" step="0.01" value="43.50" required />
+                  <input id="compoundRate" name="compound_rate" type="number" min="0" step="0.01" required />
                   <select id="compoundRateType" name="compound_rate_type" required>
                     <option value="annual" selected>Yıllık</option>
                     <option value="monthly">Aylık</option>
@@ -920,7 +898,7 @@
               <label class="need-calc-field" for="compoundTerm">
                 <span>Vade</span>
                 <div class="compound-inline">
-                  <input id="compoundTerm" name="compound_term" type="number" min="1" step="1" value="365" required />
+                  <input id="compoundTerm" name="compound_term" type="number" min="1" step="1" required />
                   <select id="compoundTermUnit" name="compound_term_unit" required>
                     <option value="day" selected>Gün</option>
                     <option value="month">Ay</option>
@@ -947,15 +925,15 @@
                   </div>
                 </article>
                 <article class="need-calc-metric">
-                  <p class="need-calc-metric-label">Yıllık Eşdeğer Getiri</p>
-                  <div class="need-calc-item">
-                    <strong id="compoundEffectiveAnnualRate">-</strong>
-                  </div>
-                </article>
-                <article class="need-calc-metric">
                   <p class="need-calc-metric-label">Dönemsel Getiri</p>
                   <div class="need-calc-item">
                     <strong id="compoundPeriodGain">-</strong>
+                  </div>
+                </article>
+                <article class="need-calc-metric">
+                  <p class="need-calc-metric-label">Yıllık Eşdeğer Getiri</p>
+                  <div class="need-calc-item">
+                    <strong id="compoundEffectiveAnnualRate">-</strong>
                   </div>
                 </article>
               </div>
@@ -963,10 +941,9 @@
           </article>
         </section>
 
+        <h2 id="realCalculatorTitle" class="need-calc-page-heading hidden">Reel Faiz Hesaplama</h2>
         <section id="realCalculator" class="need-calc-wrap hidden" aria-live="polite">
           <article class="real-calc-panel">
-            <h3 class="need-calc-block-title">Reel Faiz Hesaplama</h3>
-
             <form id="realCalcForm" class="real-calc-form" novalidate>
               <div class="real-calc-input-grid">
                 <label class="need-calc-field" for="realInitialAmount">
@@ -977,7 +954,6 @@
                     type="text"
                     inputmode="numeric"
                     autocomplete="off"
-                    value="81,750"
                     required
                   />
                 </label>
@@ -990,7 +966,6 @@
                     type="text"
                     inputmode="numeric"
                     autocomplete="off"
-                    value="109,251"
                     required
                   />
                 </label>
@@ -1003,7 +978,6 @@
                     type="number"
                     min="0"
                     step="0.01"
-                    value="38.00"
                     required
                   />
                 </label>
@@ -1011,13 +985,13 @@
 
               <div class="real-calc-date-row">
                 <label class="need-calc-field" for="realBuyDate">
-                  <span>Alış Tarihi</span>
-                  <input id="realBuyDate" name="real_buy_date" type="date" value="2026-01-01" required />
+                  <span>Başlangıç Tarihi</span>
+                  <input id="realBuyDate" name="real_buy_date" type="date" required />
                 </label>
 
                 <label class="need-calc-field" for="realSellDate">
-                  <span>Satış Tarihi</span>
-                  <input id="realSellDate" name="real_sell_date" type="date" value="2026-03-01" required />
+                  <span>Vade Tarihi</span>
+                  <input id="realSellDate" name="real_sell_date" type="date" required />
                 </label>
 
                 <button class="need-calc-submit" type="submit">Hesapla</button>
@@ -1091,7 +1065,7 @@
             <div class="investment-gold-table-head">
               <h3>Piyasalarda Altın Fiyatları</h3>
             </div>
-            <p id="investmentGoldMeta" class="tefas-meta">Kaynak: Kapalıçarşı</p>
+            <p id="investmentGoldMeta" class="tefas-meta">Kaynak: Kapalı Çarşı, 15 Mart 2026</p>
 
             <div class="investment-gold-table-wrap">
               <table class="investment-gold-table">
@@ -1108,7 +1082,49 @@
                 </thead>
                 <tbody id="investmentGoldBody">
                   <tr>
-                    <td colspan="7" class="table-empty">Altın verisi yükleniyor...</td>
+                    <td>Gram Altın</td>
+                    <td>7.234,99</td>
+                    <td>7.235,80</td>
+                    <td>10:27</td>
+                    <td><span class="table-trend-up">↑</span></td>
+                    <td><span class="table-change-up">29,54</span></td>
+                    <td><span class="table-change-up">%0,41</span></td>
+                  </tr>
+                  <tr>
+                    <td>Çeyrek Altın</td>
+                    <td>11.627,35</td>
+                    <td>11.898,89</td>
+                    <td>10:02</td>
+                    <td><span class="table-trend-down">↓</span></td>
+                    <td><span class="table-change-down">-140,31</span></td>
+                    <td><span class="table-change-down">%-1,17</span></td>
+                  </tr>
+                  <tr>
+                    <td>Yarım Altın</td>
+                    <td>23.182,03</td>
+                    <td>23.797,78</td>
+                    <td>10:02</td>
+                    <td><span class="table-trend-down">↓</span></td>
+                    <td><span class="table-change-down">-281,55</span></td>
+                    <td><span class="table-change-down">%-1,17</span></td>
+                  </tr>
+                  <tr>
+                    <td>Cumhuriyet Altını</td>
+                    <td>48.164,00</td>
+                    <td>48.892,00</td>
+                    <td>09:24</td>
+                    <td><span class="table-trend-down">↓</span></td>
+                    <td><span class="table-change-down">-631,19</span></td>
+                    <td><span class="table-change-down">%-1,31</span></td>
+                  </tr>
+                  <tr>
+                    <td>Altın (Ons/USD)</td>
+                    <td>5.010,76</td>
+                    <td>5.023,73</td>
+                    <td>20:59</td>
+                    <td><span class="table-trend-down">↓</span></td>
+                    <td><span class="table-change-down">-49,73</span></td>
+                    <td><span class="table-change-down">%-0,98</span></td>
                   </tr>
                 </tbody>
               </table>
@@ -1121,7 +1137,7 @@
             <div class="investment-gold-table-head">
               <h3>Piyasalarda Döviz Kurları</h3>
             </div>
-            <p id="investmentFxMeta" class="tefas-meta">Kaynak: Kapalıçarşı</p>
+            <p id="investmentFxMeta" class="tefas-meta">Kaynak: Kapalı Çarşı, 15 Mart 2026</p>
 
             <div class="investment-gold-table-wrap">
               <table class="investment-gold-table">
@@ -1138,7 +1154,58 @@
                 </thead>
                 <tbody id="investmentFxBody">
                   <tr>
-                    <td colspan="7" class="table-empty">Döviz verisi yükleniyor...</td>
+                    <td>Dolar</td>
+                    <td>44,09</td>
+                    <td>44,10</td>
+                    <td>10:02</td>
+                    <td><span class="table-trend-up">↑</span></td>
+                    <td><span class="table-change-up">0,12</span></td>
+                    <td><span class="table-change-up">%0,27</span></td>
+                  </tr>
+                  <tr>
+                    <td>Euro</td>
+                    <td>50,45</td>
+                    <td>50,50</td>
+                    <td>10:02</td>
+                    <td><span class="table-trend-down">↓</span></td>
+                    <td><span class="table-change-down">-0,15</span></td>
+                    <td><span class="table-change-down">%-0,30</span></td>
+                  </tr>
+                  <tr>
+                    <td>Sterlin</td>
+                    <td>58,31</td>
+                    <td>58,61</td>
+                    <td>10:26</td>
+                    <td><span class="table-trend-down">↓</span></td>
+                    <td><span class="table-change-down">-0,21</span></td>
+                    <td><span class="table-change-down">%-0,36</span></td>
+                  </tr>
+                  <tr>
+                    <td>İsviçre Frangı</td>
+                    <td>55,78</td>
+                    <td>56,06</td>
+                    <td>10:25</td>
+                    <td><span class="table-trend-down">↓</span></td>
+                    <td><span class="table-change-down">-0,02</span></td>
+                    <td><span class="table-change-down">%-0,03</span></td>
+                  </tr>
+                  <tr>
+                    <td>Japon Yeni</td>
+                    <td>27,58</td>
+                    <td>27,72</td>
+                    <td>10:27</td>
+                    <td><span class="table-trend-up">↑</span></td>
+                    <td><span class="table-change-up">0,05</span></td>
+                    <td><span class="table-change-up">%0,19</span></td>
+                  </tr>
+                  <tr>
+                    <td>Suudi Arabistan Riyali</td>
+                    <td>11,72</td>
+                    <td>11,78</td>
+                    <td>10:23</td>
+                    <td><span class="table-trend-up">↑</span></td>
+                    <td><span class="table-change-up">0,03</span></td>
+                    <td><span class="table-change-up">%0,28</span></td>
                   </tr>
                 </tbody>
               </table>
@@ -1423,6 +1490,31 @@
       </div>
     </footer>
 
+    <script>
+      (function () {
+        const hash = String(window.location.hash || "").trim().toLowerCase();
+        const routeMap = {
+          "#yatirim-fx": "investmentFxSection",
+          "#yatirim-altin": "investmentGoldSection"
+        };
+        const targetSectionId = routeMap[hash];
+        if (!targetSectionId) {
+          return;
+        }
+
+        const layoutShell = document.getElementById("layoutShell");
+        const resultShell = document.getElementById("resultShell");
+        const investmentPage = document.getElementById("investmentPage");
+        const fxSection = document.getElementById("investmentFxSection");
+        const goldSection = document.getElementById("investmentGoldSection");
+
+        layoutShell && layoutShell.classList.add("hidden");
+        resultShell && resultShell.classList.add("hidden");
+        investmentPage && investmentPage.classList.remove("hidden");
+        fxSection && fxSection.classList.toggle("hidden", targetSectionId !== "investmentFxSection");
+        goldSection && goldSection.classList.toggle("hidden", targetSectionId !== "investmentGoldSection");
+      })();
+    </script>
     <script type="module" src="./app.js"></script>
   </body>
 </html>

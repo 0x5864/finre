@@ -1,7 +1,7 @@
 {
   "kaynak": "Kapalı Çarşı",
-  "fetched_at_utc": "2026-03-13T10:30:37+00:00",
-  "count": 9,
+  "fetched_at_utc": "2026-03-15T10:16:52+00:00",
+  "count": 5,
   "rows": [
     {
       "kaynak": "Kapalı Çarşı",
@@ -21,46 +21,6 @@
     },
     {
       "kaynak": "Kapalı Çarşı",
-      "altin_adi": "Cumhuriyet Altını",
-      "alis_fiyati": 48164.0,
-      "satis_fiyati": 48892.0,
-      "gunluk_degisim_yuzde": -1.31,
-      "guncellenme_tarihi": "2026-03-13T09:24:31.280Z"
-    },
-    {
-      "kaynak": "Kapalı Çarşı",
-      "altin_adi": "Ata Altın",
-      "alis_fiyati": 47962.83,
-      "satis_fiyati": 49196.63,
-      "gunluk_degisim_yuzde": -1.17,
-      "guncellenme_tarihi": "2026-03-13T10:02:17.822Z"
-    },
-    {
-      "kaynak": "Kapalı Çarşı",
-      "altin_adi": "14 Ayar Bilezik",
-      "alis_fiyati": 4142.24,
-      "satis_fiyati": 4148.24,
-      "gunluk_degisim_yuzde": -1.17,
-      "guncellenme_tarihi": "2026-03-13T10:02:17.822Z"
-    },
-    {
-      "kaynak": "Kapalı Çarşı",
-      "altin_adi": "18 Ayar Bilezik",
-      "alis_fiyati": 5304.98,
-      "satis_fiyati": 5312.65,
-      "gunluk_degisim_yuzde": -1.17,
-      "guncellenme_tarihi": "2026-03-13T10:02:17.822Z"
-    },
-    {
-      "kaynak": "Kapalı Çarşı",
-      "altin_adi": "22 Ayar Bilezik",
-      "alis_fiyati": 6627.59,
-      "satis_fiyati": 6637.18,
-      "gunluk_degisim_yuzde": -1.17,
-      "guncellenme_tarihi": "2026-03-13T10:02:17.822Z"
-    },
-    {
-      "kaynak": "Kapalı Çarşı",
       "altin_adi": "Yarım Altın",
       "alis_fiyati": 23182.03,
       "satis_fiyati": 23797.78,
@@ -69,11 +29,19 @@
     },
     {
       "kaynak": "Kapalı Çarşı",
-      "altin_adi": "Gram Altın (Serb.)",
-      "alis_fiyati": 7267.095,
-      "satis_fiyati": 7277.608,
-      "gunluk_degisim_yuzde": -1.17,
-      "guncellenme_tarihi": "2026-03-13T10:02:17.822Z"
+      "altin_adi": "Cumhuriyet Altını",
+      "alis_fiyati": 48164.0,
+      "satis_fiyati": 48892.0,
+      "gunluk_degisim_yuzde": -1.31,
+      "guncellenme_tarihi": "2026-03-13T09:24:31.280Z"
+    },
+    {
+      "kaynak": "ENUYGUN Finans",
+      "altin_adi": "Altın (Ons/USD)",
+      "alis_fiyati": 5010.75582184038,
+      "satis_fiyati": 5023.731464737793,
+      "gunluk_degisim_yuzde": -0.98,
+      "guncellenme_tarihi": "2026-03-13T20:59:45.626Z"
     }
   ]
 }

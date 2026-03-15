@@ -1,3 +1,5 @@
+import { normalizeInvestmentSectionKey } from "./investment-route.mjs";
+
 const FALLBACK_QUESTIONS = [
   {
     id: "q07",
@@ -124,27 +126,186 @@ const DEFAULT_API_BASE = "http://127.0.0.1:8000";
 const MAX_INPUT_NUMBER = 1_000_000_000;
 const FETCH_TIMEOUT_MS = 2500;
 const MARKET_REFRESH_INTERVAL_MS = 30_000;
+const EMBEDDED_GOLD_FALLBACK_PAYLOAD = Object.freeze({
+  kaynak: "Kapalı Çarşı",
+  fetched_at_utc: "2026-03-15T10:16:52+00:00",
+  count: 5,
+  rows: [
+    {
+      kaynak: "Kapalı Çarşı",
+      altin_adi: "Gram Altın",
+      alis_fiyati: 7234.986,
+      satis_fiyati: 7235.796,
+      gunluk_degisim_yuzde: 0.41,
+      guncellenme_tarihi: "2026-03-13T10:27:59.487Z",
+    },
+    {
+      kaynak: "Kapalı Çarşı",
+      altin_adi: "Çeyrek Altın",
+      alis_fiyati: 11627.35,
+      satis_fiyati: 11898.89,
+      gunluk_degisim_yuzde: -1.17,
+      guncellenme_tarihi: "2026-03-13T10:02:17.822Z",
+    },
+    {
+      kaynak: "Kapalı Çarşı",
+      altin_adi: "Yarım Altın",
+      alis_fiyati: 23182.03,
+      satis_fiyati: 23797.78,
+      gunluk_degisim_yuzde: -1.17,
+      guncellenme_tarihi: "2026-03-13T10:02:17.822Z",
+    },
+    {
+      kaynak: "Kapalı Çarşı",
+      altin_adi: "Cumhuriyet Altını",
+      alis_fiyati: 48164.0,
+      satis_fiyati: 48892.0,
+      gunluk_degisim_yuzde: -1.31,
+      guncellenme_tarihi: "2026-03-13T09:24:31.280Z",
+    },
+    {
+      kaynak: "ENUYGUN Finans",
+      altin_adi: "Altın (Ons/USD)",
+      alis_fiyati: 5010.75582184038,
+      satis_fiyati: 5023.731464737793,
+      gunluk_degisim_yuzde: -0.98,
+      guncellenme_tarihi: "2026-03-13T20:59:45.626Z",
+    },
+  ],
+});
+const EMBEDDED_FX_FALLBACK_PAYLOAD = Object.freeze({
+  kaynak: "Kapalı Çarşı",
+  fetched_at_utc: "2026-03-13T10:30:37+00:00",
+  count: 10,
+  rows: [
+    {
+      kaynak: "Kapalı Çarşı",
+      doviz_adi: "Dolar",
+      alis_fiyati: 44.09,
+      satis_fiyati: 44.1,
+      gunluk_degisim_yuzde: 0.27,
+      gunluk_degisim_tutari: 0.11874937668295615,
+      guncellenme_tarihi: "2026-03-13T10:02:37.031Z",
+    },
+    {
+      kaynak: "Kapalı Çarşı",
+      doviz_adi: "Euro",
+      alis_fiyati: 50.45,
+      satis_fiyati: 50.5,
+      gunluk_degisim_yuzde: -0.3,
+      gunluk_degisim_tutari: -0.15195586760280833,
+      guncellenme_tarihi: "2026-03-13T10:02:38.207Z",
+    },
+    {
+      kaynak: "Kapalı Çarşı",
+      doviz_adi: "Sterlin",
+      alis_fiyati: 58.3128,
+      satis_fiyati: 58.6051,
+      gunluk_degisim_yuzde: -0.36,
+      gunluk_degisim_tutari: -0.2117406262545174,
+      guncellenme_tarihi: "2026-03-13T10:26:04.210Z",
+    },
+    {
+      kaynak: "Kapalı Çarşı",
+      doviz_adi: "İsviçre Frangı",
+      alis_fiyati: 55.7793,
+      satis_fiyati: 56.0589,
+      gunluk_degisim_yuzde: -0.03,
+      gunluk_degisim_tutari: -0.016822716815042327,
+      guncellenme_tarihi: "2026-03-13T10:25:58.194Z",
+    },
+    {
+      kaynak: "Kapalı Çarşı",
+      doviz_adi: "Japon Yeni",
+      alis_fiyati: 27.5775,
+      satis_fiyati: 27.7158,
+      gunluk_degisim_yuzde: 0.19,
+      gunluk_degisim_tutari: 0.05256015570416395,
+      guncellenme_tarihi: "2026-03-13T10:27:51.371Z",
+    },
+    {
+      kaynak: "Kapalı Çarşı",
+      doviz_adi: "Suudi Arabistan Riyali",
+      alis_fiyati: 11.7211,
+      satis_fiyati: 11.7799,
+      gunluk_degisim_yuzde: 0.28,
+      gunluk_degisim_tutari: 0.0328916234543275,
+      guncellenme_tarihi: "2026-03-13T10:23:48.779Z",
+    },
+    {
+      kaynak: "Kapalı Çarşı",
+      doviz_adi: "BAE Dirhemi",
+      alis_fiyati: 11.9768,
+      satis_fiyati: 12.0368,
+      gunluk_degisim_yuzde: 0.28,
+      gunluk_degisim_tutari: 0.03360893498205009,
+      guncellenme_tarihi: "2026-03-13T10:02:17.820Z",
+    },
+    {
+      kaynak: "Kapalı Çarşı",
+      doviz_adi: "Katar Riyali",
+      alis_fiyati: 12.0238,
+      satis_fiyati: 12.084,
+      gunluk_degisim_yuzde: -0.18,
+      gunluk_degisim_tutari: -0.02179042276097043,
+      guncellenme_tarihi: "2026-03-13T10:02:17.821Z",
+    },
+    {
+      kaynak: "Kapalı Çarşı",
+      doviz_adi: "Kuveyt Dinarı",
+      alis_fiyati: 143.1935,
+      satis_fiyati: 143.9113,
+      gunluk_degisim_yuzde: 0.26,
+      gunluk_degisim_tutari: 0.37319906243766354,
+      guncellenme_tarihi: "2026-03-13T10:27:21.496Z",
+    },
+    {
+      kaynak: "Kapalı Çarşı",
+      doviz_adi: "Gürcistan Larisi",
+      alis_fiyati: 16.2006,
+      satis_fiyati: 16.2819,
+      gunluk_degisim_yuzde: 0.28,
+      gunluk_degisim_tutari: 0.04546202632628393,
+      guncellenme_tarihi: "2026-03-13T10:02:17.821Z",
+    },
+  ],
+});
 const LOAN_TYPE_CONFIG = {
   need: {
+    title: "İhtiyaç Kredisi",
     defaultPrincipal: 50_000,
     defaultInstallment: 5_000,
     defaultRate: 2.49,
     terms: [6, 12, 24, 36],
     defaultTerm: 12,
+    taxes: {
+      bsmv: 0.15,
+      kkdf: 0.15,
+    },
   },
   housing: {
+    title: "Konut Kredisi",
     defaultPrincipal: 1_000_000,
     defaultInstallment: 30_000,
     defaultRate: 2.89,
     terms: [12, 24, 36, 48, 60, 84, 120],
     defaultTerm: 120,
+    taxes: {
+      bsmv: 0,
+      kkdf: 0,
+    },
   },
   vehicle: {
+    title: "Taşıt Kredisi",
     defaultPrincipal: 400_000,
     defaultInstallment: 12_000,
     defaultRate: 3.19,
     terms: [6, 12, 24, 36, 48],
     defaultTerm: 24,
+    taxes: {
+      bsmv: 0.15,
+      kkdf: 0.15,
+    },
   },
   deposit: {},
   compound: {},
@@ -153,15 +314,21 @@ const LOAN_TYPE_CONFIG = {
 const ROUTE_HASH = Object.freeze({
   home: "#anasayfa",
   loan: "#kredi",
-  bankIsbank: "#banka-is-bankasi",
   calculation: "#hesaplama",
   investment: "#yatirim",
   investmentFx: "#yatirim-doviz",
   investmentStock: "#yatirim-borsa",
   investmentFund: "#yatirim-fon",
   investmentGold: "#yatirim-altin",
-  investmentSilver: "#yatirim-gumus",
+  investmentSilver: "#yatirim-mevduat",
 });
+const CALCULATION_ROUTE_PREFIX = "#hesaplama-";
+const LOAN_ROUTE_PREFIX = "#kredi-";
+const INVESTMENT_ROUTE_PREFIX = "#yatirim-";
+const LEGACY_INVESTMENT_SILVER_HASH = "#yatirim-gumus";
+const LEGACY_INVESTMENT_DEPOSIT_HASH = "#yatirim-mevduar";
+const BANK_APP_REDIRECT_ROUTE_PREFIX = "#mobil-yonlendir";
+const BANK_ROUTE_PREFIX = "#banka-";
 const DEPOSIT_OFFER_CATALOG = Object.freeze([
   {
     bank: "ON Dijital",
@@ -518,6 +685,188 @@ const LOAN_RATES_PAGE_DATA = Object.freeze({
     ],
   },
 });
+const BANK_PRODUCT_TYPE_CONFIG = Object.freeze({
+  need: {
+    title: "İhtiyaç Kredisi",
+    descriptionLines: ["Tutar: 1.000 - 2.000.000 TL", "Vade: 3 - 36 Ay"],
+    amountLabel: "Kredi Tutarı",
+    defaultAmount: 50000,
+    terms: [{ value: 12, label: "12 Ay" }],
+  },
+  housing: {
+    title: "Konut Kredisi",
+    descriptionLines: ["Tutar: Ekspertiz değeri değişimli", "Vade: 1 - 120 Ay"],
+    amountLabel: "Kredi Tutarı",
+    defaultAmount: 3000000,
+    terms: [{ value: 120, label: "120 Ay" }],
+  },
+  vehicle: {
+    title: "Taşıt Kredisi",
+    descriptionLines: ["Tutar: 5.000 - 400.000 TL", "Vade: 1 - 48 Ay"],
+    amountLabel: "Kredi Tutarı",
+    defaultAmount: 600000,
+    terms: [{ value: 24, label: "24 Ay" }],
+  },
+  kobi: {
+    title: "KOBİ Kredisi",
+    descriptionLines: ["Tutar: 50.000 - 1.500.000 TL", "Vade: 12 - 36 Ay"],
+    amountLabel: "Kredi Tutarı",
+    defaultAmount: 200000,
+    terms: [{ value: 24, label: "24 Ay" }],
+  },
+});
+const BANK_PROFILE_WEBSITE_MAP = Object.freeze({
+  akbank: "https://www.akbank.com/",
+  "garanti bbva": "https://www.garantibbva.com.tr/tr",
+  "iş bankası": "https://www.isbank.com.tr/",
+  qnb: "https://www.qnb.com.tr/",
+  "yapı kredi": "https://www.yapikredi.com.tr/",
+});
+const BANK_MOBILE_APP_QUERY_MAP = Object.freeze({
+  akbank: "Akbank Mobil",
+  "garanti bbva": "Garanti BBVA Mobil",
+  "iş bankası": "İşCep",
+  qnb: "QNB Mobil",
+  "yapı kredi": "Yapı Kredi Mobil",
+  denizbank: "DenizMobil",
+  teb: "CEPTETEB",
+  fibabanka: "Fibabanka Mobil",
+  halkbank: "Halkbank Mobil",
+  "vakıfbank": "VakıfBank Mobil Bankacılık",
+  "ziraat bankası": "Ziraat Mobil",
+  "vakıf katılım": "Vakıf Katılım Mobil",
+  "ziraat katılım": "Ziraat Katılım Mobil",
+  hsbc: "HSBC Mobil Bankacılık",
+  odeabank: "Odeabank Mobil",
+  "alternatif bank": "Alternatif Bank Mobil",
+  anadolubank: "Anadolubank Mobil",
+  "şekerbank": "Şeker Mobil",
+  "albaraka türk": "Albaraka Mobil",
+  "kuveyt türk": "Kuveyt Türk Mobil",
+  "türkiye finans": "Türkiye Finans Mobil",
+  ing: "ING Mobil",
+  "icbc turkey": "ICBC Turkey Mobil",
+  on: "ON Dijital Bankacılık",
+  "n kolay": "N Kolay",
+  getirfinans: "GetirFinans",
+  "enpara.com": "Enpara.com Cep Şubesi",
+});
+const BANK_PRODUCT_DETAIL_LINKS = Object.freeze({
+  akbank: {
+    need: "https://www.akbank.com/krediler/ihtiyac-kredileri",
+    housing: "https://www.akbank.com/krediler/konut-kredileri/akbank-konut-kredisi",
+    vehicle: "https://www.akbank.com/krediler/tasit-kredileri/ikinci-el-tasit-kredisi",
+    kobi: "https://www.akbank.com/kurumsal/krediler/ticari-krediler/ticari-kredi-faiz-oranlari",
+  },
+  "garanti bbva": {
+    need: "https://www.garantibbva.com.tr/tr/bireysel_ihtiyac_kredisi",
+    housing: "https://www.garantibbva.com.tr/tr/kendim-icin/krediler/konut-kredisi",
+    vehicle: "https://www.garantibbva.com.tr/krediler/444-otom",
+    kobi: "https://www.garantibbva.com.tr/hesap_mak",
+  },
+  qnb: {
+    housing: "https://www.qnb.com.tr/standart-konut-kredisi",
+    vehicle: "https://www.qnb.com.tr/tasit-otomobil-kredisi",
+    kobi: "https://www.qnb.com.tr/isim-icin/kobi/krediler/kobi-destek-kredileri/diger-krediler",
+  },
+  "yapı kredi": {
+    need: "https://www.yapikredi.com.tr/kredi/ihtiyac-kredisi/",
+    housing: "https://www.yapikredi.com.tr/kredi/konut-kredisi/",
+    vehicle: "https://www.yapikredi.com.tr/bireysel-bankacilik/krediler/tasit-kredisi/",
+    kobi: "https://www.yapikredi.com.tr/bireysel-bankacilik/krediler/esnek-hesap/",
+  },
+});
+const ISBANK_PROFILE_DATA = Object.freeze({
+  primaryProducts: [
+    {
+      kind: "loan",
+      title: "İhtiyaç Kredisi",
+      descriptionLines: ["Tutar: 1.000 - 2.000.000 TL", "Vade: 3 - 36 Ay"],
+      amountLabel: "Kredi Tutarı",
+      defaultAmount: 100000,
+      rateMap: { 12: 3.54, 24: 3.64, 36: 3.74 },
+      selectedTerm: 24,
+      detailHref: "https://www.isbank.com.tr/ihtiyac-kredisi",
+      featured: true,
+    },
+    {
+      kind: "loan",
+      title: "Konut Kredisi",
+      descriptionLines: ["Tutar: Ekspertiz değeri değişimli", "Vade: 1 - 120 Ay"],
+      amountLabel: "Kredi Tutarı",
+      defaultAmount: 1500000,
+      rateMap: { 60: 2.84, 120: 2.94, 180: 3.04 },
+      selectedTerm: 120,
+      detailHref: "https://www.isbank.com.tr/ev-kredisi",
+    },
+    {
+      kind: "loan",
+      title: "Taşıt Kredisi",
+      descriptionLines: ["Tutar: 5.000 - 400.000 TL", "Vade: 1 - 48 Ay"],
+      amountLabel: "Kredi Tutarı",
+      defaultAmount: 750000,
+      rateMap: { 12: 3.29, 24: 3.39, 36: 3.49 },
+      selectedTerm: 24,
+      detailHref: "https://www.isbank.com.tr/tasit-kredisi",
+    },
+    {
+      kind: "loan",
+      title: "Ek Hesap",
+      descriptionLines: ["Tutar: 0 - 150.000 TL arasında", "Vade: 1 - 30 gün arasında"],
+      amountLabel: "Kredi Tutarı",
+      defaultAmount: 500000,
+      rateMap: { 12: 3.68, 24: 3.79, 36: 3.92 },
+      selectedTerm: 12,
+      detailHref: "https://www.isbank.com.tr/ek-hesap",
+    },
+  ],
+  secondaryProducts: [
+    {
+      kind: "loan",
+      title: "Taksitli Nakit Avans",
+      descriptionLines: ["Kısa vadeli nakit ihtiyacında taksitle ödenmek için kullanılabilir."],
+      amountLabel: "Tutar",
+      defaultAmount: 50000,
+      rateMap: { 3: 4.25, 6: 4.35, 12: 4.49 },
+      selectedTerm: 6,
+      detailHref: "https://www.isbank.com.tr/vnakit-ihtiyaclariniz-icin",
+    },
+    {
+      kind: "loan",
+      title: "Nakit Avans",
+      descriptionLines: ["Kısa vadeli nakit ihtiyacın karşılanmasında kullanılır."],
+      amountLabel: "Tutar",
+      defaultAmount: 35000,
+      rateMap: { 3: 3.95, 6: 4.1, 12: 4.28 },
+      selectedTerm: 6,
+      detailHref: "https://www.isbank.com.tr/nakit-ihtiyaclariniz-icin",
+    },
+    {
+      kind: "deposit",
+      title: "Vadeli TL Mevduat",
+      descriptionLines: ["Standart şube kanalından vadeli TL hesap açılşında kullanılır"],
+      amountLabel: "Mevduat Tutarı",
+      defaultAmount: 250000,
+      rateMap: { 32: 41.5, 92: 43.0, 181: 44.25 },
+      selectedTerm: 92,
+      secondaryLabel: "Net Getiri",
+      tertiaryLabel: "Vade Sonu Tutar",
+      detailHref: "https://www.isbank.com.tr/vadeli-tl",
+    },
+    {
+      kind: "deposit",
+      title: "Dijital Vadeli Mevduat",
+      descriptionLines: ["%39'a varan faiz oranları için İşCep’e giriş yapın."],
+      amountLabel: "Mevduat Tutarı",
+      defaultAmount: 400000,
+      rateMap: { 32: 42.25, 92: 43.5, 181: 44.5 },
+      selectedTerm: 92,
+      secondaryLabel: "Net Getiri",
+      tertiaryLabel: "Vade Sonu Tutar",
+      detailHref: "https://www.isbank.com.tr/vadeli-tl",
+    },
+  ],
+});
 const BANK_LOGO_MAP = Object.freeze({
   "aktif bank": "./assets/banks/aktif-bank.svg",
   akbank: "./assets/banks/akbank.svg",
@@ -573,6 +922,8 @@ let tefasFundSourceLabel = "bilinmiyor";
 let tefasFundFetchedAtUnix = 0;
 let currentInvestmentSectionKey = "";
 let marketRefreshTimerId = null;
+let currentBankProfileName = "İş Bankası";
+let currentBankAppQrContext = null;
 
 const state = {
   questions: [],
@@ -592,6 +943,19 @@ const ui = {
   authToggle: document.getElementById("authToggle"),
   brandHome: document.getElementById("brandHome"),
   authPopover: document.getElementById("authPopover"),
+  bankAppQrModal: document.getElementById("bankAppQrModal"),
+  bankAppQrBackdrop: document.getElementById("bankAppQrBackdrop"),
+  bankAppQrClose: document.getElementById("bankAppQrClose"),
+  bankAppQrBrand: document.getElementById("bankAppQrBrand"),
+  bankAppQrDescription: document.getElementById("bankAppQrDescription"),
+  bankAppQrAndroidLink: document.getElementById("bankAppQrAndroidLink"),
+  bankAppQrIosLink: document.getElementById("bankAppQrIosLink"),
+  bankAppQrImage: document.getElementById("bankAppQrImage"),
+  bankAppRedirectPage: document.getElementById("bankAppRedirectPage"),
+  bankAppRedirectBankBrand: document.getElementById("bankAppRedirectBankBrand"),
+  bankAppRedirectTitle: document.getElementById("bankAppRedirectTitle"),
+  bankAppRedirectAndroidLink: document.getElementById("bankAppRedirectAndroidLink"),
+  bankAppRedirectIosLink: document.getElementById("bankAppRedirectIosLink"),
   signinTabButton: document.getElementById("signinTabButton"),
   signupTabButton: document.getElementById("signupTabButton"),
   signinForm: document.getElementById("signinForm"),
@@ -618,6 +982,8 @@ const ui = {
   openCalculationPage: document.getElementById("openCalculationPage"),
   loanRatesPage: document.getElementById("loanRatesPage"),
   bankDetailPage: document.getElementById("bankDetailPage"),
+  bankDetailBrand: document.getElementById("bankDetailBrand"),
+  bankDetailSections: document.getElementById("bankDetailSections"),
   loanRatesTitle: document.getElementById("loanRatesTitle"),
   loanRatesDate: document.getElementById("loanRatesDate"),
   loanRatesTableBody: document.getElementById("loanRatesTableBody"),
@@ -655,6 +1021,10 @@ const ui = {
   calcDepositCard: document.getElementById("calcDepositCard"),
   calcCompoundCard: document.getElementById("calcCompoundCard"),
   calcRealCard: document.getElementById("calcRealCard"),
+  needLoanCalculatorTitle: document.getElementById("needLoanCalculatorTitle"),
+  depositCalculatorTitle: document.getElementById("depositCalculatorTitle"),
+  compoundCalculatorTitle: document.getElementById("compoundCalculatorTitle"),
+  realCalculatorTitle: document.getElementById("realCalculatorTitle"),
   needLoanCalculator: document.getElementById("needLoanCalculator"),
   needCalcTabPrincipal: document.getElementById("needCalcTabPrincipal"),
   needCalcTabInstallment: document.getElementById("needCalcTabInstallment"),
@@ -671,6 +1041,10 @@ const ui = {
   needCalcMonthly: document.getElementById("needCalcMonthly"),
   needCalcTotal: document.getElementById("needCalcTotal"),
   needCalcInterest: document.getElementById("needCalcInterest"),
+  needCalcNote: document.getElementById("needCalcNote"),
+  needCalcScheduleSection: document.getElementById("needCalcScheduleSection"),
+  needCalcScheduleTitle: document.getElementById("needCalcScheduleTitle"),
+  needCalcScheduleBody: document.getElementById("needCalcScheduleBody"),
   needInstallmentForm: document.getElementById("needInstallmentForm"),
   needInstallmentAmount: document.getElementById("needInstallmentAmount"),
   needInstallmentTerm: document.getElementById("needInstallmentTerm"),
@@ -679,6 +1053,7 @@ const ui = {
   needInstallmentPrincipal: document.getElementById("needInstallmentPrincipal"),
   needInstallmentTotal: document.getElementById("needInstallmentTotal"),
   needInstallmentInterest: document.getElementById("needInstallmentInterest"),
+  needInstallmentNote: document.getElementById("needInstallmentNote"),
   loanOffersPanel: document.getElementById("loanOffersPanel"),
   loanOffersTitle: document.getElementById("loanOffersTitle"),
   loanOffersMeta: document.getElementById("loanOffersMeta"),
@@ -747,22 +1122,51 @@ ui.restartButton.addEventListener("click", () => {
 });
 setupAuthUi();
 setupLoanRatesUi();
+window.addEventListener("load", () => {
+  scheduleInitialRouteSectionSync();
+});
 
 void boot();
 
 async function boot() {
-  state.questions = await loadQuestions();
   state.currentIndex = 0;
   state.answers = {};
   state.sessionId = "";
   state.phase = "consent";
   state.consentAccepted = false;
   ui.consentCheckbox.checked = false;
-  await initializeSession();
   renderConsent();
+  preloadMarketTables();
   lockInitialLayoutHeight();
   lockInitialPanelHeights();
-  applyRouteFromHash();
+  const shouldPrioritizeRoute = shouldPrioritizeInitialRoute(window.location.hash);
+  if (shouldPrioritizeRoute) {
+    applyRouteFromHash();
+    scheduleInitialRouteSectionSync();
+  }
+
+  state.questions = await loadQuestions();
+  await initializeSession();
+
+  if (!shouldPrioritizeRoute) {
+    applyRouteFromHash();
+    scheduleInitialRouteSectionSync();
+  }
+}
+
+function preloadMarketTables() {
+  if (ui.investmentFxBody) {
+    renderFxPriceTable(EMBEDDED_FX_FALLBACK_PAYLOAD.rows, EMBEDDED_FX_FALLBACK_PAYLOAD);
+    void loadFxPriceTable({ silent: true });
+  }
+
+  if (ui.investmentGoldBody) {
+    renderGoldPriceTable(
+      EMBEDDED_GOLD_FALLBACK_PAYLOAD.rows,
+      EMBEDDED_GOLD_FALLBACK_PAYLOAD,
+    );
+    void loadGoldPriceTable({ silent: true });
+  }
 }
 
 function lockInitialLayoutHeight() {
@@ -1593,21 +1997,19 @@ function setupLoanRatesUi() {
 
   ui.loanRatesTabs?.forEach((tabElement) => {
     tabElement.addEventListener("click", () => {
-      renderLoanRatesPage(String(tabElement.dataset.loanRatesTab || "need"));
+      const tabKey = String(tabElement.dataset.loanRatesTab || "need");
+      renderLoanRatesPage(tabKey);
+      updateRouteHash(buildLoanRatesHash(tabKey));
     });
   });
 
   if (ui.openNeedLoanRates) {
     ui.openNeedLoanRates.addEventListener("click", () => {
-      openLoanRatesPage();
+      openLoanRatesPage({ tabKey: "need" });
     });
   }
 
-  if (ui.openIsbankProfile) {
-    ui.openIsbankProfile.addEventListener("click", () => {
-      openBankDetailPage();
-    });
-  }
+  setupHomeBankWallProfiles();
 
   if (ui.calcNeedLoanCard) {
     ui.calcNeedLoanCard.addEventListener("click", () => {
@@ -1656,6 +2058,7 @@ function setupLoanRatesUi() {
     ui.openHomePage.addEventListener("click", (event) => {
       event.preventDefault();
       closeHeaderMegaMenus();
+      closeBankDetailPage({ updateHash: false });
       closeLoanRatesPage({ updateHash: false });
       closeCalculationPage({ updateHash: false });
       closeInvestmentPage({ updateHash: false });
@@ -1824,6 +2227,8 @@ function setupLoanRatesUi() {
     ui.brandHome.addEventListener("click", (event) => {
       event.preventDefault();
       closeHeaderMegaMenus();
+      closeBankAppQrModal();
+      closeBankAppRedirectPage();
       closeBankDetailPage({ updateHash: false });
       closeLoanRatesPage({ updateHash: false });
       closeCalculationPage({ updateHash: false });
@@ -1839,6 +2244,11 @@ function setupLoanRatesUi() {
       return;
     }
 
+    if (ui.bankAppQrModal && !ui.bankAppQrModal.classList.contains("hidden")) {
+      closeBankAppQrModal();
+      return;
+    }
+
     if (ui.loanRatesPage && !ui.loanRatesPage.classList.contains("hidden")) {
       closeLoanRatesPage();
       return;
@@ -1851,6 +2261,11 @@ function setupLoanRatesUi() {
 
     if (ui.investmentPage && !ui.investmentPage.classList.contains("hidden")) {
       closeInvestmentPage();
+      return;
+    }
+
+    if (ui.bankDetailPage && !ui.bankDetailPage.classList.contains("hidden")) {
+      closeBankDetailPage();
     }
   });
 
@@ -1862,7 +2277,635 @@ function setupLoanRatesUi() {
     applyRouteFromHash();
   });
 
+  if (ui.bankAppQrClose) {
+    ui.bankAppQrClose.addEventListener("click", () => {
+      closeBankAppQrModal();
+    });
+  }
+
+  if (ui.bankAppQrBackdrop) {
+    ui.bankAppQrBackdrop.addEventListener("click", () => {
+      closeBankAppQrModal();
+    });
+  }
+
+  setupBankProductCards();
   setupNeedLoanCalculator();
+}
+
+function setupBankProductCards() {
+  document.querySelectorAll("[data-bank-product-card]").forEach((cardElement) => {
+    const amountInput = cardElement.querySelector('[data-role="amount"]');
+    const termSelect = cardElement.querySelector('[data-role="term"]');
+    const rateOutput = cardElement.querySelector('[data-role="rate"]');
+    const installmentOutput = cardElement.querySelector('[data-role="installment"]');
+    const totalPaymentOutput = cardElement.querySelector('[data-role="total-payment"]');
+    const secondaryLabel = cardElement.querySelector('[data-role="label-secondary"]');
+    const tertiaryLabel = cardElement.querySelector('[data-role="label-tertiary"]');
+
+    if (
+      !(amountInput instanceof HTMLInputElement) ||
+      !(termSelect instanceof HTMLSelectElement) ||
+      !(rateOutput instanceof HTMLElement) ||
+      !(installmentOutput instanceof HTMLElement) ||
+      !(totalPaymentOutput instanceof HTMLElement)
+    ) {
+      return;
+    }
+
+    const rateMap = parseBankProductRateMap(cardElement.dataset.rateMap || "");
+    if (Object.keys(rateMap).length === 0) {
+      return;
+    }
+
+    const productKind = String(cardElement.dataset.kind || "loan");
+    if (secondaryLabel instanceof HTMLElement && cardElement.dataset.secondaryLabel) {
+      secondaryLabel.textContent = String(cardElement.dataset.secondaryLabel);
+    }
+    if (tertiaryLabel instanceof HTMLElement && cardElement.dataset.tertiaryLabel) {
+      tertiaryLabel.textContent = String(cardElement.dataset.tertiaryLabel);
+    }
+
+    const renderCardOutcome = () => {
+      amountInput.value = formatAmountInput(amountInput.value);
+
+      const principal = parseAmountInput(amountInput.value);
+      const termMonths = Number.parseInt(termSelect.value, 10);
+      const monthlyRatePercent = rateMap[String(termMonths)];
+
+      if (
+        !Number.isFinite(principal) ||
+        principal <= 0 ||
+        !Number.isFinite(termMonths) ||
+        !Number.isFinite(monthlyRatePercent)
+      ) {
+        rateOutput.textContent = "-";
+        installmentOutput.textContent = "-";
+        totalPaymentOutput.textContent = "-";
+        return;
+      }
+
+      rateOutput.textContent = `% ${formatPercentNumber(monthlyRatePercent)}`;
+
+      if (productKind === "deposit") {
+        const depositOutcome = calculateDepositOutcome(principal, monthlyRatePercent, termMonths);
+        installmentOutput.textContent = `${formatTry(depositOutcome.netReturn)} TL`;
+        totalPaymentOutput.textContent = `${formatTry(depositOutcome.maturityAmount)} TL`;
+        return;
+      }
+
+      if (productKind === "kmh") {
+        const estimatedInterest = principal * (monthlyRatePercent / 100) * termMonths;
+        const totalRepayment = principal + estimatedInterest;
+        installmentOutput.textContent = `${formatTry(estimatedInterest)} TL`;
+        totalPaymentOutput.textContent = `${formatTry(totalRepayment)} TL`;
+        return;
+      }
+
+      const monthlyPayment = calculateInstallment(principal, monthlyRatePercent, termMonths);
+      const totalPayment = monthlyPayment * termMonths;
+      installmentOutput.textContent = `${formatTry(monthlyPayment)} TL`;
+      totalPaymentOutput.textContent = `${formatTry(totalPayment)} TL`;
+    };
+
+    amountInput.addEventListener("input", renderCardOutcome);
+    amountInput.addEventListener("blur", renderCardOutcome);
+    termSelect.addEventListener("change", renderCardOutcome);
+
+    renderCardOutcome();
+  });
+
+  document.querySelectorAll("[data-bank-apply-button]").forEach((buttonElement) => {
+    if (!(buttonElement instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    buttonElement.onclick = null;
+    buttonElement.addEventListener("click", () => {
+      const bankName = String(buttonElement.dataset.bankName || currentBankProfileName || "").trim();
+      const productTitle = String(buttonElement.dataset.productTitle || "").trim();
+      openBankAppQrModal(bankName, productTitle);
+    });
+  });
+}
+
+function setupHomeBankWallProfiles() {
+  document.querySelectorAll(".home-bank-wall-card").forEach((cardElement) => {
+    const bankName = getBankNameFromWallCard(cardElement);
+    if (!bankName) {
+      return;
+    }
+
+    cardElement.dataset.bankProfile = bankName;
+    cardElement.classList.add("is-clickable");
+
+    if (!(cardElement instanceof HTMLButtonElement)) {
+      cardElement.setAttribute("role", "button");
+      cardElement.tabIndex = 0;
+    }
+
+    const openProfile = () => {
+      closeHeaderMegaMenus();
+      openBankDetailPage({ bankName });
+    };
+
+    cardElement.addEventListener("click", openProfile);
+    cardElement.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openProfile();
+      }
+    });
+  });
+}
+
+function getBankNameFromWallCard(cardElement) {
+  const logoElement = cardElement.querySelector("img");
+  if (!(logoElement instanceof HTMLImageElement)) {
+    return "";
+  }
+
+  return String(logoElement.alt || "")
+    .replace(/\s+logosu$/i, "")
+    .trim();
+}
+
+function buildBankDetailHash(bankName) {
+  return `${BANK_ROUTE_PREFIX}${createBankSlug(bankName)}`;
+}
+
+function resolveBankNameFromHash(hashValue) {
+  const normalizedHash = String(hashValue || "").trim().toLowerCase();
+  if (!normalizedHash.startsWith(BANK_ROUTE_PREFIX)) {
+    return "";
+  }
+
+  const slug = normalizedHash.slice(BANK_ROUTE_PREFIX.length);
+  if (!slug) {
+    return "";
+  }
+
+  const matchingCard = Array.from(document.querySelectorAll(".home-bank-wall-card")).find((cardElement) => {
+    const bankName = cardElement.dataset.bankProfile || getBankNameFromWallCard(cardElement);
+    return createBankSlug(bankName) === slug;
+  });
+
+  return matchingCard?.dataset.bankProfile || getBankNameFromWallCard(matchingCard || document.createElement("div"));
+}
+
+function createBankSlug(bankName) {
+  return normalizeTefasSearchText(bankName)
+    .replace(/ğ/g, "g")
+    .replace(/ü/g, "u")
+    .replace(/ş/g, "s")
+    .replace(/ı/g, "i")
+    .replace(/ö/g, "o")
+    .replace(/ç/g, "c")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function buildBankProfileData(bankName) {
+  const normalizedBankName = normalizeTefasSearchText(bankName);
+
+  if (normalizedBankName === "iş bankası") {
+    return {
+      bankName: "İş Bankası",
+      website: BANK_PROFILE_WEBSITE_MAP[normalizedBankName] || "",
+      primaryProducts: ISBANK_PROFILE_DATA.primaryProducts,
+      secondaryProducts: ISBANK_PROFILE_DATA.secondaryProducts,
+    };
+  }
+
+  return {
+    bankName,
+    website: BANK_PROFILE_WEBSITE_MAP[normalizedBankName] || "",
+    primaryProducts: buildGenericBankLoanProducts(bankName),
+    secondaryProducts: buildGenericBankDepositProducts(bankName),
+  };
+}
+
+function buildGenericBankLoanProducts(bankName) {
+  const normalizedBankName = normalizeTefasSearchText(bankName);
+  const loanTypeOrder = ["need", "housing", "vehicle", "kobi"];
+
+  return loanTypeOrder
+    .map((loanTypeKey, index) => {
+      const rowData = LOAN_RATES_PAGE_DATA[loanTypeKey]?.rows?.find(
+        (row) => normalizeTefasSearchText(row.bank) === normalizedBankName,
+      );
+
+      if (!rowData) {
+        return null;
+      }
+
+      const typeConfig = BANK_PRODUCT_TYPE_CONFIG[loanTypeKey];
+      if (!typeConfig) {
+        return null;
+      }
+
+      const defaultTerm = typeConfig.terms[0]?.value || 12;
+
+      return {
+        kind: "loan",
+        title: typeConfig.title,
+        descriptionLines: typeConfig.descriptionLines,
+        amountLabel: typeConfig.amountLabel,
+        defaultAmount: typeConfig.defaultAmount,
+        rateMap: { [defaultTerm]: rowData.rate },
+        selectedTerm: defaultTerm,
+        detailHref: BANK_PRODUCT_DETAIL_LINKS[normalizedBankName]?.[loanTypeKey] || "",
+        featured: index === 0,
+      };
+    })
+    .filter(Boolean);
+}
+
+function buildGenericBankDepositProducts(bankName) {
+  const normalizedBankName = normalizeTefasSearchText(bankName);
+
+  return DEPOSIT_OFFER_CATALOG.filter(
+    (offer) => normalizeTefasSearchText(offer.bank) === normalizedBankName,
+  ).map((offer) => ({
+    kind: "deposit",
+    title: offer.product,
+    descriptionLines: [offer.note],
+    amountLabel: "Mevduat Tutarı",
+    defaultAmount: 250000,
+    rateMap: { 32: offer.annualRate },
+    selectedTerm: 32,
+    secondaryLabel: "Net Getiri",
+    tertiaryLabel: "Vade Sonu Tutar",
+  }));
+}
+
+function renderBankDetailPage(bankName) {
+  if (!(ui.bankDetailBrand instanceof HTMLElement) || !(ui.bankDetailSections instanceof HTMLElement)) {
+    return;
+  }
+
+  const profile = buildBankProfileData(bankName);
+  currentBankProfileName = profile.bankName;
+
+  ui.bankDetailBrand.replaceChildren(createBankDetailBrand(profile));
+
+  const fragment = document.createDocumentFragment();
+
+  if (profile.primaryProducts.length > 0) {
+    fragment.append(createBankProductShowcase(profile.primaryProducts, profile.bankName));
+  }
+
+  if (profile.secondaryProducts.length > 0) {
+    fragment.append(createBankProductShowcase(profile.secondaryProducts, profile.bankName));
+  }
+
+  if (profile.primaryProducts.length === 0 && profile.secondaryProducts.length === 0) {
+    fragment.append(createBankDetailEmptyState(profile.bankName));
+  }
+
+  ui.bankDetailSections.replaceChildren(fragment);
+  setupBankProductCards();
+}
+
+function createBankDetailBrand(profile) {
+  const wrapper = document.createElement(profile.website ? "a" : "div");
+  wrapper.className = "bank-detail-logo-link";
+
+  if (profile.website) {
+    wrapper.href = profile.website;
+    wrapper.target = "_blank";
+    wrapper.rel = "noopener noreferrer";
+    wrapper.setAttribute("aria-label", `${profile.bankName} sitesini yeni sekmede aç`);
+  }
+
+  const logoElement = createBankLogoElement(profile.bankName, "bank-detail-logo");
+  if (logoElement) {
+    wrapper.append(logoElement);
+    return wrapper;
+  }
+
+  const fallbackText = document.createElement("strong");
+  fallbackText.className = "bank-detail-logo-fallback";
+  fallbackText.textContent = profile.bankName;
+  wrapper.append(fallbackText);
+  return wrapper;
+}
+
+function getBankAppStoreLinks(bankName) {
+  const normalizedBankName = normalizeTefasSearchText(bankName);
+  const appQuery = BANK_MOBILE_APP_QUERY_MAP[normalizedBankName] || bankName;
+  const encodedQuery = encodeURIComponent(appQuery);
+  return {
+    android: `https://play.google.com/store/search?q=${encodedQuery}&c=apps&hl=tr`,
+    ios: `https://apps.apple.com/tr/search?term=${encodedQuery}`,
+  };
+}
+
+function buildBankAppRedirectHash(bankName, productTitle) {
+  const params = new URLSearchParams();
+  params.set("bank", bankName);
+  if (productTitle) {
+    params.set("product", productTitle);
+  }
+  return `${BANK_APP_REDIRECT_ROUTE_PREFIX}?${params.toString()}`;
+}
+
+function buildAbsoluteBankAppRedirectUrl(bankName, productTitle) {
+  const { origin, pathname } = window.location;
+  return `${origin}${pathname}${buildBankAppRedirectHash(bankName, productTitle)}`;
+}
+
+function buildQrImageUrl(rawText) {
+  return `https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=0&data=${encodeURIComponent(rawText)}`;
+}
+
+function closeBankAppQrModal() {
+  if (ui.bankAppQrModal) {
+    ui.bankAppQrModal.classList.add("hidden");
+  }
+  document.body.classList.remove("bank-app-qr-open");
+  currentBankAppQrContext = null;
+}
+
+function openBankAppQrModal(bankName, productTitle) {
+  if (
+    !ui.bankAppQrModal ||
+    !ui.bankAppQrBrand ||
+    !ui.bankAppQrDescription ||
+    !ui.bankAppQrDirectLink ||
+    !ui.bankAppQrImage ||
+    !ui.bankAppQrAndroidTab ||
+    !ui.bankAppQrIosTab
+  ) {
+    return;
+  }
+
+  const links = getBankAppStoreLinks(bankName);
+  const qrTargetUrl = buildAbsoluteBankAppRedirectUrl(bankName, productTitle);
+  currentBankAppQrContext = {
+    bankName,
+    productTitle,
+    links,
+  };
+  const qrBrandLogo = createBankLogoElement(bankName, "bank-app-qr-brand-logo");
+  if (qrBrandLogo) {
+    ui.bankAppQrBrand.replaceChildren(qrBrandLogo);
+  } else {
+    ui.bankAppQrBrand.textContent = bankName;
+  }
+  ui.bankAppQrDescription.textContent = `${bankName} mobil uygulamasına geçmek için QR kodu okut. Telefonun Android ise Google Play, iPhone ise App Store açılır.`;
+  ui.bankAppQrImage.src = buildQrImageUrl(qrTargetUrl);
+  ui.bankAppQrImage.alt = `${bankName} mobil uygulamasına yönlendiren QR kod`;
+
+  ui.bankAppQrAndroidTab.classList.add("active");
+  ui.bankAppQrAndroidTab.setAttribute("aria-selected", "true");
+  ui.bankAppQrIosTab.classList.remove("active");
+  ui.bankAppQrIosTab.setAttribute("aria-selected", "false");
+  ui.bankAppQrDirectLink.href = links.android;
+  ui.bankAppQrDirectLink.textContent = "Google Play'de aç";
+
+  ui.bankAppQrModal.classList.remove("hidden");
+  document.body.classList.add("bank-app-qr-open");
+}
+
+function detectMobileStorePreference() {
+  const userAgent = navigator.userAgent || "";
+  if (/iphone|ipad|ipod/i.test(userAgent)) {
+    return "ios";
+  }
+  if (/android/i.test(userAgent)) {
+    return "android";
+  }
+  return "android";
+}
+
+function renderBankAppRedirectPage(bankName, productTitle) {
+  if (
+    !ui.bankAppRedirectPage ||
+    !ui.bankAppRedirectBankBrand ||
+    !ui.bankAppRedirectTitle ||
+    !ui.bankAppRedirectAndroidLink ||
+    !ui.bankAppRedirectIosLink
+  ) {
+    return;
+  }
+
+  const links = getBankAppStoreLinks(bankName);
+  const redirectLogo = createBankLogoElement(bankName, "bank-app-redirect-bank-logo");
+  if (redirectLogo) {
+    ui.bankAppRedirectBankBrand.replaceChildren(redirectLogo);
+  } else {
+    ui.bankAppRedirectBankBrand.textContent = bankName;
+  }
+  ui.bankAppRedirectTitle.textContent = productTitle
+    ? `${bankName} ${productTitle} için mobil uygulamaya yönlendiriliyorsunuz`
+    : `${bankName} mobil uygulamasına yönlendiriliyorsunuz`;
+  ui.bankAppRedirectAndroidLink.href = links.android;
+  ui.bankAppRedirectIosLink.href = links.ios;
+  closeBankAppQrModal();
+
+  hideHomePageContent();
+  ui.loanRatesPage?.classList.add("hidden");
+  ui.bankDetailPage?.classList.add("hidden");
+  ui.calculationPage?.classList.add("hidden");
+  ui.investmentPage?.classList.add("hidden");
+  ui.bankAppRedirectPage.classList.remove("hidden");
+  syncSubpageBodyClasses();
+
+  const targetStore = detectMobileStorePreference();
+  const targetHref = targetStore === "ios" ? links.ios : links.android;
+  window.setTimeout(() => {
+    window.location.href = targetHref;
+  }, 700);
+}
+
+function closeBankAppRedirectPage() {
+  if (ui.bankAppRedirectPage) {
+    ui.bankAppRedirectPage.classList.add("hidden");
+  }
+}
+
+function createBankProductShowcase(products, bankName) {
+  const section = document.createElement("section");
+  section.className = "bank-product-showcase";
+
+  const grid = document.createElement("div");
+  grid.className = "bank-product-grid";
+
+  products.forEach((product) => {
+    grid.append(createBankProductCard(product, bankName));
+  });
+
+  section.append(grid);
+  return section;
+}
+
+function createBankProductCard(product, bankName) {
+  const article = document.createElement("article");
+  article.className = `bank-product-card${product.featured ? " bank-product-card-featured" : ""}`;
+  article.dataset.bankProductCard = "";
+  article.dataset.bankName = bankName || currentBankProfileName;
+  article.dataset.kind = product.kind || "loan";
+  article.dataset.rateMap = buildBankProductRateMapText(product.rateMap);
+
+  if (product.secondaryLabel) {
+    article.dataset.secondaryLabel = product.secondaryLabel;
+  }
+  if (product.tertiaryLabel) {
+    article.dataset.tertiaryLabel = product.tertiaryLabel;
+  }
+
+  const header = document.createElement("header");
+  header.className = "bank-product-head";
+
+  const title = document.createElement("h3");
+  title.textContent = product.title;
+  header.append(title);
+
+  (product.descriptionLines || []).forEach((lineText) => {
+    const line = document.createElement("p");
+    line.textContent = lineText;
+    header.append(line);
+  });
+
+  const formGrid = document.createElement("div");
+  formGrid.className = "bank-product-form-grid";
+
+  const amountField = document.createElement("label");
+  amountField.className = "bank-product-field";
+  const amountLabel = document.createElement("span");
+  amountLabel.textContent = product.amountLabel || "Tutar";
+  const amountShell = document.createElement("div");
+  amountShell.className = "bank-product-input-shell";
+  const amountInput = document.createElement("input");
+  amountInput.type = "text";
+  amountInput.inputMode = "numeric";
+  amountInput.value = formatTry(product.defaultAmount || 0);
+  amountInput.setAttribute("data-role", "amount");
+  const amountSuffix = document.createElement("em");
+  amountSuffix.textContent = "TL";
+  amountShell.append(amountInput, amountSuffix);
+  amountField.append(amountLabel, amountShell);
+
+  const termField = document.createElement("label");
+  termField.className = "bank-product-field";
+  const termLabel = document.createElement("span");
+  termLabel.textContent = "Vade";
+  const termShell = document.createElement("div");
+  termShell.className = "bank-product-input-shell bank-product-input-shell-select";
+  const termSelect = document.createElement("select");
+  termSelect.setAttribute("data-role", "term");
+
+  getTermsFromRateMap(product.rateMap).forEach((termValue) => {
+    const option = document.createElement("option");
+    option.value = String(termValue);
+    option.textContent = formatBankTermLabel(product.kind || "loan", termValue);
+    option.selected = Number(termValue) === Number(product.selectedTerm || termValue);
+    termSelect.append(option);
+  });
+
+  termShell.append(termSelect);
+  termField.append(termLabel, termShell);
+  formGrid.append(amountField, termField);
+
+  const tableCard = document.createElement("div");
+  tableCard.className = "bank-product-table-card";
+  [
+    ["Faiz Oranı", "rate", "label-primary"],
+    [product.secondaryLabel || "Aylık Taksit", "installment", "label-secondary"],
+    [product.tertiaryLabel || "Toplam Ödeme", "total-payment", "label-tertiary"],
+  ].forEach(([labelText, roleName, labelRole]) => {
+    const row = document.createElement("div");
+    row.className = "bank-product-table-row";
+    const label = document.createElement("span");
+    label.textContent = labelText;
+    label.dataset.role = labelRole;
+    const value = document.createElement("strong");
+    value.dataset.role = roleName;
+    value.textContent = "-";
+    row.append(label, value);
+    tableCard.append(row);
+  });
+
+  const actionButton = document.createElement("button");
+  actionButton.type = "button";
+  actionButton.className = "bank-product-action";
+  actionButton.dataset.bankApplyButton = "";
+  actionButton.dataset.bankName = bankName || currentBankProfileName;
+  actionButton.dataset.productTitle = product.title;
+  actionButton.textContent = "Başvur";
+
+  article.append(header, formGrid, tableCard, actionButton);
+
+  if (product.detailHref) {
+    const detailLink = document.createElement("a");
+    detailLink.className = "bank-product-secondary-link";
+    detailLink.href = product.detailHref;
+    detailLink.target = "_blank";
+    detailLink.rel = "noopener noreferrer";
+    detailLink.textContent = "Ayrıntılı Bilgi";
+    article.append(detailLink);
+  } else {
+    const mutedText = document.createElement("span");
+    mutedText.className = "bank-product-secondary-link bank-product-secondary-link-muted";
+    mutedText.textContent = "Ayrıntılı Bilgi";
+    article.append(mutedText);
+  }
+
+  return article;
+}
+
+function createBankDetailEmptyState(bankName) {
+  const section = document.createElement("section");
+  section.className = "bank-product-showcase";
+
+  const emptyCard = document.createElement("article");
+  emptyCard.className = "bank-product-empty";
+
+  const heading = document.createElement("h3");
+  heading.textContent = `${bankName} için güncel ürün kartı hazırlanıyor`;
+  const copy = document.createElement("p");
+  copy.textContent = "Bu banka için mevcut kredi faiz verisi henüz eklenmedi. Sonraki adımda ürünler aynı kart yapısına taşınabilir.";
+  emptyCard.append(heading, copy);
+  section.append(emptyCard);
+  return section;
+}
+
+function buildBankProductRateMapText(rateMap) {
+  return Object.entries(rateMap || {})
+    .map(([termValue, rateValue]) => `${termValue}:${rateValue}`)
+    .join(";");
+}
+
+function getTermsFromRateMap(rateMap) {
+  return Object.keys(rateMap || {})
+    .map((termValue) => Number.parseInt(termValue, 10))
+    .filter((termValue) => Number.isFinite(termValue))
+    .sort((leftValue, rightValue) => leftValue - rightValue);
+}
+
+function formatBankTermLabel(productKind, termValue) {
+  if (productKind === "deposit") {
+    return `${termValue} Gün`;
+  }
+
+  return `${termValue} Ay`;
+}
+
+function parseBankProductRateMap(rawValue) {
+  return String(rawValue || "")
+    .split(";")
+    .reduce((accumulator, item) => {
+      const [termText, rateText] = item.split(":");
+      const term = Number.parseInt(String(termText || "").trim(), 10);
+      const rate = Number.parseFloat(String(rateText || "").trim());
+
+      if (Number.isFinite(term) && Number.isFinite(rate)) {
+        accumulator[String(term)] = rate;
+      }
+
+      return accumulator;
+    }, {});
 }
 
 function closeHeaderMegaMenus() {
@@ -2026,6 +3069,8 @@ function createLoanRatesRow(rowData) {
 function openLoanRatesPage(options = {}) {
   const { updateHash = true, tabKey } = options;
   closeAuthPopover();
+  closeBankAppRedirectPage();
+  hideHomePageContent();
   if (ui.bankDetailPage) {
     ui.bankDetailPage.classList.add("hidden");
   }
@@ -2042,7 +3087,7 @@ function openLoanRatesPage(options = {}) {
   syncSubpageBodyClasses();
   setActiveHeaderNav("loan");
   if (updateHash) {
-    updateRouteHash(ROUTE_HASH.loan);
+    updateRouteHash(buildLoanRatesHash(ui.loanRatesPage?.dataset.loanRatesTab || tabKey));
   }
 }
 
@@ -2051,6 +3096,7 @@ function closeLoanRatesPage(options = {}) {
   if (ui.loanRatesPage) {
     ui.loanRatesPage.classList.add("hidden");
   }
+  showHomePageContent();
   syncSubpageBodyClasses();
   if (updateHash) {
     updateRouteHash(ROUTE_HASH.home);
@@ -2058,8 +3104,10 @@ function closeLoanRatesPage(options = {}) {
 }
 
 function openBankDetailPage(options = {}) {
-  const { updateHash = true } = options;
+  const { updateHash = true, bankName = currentBankProfileName } = options;
   closeAuthPopover();
+  closeBankAppRedirectPage();
+  hideHomePageContent();
   if (ui.loanRatesPage) {
     ui.loanRatesPage.classList.add("hidden");
   }
@@ -2069,14 +3117,16 @@ function openBankDetailPage(options = {}) {
   if (ui.investmentPage) {
     ui.investmentPage.classList.add("hidden");
   }
+  renderBankDetailPage(bankName);
   if (ui.bankDetailPage) {
     ui.bankDetailPage.classList.remove("hidden");
   }
   syncSubpageBodyClasses();
   setActiveHeaderNav("loan");
   if (updateHash) {
-    updateRouteHash(ROUTE_HASH.bankIsbank);
+    updateRouteHash(buildBankDetailHash(bankName));
   }
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function closeBankDetailPage(options = {}) {
@@ -2084,6 +3134,7 @@ function closeBankDetailPage(options = {}) {
   if (ui.bankDetailPage) {
     ui.bankDetailPage.classList.add("hidden");
   }
+  showHomePageContent();
   syncSubpageBodyClasses();
   if (updateHash) {
     updateRouteHash(ROUTE_HASH.home);
@@ -2093,6 +3144,8 @@ function closeBankDetailPage(options = {}) {
 function openCalculationPage(options = {}) {
   const { updateHash = true } = options;
   closeAuthPopover();
+  closeBankAppRedirectPage();
+  hideHomePageContent();
   if (ui.bankDetailPage) {
     ui.bankDetailPage.classList.add("hidden");
   }
@@ -2118,8 +3171,9 @@ function openCalculationPage(options = {}) {
   syncSubpageBodyClasses();
   setActiveHeaderNav("calculation");
   if (updateHash) {
-    updateRouteHash(ROUTE_HASH.calculation);
+    updateRouteHash(buildCalculationHash(ui.calculationPage?.dataset.loanType || "need"));
   }
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function closeCalculationPage(options = {}) {
@@ -2127,6 +3181,7 @@ function closeCalculationPage(options = {}) {
   if (ui.calculationPage) {
     ui.calculationPage.classList.add("hidden");
   }
+  showHomePageContent();
   syncSubpageBodyClasses();
   if (updateHash) {
     updateRouteHash(ROUTE_HASH.home);
@@ -2134,8 +3189,10 @@ function closeCalculationPage(options = {}) {
 }
 
 function openInvestmentPage(options = {}) {
-  const { updateHash = true } = options;
+  const { updateHash = true, initialSectionKey = "" } = options;
   closeAuthPopover();
+  closeBankAppRedirectPage();
+  hideHomePageContent();
   if (ui.bankDetailPage) {
     ui.bankDetailPage.classList.add("hidden");
   }
@@ -2169,11 +3226,18 @@ function openInvestmentPage(options = {}) {
   ui.investmentGoldCard?.classList.remove("is-active");
   ui.investmentSilverCard?.classList.remove("is-active");
   currentInvestmentSectionKey = "";
+  if (ui.investmentPage) {
+    ui.investmentPage.dataset.sectionKey = "";
+  }
   stopMarketRefreshTimer();
   syncSubpageBodyClasses();
   setActiveHeaderNav("investment");
+  if (initialSectionKey) {
+    revealInvestmentSection(initialSectionKey, { updateHash: false, smoothScroll: false });
+    return;
+  }
   if (updateHash) {
-    updateRouteHash(ROUTE_HASH.investment);
+    updateRouteHash(buildInvestmentHash(currentInvestmentSectionKey || ui.investmentPage?.dataset.sectionKey || ""));
   }
 }
 
@@ -2204,9 +3268,31 @@ function closeInvestmentPage(options = {}) {
   ui.investmentSilverCard?.classList.remove("is-active");
   currentInvestmentSectionKey = "";
   stopMarketRefreshTimer();
+  showHomePageContent();
   syncSubpageBodyClasses();
   if (updateHash) {
     updateRouteHash(ROUTE_HASH.home);
+  }
+}
+
+function hideHomePageContent() {
+  if (ui.layoutShell) {
+    ui.layoutShell.classList.add("hidden");
+  }
+
+  if (ui.resultShell) {
+    ui.resultShell.classList.add("hidden");
+  }
+}
+
+function showHomePageContent() {
+  if (ui.layoutShell) {
+    ui.layoutShell.classList.remove("hidden");
+  }
+
+  if (ui.resultShell) {
+    const hasVisibleResult = Boolean(ui.resultView && !ui.resultView.classList.contains("hidden"));
+    ui.resultShell.classList.toggle("hidden", !hasVisibleResult);
   }
 }
 
@@ -2232,21 +3318,12 @@ function revealInvestmentSection(sectionKey, options = {}) {
   ui.investmentGoldCard?.classList.toggle("is-active", isGoldSection);
   ui.investmentSilverCard?.classList.toggle("is-active", isSilverSection);
   currentInvestmentSectionKey = String(sectionKey || "");
+  if (ui.investmentPage) {
+    ui.investmentPage.dataset.sectionKey = currentInvestmentSectionKey;
+  }
 
   if (updateHash) {
-    if (isFxSection) {
-      updateRouteHash(ROUTE_HASH.investmentFx);
-    } else if (isStockSection) {
-      updateRouteHash(ROUTE_HASH.investmentStock);
-    } else if (isFundSection) {
-      updateRouteHash(ROUTE_HASH.investmentFund);
-    } else if (isGoldSection) {
-      updateRouteHash(ROUTE_HASH.investmentGold);
-    } else if (isSilverSection) {
-      updateRouteHash(ROUTE_HASH.investmentSilver);
-    } else {
-      updateRouteHash(ROUTE_HASH.investment);
-    }
+    updateRouteHash(buildInvestmentHash(sectionKey));
   }
 
   if (isFxSection) {
@@ -2300,13 +3377,89 @@ function updateRouteHash(nextHash) {
   window.location.hash = nextHash;
 }
 
+function buildCalculationHash(loanType) {
+  const normalizedLoanType = String(loanType || "").trim().toLowerCase();
+  return LOAN_TYPE_CONFIG[normalizedLoanType]
+    ? `${CALCULATION_ROUTE_PREFIX}${normalizedLoanType}`
+    : ROUTE_HASH.calculation;
+}
+
+function buildLoanRatesHash(tabKey) {
+  const normalizedTabKey = String(tabKey || "").trim().toLowerCase();
+  const supportedTabKeys = new Set(["need", "housing", "vehicle", "kobi"]);
+  return supportedTabKeys.has(normalizedTabKey)
+    ? `${LOAN_ROUTE_PREFIX}${normalizedTabKey}`
+    : ROUTE_HASH.loan;
+}
+
+function buildInvestmentHash(sectionKey) {
+  const normalizedSectionKey = String(sectionKey || "").trim().toLowerCase();
+  const sectionHashByKey = {
+    fx: ROUTE_HASH.investmentFx,
+    stock: ROUTE_HASH.investmentStock,
+    fund: ROUTE_HASH.investmentFund,
+    gold: ROUTE_HASH.investmentGold,
+    silver: ROUTE_HASH.investmentSilver,
+  };
+  return sectionHashByKey[normalizedSectionKey] || ROUTE_HASH.investment;
+}
+
+function shouldPrioritizeInitialRoute(hashValue) {
+  const normalizedHash = String(hashValue || "").trim().toLowerCase();
+  return (
+    normalizedHash === ROUTE_HASH.investment ||
+    normalizedHash === LEGACY_INVESTMENT_SILVER_HASH ||
+    normalizedHash === LEGACY_INVESTMENT_DEPOSIT_HASH ||
+    normalizedHash.startsWith(INVESTMENT_ROUTE_PREFIX)
+  );
+}
+
+function getInvestmentSectionKeyFromHash(hashValue) {
+  const normalizedHash = String(hashValue || "").trim().toLowerCase();
+  if (!normalizedHash.startsWith(INVESTMENT_ROUTE_PREFIX)) {
+    return "";
+  }
+  return normalizeInvestmentSectionKey(
+    normalizedHash.slice(INVESTMENT_ROUTE_PREFIX.length),
+  );
+}
+
+function scheduleInitialRouteSectionSync() {
+  const investmentSectionKey = getInvestmentSectionKeyFromHash(window.location.hash);
+  if (!investmentSectionKey) {
+    return;
+  }
+
+  window.setTimeout(() => {
+    revealInvestmentSection(investmentSectionKey, {
+      updateHash: false,
+      smoothScroll: false,
+    });
+  }, 120);
+}
+
 function applyRouteFromHash() {
-  const normalizedHash = String(window.location.hash || "")
-    .trim()
-    .toLowerCase();
+  const rawHash = String(window.location.hash || "").trim();
+  const normalizedHash = rawHash.toLowerCase();
+
+  if (normalizedHash.startsWith(BANK_APP_REDIRECT_ROUTE_PREFIX)) {
+    const queryText = rawHash.includes("?") ? rawHash.slice(rawHash.indexOf("?") + 1) : "";
+    const params = new URLSearchParams(queryText);
+    const bankName = params.get("bank") || currentBankProfileName || "İş Bankası";
+    const productTitle = params.get("product") || "";
+    renderBankAppRedirectPage(bankName, productTitle);
+    return;
+  }
 
   if (normalizedHash === ROUTE_HASH.calculation) {
     openCalculationPage({ updateHash: false });
+    return;
+  }
+
+  if (normalizedHash.startsWith(CALCULATION_ROUTE_PREFIX)) {
+    const calculationLoanType = normalizedHash.slice(CALCULATION_ROUTE_PREFIX.length);
+    openCalculationPage({ updateHash: false });
+    revealLoanCalculator(calculationLoanType, { updateHash: false, scroll: false });
     return;
   }
 
@@ -2315,8 +3468,22 @@ function applyRouteFromHash() {
     return;
   }
 
-  if (normalizedHash === ROUTE_HASH.bankIsbank) {
-    openBankDetailPage({ updateHash: false });
+  if (normalizedHash.startsWith(LOAN_ROUTE_PREFIX)) {
+    const loanRatesTabKey = normalizedHash.slice(LOAN_ROUTE_PREFIX.length);
+    openLoanRatesPage({ updateHash: false, tabKey: loanRatesTabKey });
+    return;
+  }
+
+  if (normalizedHash.startsWith(BANK_ROUTE_PREFIX)) {
+    const bankName = resolveBankNameFromHash(normalizedHash);
+    if (bankName) {
+      openBankDetailPage({ updateHash: false, bankName });
+      return;
+    }
+  }
+
+  if (normalizedHash === `${BANK_ROUTE_PREFIX}is-bankasi`) {
+    openBankDetailPage({ updateHash: false, bankName: "İş Bankası" });
     return;
   }
 
@@ -2325,33 +3492,24 @@ function applyRouteFromHash() {
     return;
   }
 
-  if (normalizedHash === ROUTE_HASH.investmentFx) {
-    openInvestmentPage({ updateHash: false });
-    revealInvestmentSection("fx", { updateHash: false, smoothScroll: false });
+  if (normalizedHash === LEGACY_INVESTMENT_SILVER_HASH) {
+    openInvestmentPage({ updateHash: false, initialSectionKey: "silver" });
     return;
   }
 
-  if (normalizedHash === ROUTE_HASH.investmentStock) {
-    openInvestmentPage({ updateHash: false });
-    revealInvestmentSection("stock", { updateHash: false, smoothScroll: false });
+  if (normalizedHash === LEGACY_INVESTMENT_DEPOSIT_HASH) {
+    openInvestmentPage({ updateHash: false, initialSectionKey: "silver" });
     return;
   }
 
-  if (normalizedHash === ROUTE_HASH.investmentFund) {
-    openInvestmentPage({ updateHash: false });
-    revealInvestmentSection("fund", { updateHash: false, smoothScroll: false });
-    return;
-  }
-
-  if (normalizedHash === ROUTE_HASH.investmentGold) {
-    openInvestmentPage({ updateHash: false });
-    revealInvestmentSection("gold", { updateHash: false, smoothScroll: false });
-    return;
-  }
-
-  if (normalizedHash === ROUTE_HASH.investmentSilver) {
-    openInvestmentPage({ updateHash: false });
-    revealInvestmentSection("silver", { updateHash: false, smoothScroll: false });
+  if (normalizedHash.startsWith(INVESTMENT_ROUTE_PREFIX)) {
+    const investmentSectionKey = normalizeInvestmentSectionKey(
+      normalizedHash.slice(INVESTMENT_ROUTE_PREFIX.length),
+    );
+    openInvestmentPage({
+      updateHash: false,
+      initialSectionKey: investmentSectionKey,
+    });
     return;
   }
 
@@ -2359,6 +3517,7 @@ function applyRouteFromHash() {
   closeLoanRatesPage({ updateHash: false });
   closeCalculationPage({ updateHash: false });
   closeInvestmentPage({ updateHash: false });
+  closeBankAppRedirectPage();
   setActiveHeaderNav("home");
 }
 
@@ -2447,10 +3606,7 @@ async function loadFxPriceTable(options = {}) {
   }
 
   if (!silent) {
-    ui.investmentFxBody.replaceChildren(createEmptyRow("Döviz verisi yükleniyor...", 7));
-  }
-  if (!silent && ui.investmentFxMeta) {
-    ui.investmentFxMeta.textContent = "Kaynak: Kapalıçarşı";
+    renderFxPriceTable(EMBEDDED_FX_FALLBACK_PAYLOAD.rows, EMBEDDED_FX_FALLBACK_PAYLOAD);
   }
 
   try {
@@ -2536,7 +3692,15 @@ function renderFxPriceTable(rows, payload) {
     return;
   }
 
-  const normalizedRows = rows.filter((row) => row && typeof row === "object");
+  const allRows = rows.filter((row) => row && typeof row === "object");
+  const saudiRiyalIndex = allRows.findIndex((row) => {
+    const dovizAdi = String(row.doviz_adi || "").trim().toLowerCase();
+    return dovizAdi === "suudi arabistan riyali";
+  });
+  const normalizedRows = saudiRiyalIndex >= 0
+    ? allRows.slice(0, saudiRiyalIndex + 1)
+    : allRows;
+
   if (normalizedRows.length === 0) {
     ui.investmentFxBody.replaceChildren(createEmptyRow("Döviz verisi boş görünüyor.", 7));
     return;
@@ -2594,7 +3758,7 @@ function renderFxPriceTable(rows, payload) {
 
   if (ui.investmentFxMeta) {
     const sourceLabel = String(payload.kaynak || "Kapalı Çarşı");
-    ui.investmentFxMeta.textContent = `Kaynak: ${sourceLabel}`;
+    ui.investmentFxMeta.textContent = `Kaynak: ${sourceLabel}, ${formatCurrentDate()}`;
   }
 }
 
@@ -2605,10 +3769,10 @@ async function loadGoldPriceTable(options = {}) {
   }
 
   if (!silent) {
-    ui.investmentGoldBody.replaceChildren(createEmptyRow("Altın verisi yükleniyor...", 7));
-  }
-  if (!silent && ui.investmentGoldMeta) {
-    ui.investmentGoldMeta.textContent = "Kaynak: Kapalıçarşı";
+    renderGoldPriceTable(
+      EMBEDDED_GOLD_FALLBACK_PAYLOAD.rows,
+      EMBEDDED_GOLD_FALLBACK_PAYLOAD,
+    );
   }
 
   try {
@@ -2635,6 +3799,7 @@ async function fetchGoldPayload(options = {}) {
   const { forceRefresh = false } = options;
   const apiBase = normalizeBaseUrl(ui.apiBase ? ui.apiBase.value : "");
   const forceRefreshQuery = forceRefresh ? "?force_refresh=true" : "";
+  const localFallbackPayload = await loadLocalGoldPayload({ forceRefresh });
 
   try {
     const apiResponse = await fetchWithTimeout(
@@ -2649,13 +3814,22 @@ async function fetchGoldPayload(options = {}) {
     if (apiResponse.ok) {
       const apiPayload = await apiResponse.json();
       if (apiPayload && typeof apiPayload === "object" && Array.isArray(apiPayload.rows)) {
-        return apiPayload;
+        return mergeGoldPayloadWithFallback(apiPayload, localFallbackPayload);
       }
     }
   } catch (_error) {
     // Fall back to local snapshot files.
   }
 
+  if (localFallbackPayload) {
+    return localFallbackPayload;
+  }
+
+  throw new Error("Gold data file not found");
+}
+
+async function loadLocalGoldPayload(options = {}) {
+  const { forceRefresh = false } = options;
   const dateStamp = new Date().toISOString().slice(0, 10);
   const cacheBust = forceRefresh ? `?t=${Date.now()}` : "";
   const candidateUrls = [
@@ -2686,7 +3860,78 @@ async function fetchGoldPayload(options = {}) {
     }
   }
 
-  throw new Error("Gold data file not found");
+  return null;
+}
+
+function mergeGoldPayloadWithFallback(apiPayload, fallbackPayload) {
+  if (!fallbackPayload || !Array.isArray(fallbackPayload.rows)) {
+    return apiPayload;
+  }
+
+  const apiRows = Array.isArray(apiPayload.rows) ? apiPayload.rows : [];
+  const fallbackRows = fallbackPayload.rows;
+  const rowByName = new Map();
+
+  apiRows.forEach((row) => {
+    const rowName = normalizeGoldRowName(row?.altin_adi);
+    if (rowName) {
+      rowByName.set(rowName, row);
+    }
+  });
+
+  fallbackRows.forEach((row) => {
+    const rowName = normalizeGoldRowName(row?.altin_adi);
+    if (!rowName || rowByName.has(rowName)) {
+      return;
+    }
+    rowByName.set(rowName, row);
+  });
+
+  return {
+    ...apiPayload,
+    count: rowByName.size,
+    rows: Array.from(rowByName.values()),
+  };
+}
+
+function normalizeGoldRowName(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9çğıöşü]+/gi, " ")
+    .trim();
+}
+
+function prepareGoldRows(rows) {
+  const hiddenNameKeys = new Set([
+    "ata altın",
+    "14 ayar bilezik",
+    "18 ayar bilezik",
+    "22 ayar bilezik",
+    "gram altın serb",
+  ]);
+  const orderMap = new Map([
+    ["gram altın", 0],
+    ["çeyrek altın", 1],
+    ["yarım altın", 2],
+    ["cumhuriyet altını", 3],
+    ["altın ons usd", 4],
+  ]);
+
+  return rows
+    .filter((row) => row && typeof row === "object")
+    .filter((row) => !hiddenNameKeys.has(normalizeGoldRowName(row.altin_adi)))
+    .sort((leftRow, rightRow) => {
+      const leftName = String(leftRow.altin_adi || "");
+      const rightName = String(rightRow.altin_adi || "");
+      const leftOrder = orderMap.get(normalizeGoldRowName(leftName)) ?? orderMap.size;
+      const rightOrder = orderMap.get(normalizeGoldRowName(rightName)) ?? orderMap.size;
+
+      if (leftOrder !== rightOrder) {
+        return leftOrder - rightOrder;
+      }
+
+      return leftName.localeCompare(rightName, "tr");
+    });
 }
 
 function renderGoldPriceTable(rows, payload) {
@@ -2694,7 +3939,15 @@ function renderGoldPriceTable(rows, payload) {
     return;
   }
 
-  const normalizedRows = rows.filter((row) => row && typeof row === "object");
+  let normalizedRows = [];
+  try {
+    normalizedRows = prepareGoldRows(rows);
+  } catch (error) {
+    console.error("Gold row preparation failed", error);
+    normalizedRows = Array.isArray(rows)
+      ? rows.filter((row) => row && typeof row === "object")
+      : [];
+  }
   if (normalizedRows.length === 0) {
     ui.investmentGoldBody.replaceChildren(createEmptyRow("Altın verisi boş görünüyor.", 7));
     return;
@@ -2743,7 +3996,7 @@ function renderGoldPriceTable(rows, payload) {
 
   if (ui.investmentGoldMeta) {
     const sourceLabel = String(payload.kaynak || "Kapalı Çarşı");
-    ui.investmentGoldMeta.textContent = `Kaynak: ${sourceLabel}`;
+    ui.investmentGoldMeta.textContent = `Kaynak: ${sourceLabel}, ${formatCurrentDate()}`;
   }
 }
 
@@ -3164,8 +4417,12 @@ function syncSubpageBodyClasses() {
   const loanRatesOpen = Boolean(ui.loanRatesPage && !ui.loanRatesPage.classList.contains("hidden"));
   const calculationOpen = Boolean(ui.calculationPage && !ui.calculationPage.classList.contains("hidden"));
   const investmentOpen = Boolean(ui.investmentPage && !ui.investmentPage.classList.contains("hidden"));
+  const bankRedirectOpen = Boolean(ui.bankAppRedirectPage && !ui.bankAppRedirectPage.classList.contains("hidden"));
   document.body.classList.toggle("loan-rates-open", loanRatesOpen);
-  document.body.classList.toggle("subpage-open", bankDetailOpen || loanRatesOpen || calculationOpen || investmentOpen);
+  document.body.classList.toggle(
+    "subpage-open",
+    bankDetailOpen || loanRatesOpen || calculationOpen || investmentOpen || bankRedirectOpen,
+  );
 }
 
 function scrollHomeSectionIntoView() {
@@ -3179,6 +4436,18 @@ function scrollHomeSectionIntoView() {
   const headerHeight = headerElement instanceof HTMLElement ? headerElement.getBoundingClientRect().height : 0;
   const targetTop = window.scrollY + homeTopTarget.getBoundingClientRect().top - headerHeight - 8;
   window.scrollTo({ top: Math.max(targetTop, 0), behavior: "smooth" });
+}
+
+function scrollElementBelowHeader(targetElement, behavior = "smooth") {
+  if (!(targetElement instanceof HTMLElement)) {
+    window.scrollTo({ top: 0, behavior });
+    return;
+  }
+
+  const headerElement = document.querySelector(".site-header");
+  const headerHeight = headerElement instanceof HTMLElement ? headerElement.getBoundingClientRect().height : 0;
+  const targetTop = window.scrollY + targetElement.getBoundingClientRect().top - headerHeight - 8;
+  window.scrollTo({ top: Math.max(targetTop, 0), behavior });
 }
 
 function setNeedCalculatorTab(tabKey) {
@@ -3206,6 +4475,49 @@ function setNeedCalculatorTab(tabKey) {
   }
 }
 
+function clearNeedCalcFieldError(fieldElement) {
+  if (!(fieldElement instanceof HTMLElement)) {
+    return;
+  }
+  const fieldWrapper = fieldElement.closest(".need-calc-field");
+  if (!(fieldWrapper instanceof HTMLElement)) {
+    return;
+  }
+  fieldWrapper.classList.remove("has-error");
+  const errorElement = fieldWrapper.querySelector(".need-calc-field-error");
+  if (errorElement instanceof HTMLElement) {
+    errorElement.textContent = "";
+    errorElement.classList.add("hidden");
+  }
+}
+
+function setNeedCalcFieldError(fieldElement, message) {
+  if (!(fieldElement instanceof HTMLElement)) {
+    return;
+  }
+  const fieldWrapper = fieldElement.closest(".need-calc-field");
+  if (!(fieldWrapper instanceof HTMLElement)) {
+    return;
+  }
+  fieldWrapper.classList.add("has-error");
+  const errorElement = fieldWrapper.querySelector(".need-calc-field-error");
+  if (errorElement instanceof HTMLElement) {
+    errorElement.textContent = message;
+    errorElement.classList.remove("hidden");
+  }
+}
+
+function clearNeedCalcFormErrors(formElement) {
+  if (!(formElement instanceof HTMLFormElement)) {
+    return;
+  }
+  formElement.querySelectorAll(".need-calc-field input, .need-calc-field select").forEach((fieldElement) => {
+    if (fieldElement instanceof HTMLElement) {
+      clearNeedCalcFieldError(fieldElement);
+    }
+  });
+}
+
 function setupNeedLoanCalculator() {
   if (
     !ui.needCalcForm &&
@@ -3231,7 +4543,9 @@ function setupNeedLoanCalculator() {
 
   [
     ui.needPrincipal,
+    ui.needRate,
     ui.needInstallmentAmount,
+    ui.needInstallmentRateInput,
     ui.depositPrincipal,
     ui.investmentDepositPrincipal,
     ui.compoundPrincipal,
@@ -3245,6 +4559,24 @@ function setupNeedLoanCalculator() {
     inputElement.value = formatAmountInput(inputElement.value);
     inputElement.addEventListener("input", () => {
       inputElement.value = formatAmountInput(inputElement.value);
+      clearNeedCalcFieldError(inputElement);
+    });
+  });
+
+  [
+    ui.needRate,
+    ui.needInstallmentRateInput,
+    ui.needTerm,
+    ui.needInstallmentTerm,
+  ].forEach((fieldElement) => {
+    if (!fieldElement) {
+      return;
+    }
+    fieldElement.addEventListener("input", () => {
+      clearNeedCalcFieldError(fieldElement);
+    });
+    fieldElement.addEventListener("change", () => {
+      clearNeedCalcFieldError(fieldElement);
     });
   });
 
@@ -3300,14 +4632,18 @@ function setupNeedLoanCalculator() {
   }
 }
 
-function revealLoanCalculator(loanType) {
+function revealLoanCalculator(loanType, options = {}) {
   if (!ui.needLoanCalculator && !ui.depositCalculator && !ui.compoundCalculator && !ui.realCalculator) {
     return;
   }
+  const { updateHash = true, scroll = true } = options;
 
   const resolvedLoanType = LOAN_TYPE_CONFIG[loanType] ? loanType : "need";
   if (ui.calculationPage) {
     ui.calculationPage.dataset.loanType = resolvedLoanType;
+  }
+  if (updateHash && ui.calculationPage && !ui.calculationPage.classList.contains("hidden")) {
+    updateRouteHash(buildCalculationHash(resolvedLoanType));
   }
 
   const typeConfig = LOAN_TYPE_CONFIG[resolvedLoanType] || LOAN_TYPE_CONFIG.need;
@@ -3328,6 +4664,21 @@ function revealLoanCalculator(loanType) {
   }
 
   if (resolvedLoanType === "deposit") {
+    if (ui.needCalcScheduleSection) {
+      ui.needCalcScheduleSection.classList.add("hidden");
+    }
+    if (ui.needLoanCalculatorTitle) {
+      ui.needLoanCalculatorTitle.classList.add("hidden");
+    }
+    if (ui.depositCalculatorTitle) {
+      ui.depositCalculatorTitle.classList.remove("hidden");
+    }
+    if (ui.compoundCalculatorTitle) {
+      ui.compoundCalculatorTitle.classList.add("hidden");
+    }
+    if (ui.realCalculatorTitle) {
+      ui.realCalculatorTitle.classList.add("hidden");
+    }
     if (ui.needLoanCalculator) {
       ui.needLoanCalculator.classList.add("hidden");
     }
@@ -3344,12 +4695,29 @@ function revealLoanCalculator(loanType) {
     if (ui.depositCalculator) {
       applyDepositDefaults();
       ui.depositCalculator.classList.remove("hidden");
-      ui.depositCalculator.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (scroll) {
+        scrollElementBelowHeader(ui.depositCalculatorTitle || ui.depositCalculator);
+      }
     }
     return;
   }
 
   if (resolvedLoanType === "compound") {
+    if (ui.needCalcScheduleSection) {
+      ui.needCalcScheduleSection.classList.add("hidden");
+    }
+    if (ui.needLoanCalculatorTitle) {
+      ui.needLoanCalculatorTitle.classList.add("hidden");
+    }
+    if (ui.depositCalculatorTitle) {
+      ui.depositCalculatorTitle.classList.add("hidden");
+    }
+    if (ui.compoundCalculatorTitle) {
+      ui.compoundCalculatorTitle.classList.remove("hidden");
+    }
+    if (ui.realCalculatorTitle) {
+      ui.realCalculatorTitle.classList.add("hidden");
+    }
     if (ui.needLoanCalculator) {
       ui.needLoanCalculator.classList.add("hidden");
     }
@@ -3366,12 +4734,29 @@ function revealLoanCalculator(loanType) {
     if (ui.compoundCalculator) {
       applyCompoundDefaults();
       ui.compoundCalculator.classList.remove("hidden");
-      ui.compoundCalculator.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (scroll) {
+        scrollElementBelowHeader(ui.compoundCalculatorTitle || ui.compoundCalculator);
+      }
     }
     return;
   }
 
   if (resolvedLoanType === "real") {
+    if (ui.needCalcScheduleSection) {
+      ui.needCalcScheduleSection.classList.add("hidden");
+    }
+    if (ui.needLoanCalculatorTitle) {
+      ui.needLoanCalculatorTitle.classList.add("hidden");
+    }
+    if (ui.depositCalculatorTitle) {
+      ui.depositCalculatorTitle.classList.add("hidden");
+    }
+    if (ui.compoundCalculatorTitle) {
+      ui.compoundCalculatorTitle.classList.add("hidden");
+    }
+    if (ui.realCalculatorTitle) {
+      ui.realCalculatorTitle.classList.remove("hidden");
+    }
     if (ui.needLoanCalculator) {
       ui.needLoanCalculator.classList.add("hidden");
     }
@@ -3388,7 +4773,9 @@ function revealLoanCalculator(loanType) {
     if (ui.realCalculator) {
       applyRealDefaults();
       ui.realCalculator.classList.remove("hidden");
-      ui.realCalculator.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (scroll) {
+        scrollElementBelowHeader(ui.realCalculatorTitle || ui.realCalculator);
+      }
     }
     return;
   }
@@ -3402,12 +4789,30 @@ function revealLoanCalculator(loanType) {
   if (ui.realCalculator) {
     ui.realCalculator.classList.add("hidden");
   }
+  if (ui.needCalcScheduleSection) {
+    ui.needCalcScheduleSection.classList.add("hidden");
+  }
 
   applyLoanTypeDefaults(typeConfig);
+  if (ui.needLoanCalculatorTitle) {
+    ui.needLoanCalculatorTitle.textContent = `${typeConfig.title} Hesaplama`;
+    ui.needLoanCalculatorTitle.classList.remove("hidden");
+  }
+  if (ui.depositCalculatorTitle) {
+    ui.depositCalculatorTitle.classList.add("hidden");
+  }
+  if (ui.compoundCalculatorTitle) {
+    ui.compoundCalculatorTitle.classList.add("hidden");
+  }
+  if (ui.realCalculatorTitle) {
+    ui.realCalculatorTitle.classList.add("hidden");
+  }
   ui.needLoanCalculator.classList.remove("hidden");
   renderNeedLoanTable(false);
   renderNeedLoanByInstallment(false);
-  ui.needLoanCalculator.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (scroll) {
+    scrollElementBelowHeader(ui.needLoanCalculatorTitle || ui.needLoanCalculator);
+  }
 }
 
 function applyLoanTypeDefaults(typeConfig) {
@@ -3416,16 +4821,16 @@ function applyLoanTypeDefaults(typeConfig) {
   }
 
   if (ui.needPrincipal) {
-    ui.needPrincipal.value = formatAmountInput(String(typeConfig.defaultPrincipal));
+    ui.needPrincipal.value = "";
   }
   if (ui.needInstallmentAmount) {
-    ui.needInstallmentAmount.value = formatAmountInput(String(typeConfig.defaultInstallment));
+    ui.needInstallmentAmount.value = "";
   }
   if (ui.needRate) {
-    ui.needRate.value = typeConfig.defaultRate.toFixed(2);
+    ui.needRate.value = "";
   }
   if (ui.needInstallmentRateInput) {
-    ui.needInstallmentRateInput.value = typeConfig.defaultRate.toFixed(2);
+    ui.needInstallmentRateInput.value = "";
   }
 
   populateTermOptions(ui.needTerm, typeConfig.terms, typeConfig.defaultTerm);
@@ -3444,13 +4849,10 @@ function applyLoanTypeDefaults(typeConfig) {
 
 function applyDepositDefaults() {
   if (ui.depositPrincipal) {
-    ui.depositPrincipal.value = formatAmountInput(ui.depositPrincipal.value || "100000");
+    ui.depositPrincipal.value = "";
   }
-  if (ui.depositTermDays && !ui.depositTermDays.value) {
-    ui.depositTermDays.value = "32";
-  }
-  if (ui.depositRate && !ui.depositRate.value) {
-    ui.depositRate.value = "43.50";
+  if (ui.depositRate) {
+    ui.depositRate.value = "";
   }
   if (ui.depositCalcResult) {
     ui.depositCalcResult.classList.add("hidden");
@@ -3459,19 +4861,13 @@ function applyDepositDefaults() {
 
 function applyCompoundDefaults() {
   if (ui.compoundPrincipal) {
-    ui.compoundPrincipal.value = formatAmountInput(ui.compoundPrincipal.value || "100000");
+    ui.compoundPrincipal.value = "";
   }
-  if (ui.compoundFrequency && !ui.compoundFrequency.value) {
-    ui.compoundFrequency.value = "monthly";
+  if (ui.compoundRate) {
+    ui.compoundRate.value = "";
   }
-  if (ui.compoundRate && !ui.compoundRate.value) {
-    ui.compoundRate.value = "43.50";
-  }
-  if (ui.compoundRateType && !ui.compoundRateType.value) {
-    ui.compoundRateType.value = "annual";
-  }
-  if (ui.compoundTerm && !ui.compoundTerm.value) {
-    ui.compoundTerm.value = "365";
+  if (ui.compoundTerm) {
+    ui.compoundTerm.value = "";
   }
   if (ui.compoundTermUnit && !ui.compoundTermUnit.value) {
     ui.compoundTermUnit.value = "day";
@@ -3483,19 +4879,19 @@ function applyCompoundDefaults() {
 
 function applyRealDefaults() {
   if (ui.realInitialAmount) {
-    ui.realInitialAmount.value = formatAmountInput(ui.realInitialAmount.value || "81750");
+    ui.realInitialAmount.value = "";
   }
   if (ui.realFinalAmount) {
-    ui.realFinalAmount.value = formatAmountInput(ui.realFinalAmount.value || "109251");
+    ui.realFinalAmount.value = "";
   }
-  if (ui.realInflationRate && !ui.realInflationRate.value) {
-    ui.realInflationRate.value = "38.00";
+  if (ui.realInflationRate) {
+    ui.realInflationRate.value = "";
   }
-  if (ui.realBuyDate && !ui.realBuyDate.value) {
-    ui.realBuyDate.value = "2026-01-01";
+  if (ui.realBuyDate) {
+    ui.realBuyDate.value = "";
   }
-  if (ui.realSellDate && !ui.realSellDate.value) {
-    ui.realSellDate.value = "2026-03-01";
+  if (ui.realSellDate) {
+    ui.realSellDate.value = "";
   }
   if (ui.realCalcResult) {
     ui.realCalcResult.classList.add("hidden");
@@ -3538,26 +4934,55 @@ function renderNeedLoanTable(updateOffers = true) {
   const principal = parseAmountInput(ui.needPrincipal.value);
   const termMonths = Number.parseInt(ui.needTerm.value, 10);
   const monthlyRate = Number.parseFloat(ui.needRate.value);
+  const effectiveMonthlyRate = getEffectiveLoanMonthlyRate(monthlyRate, getCurrentLoanType());
+  let hasError = false;
 
-  if (
-    !Number.isFinite(principal) ||
-    principal <= 0 ||
-    !Number.isFinite(termMonths) ||
-    termMonths <= 0 ||
-    !Number.isFinite(monthlyRate) ||
-    monthlyRate < 0
-  ) {
-    alert("Lütfen geçerli bir kredi tutarı, vade ve faiz oranı gir.");
+  clearNeedCalcFormErrors(ui.needCalcForm);
+
+  if (!Number.isFinite(principal) || principal <= 0) {
+    setNeedCalcFieldError(ui.needPrincipal, "Kredi tutarı gir.");
+    hasError = true;
+  }
+  if (!Number.isFinite(termMonths) || termMonths <= 0) {
+    setNeedCalcFieldError(ui.needTerm, "Vade seç.");
+    hasError = true;
+  }
+  if (!Number.isFinite(monthlyRate) || monthlyRate < 0) {
+    setNeedCalcFieldError(ui.needRate, "Faiz oranı gir.");
+    hasError = true;
+  }
+
+  if (hasError) {
+    ui.needCalcResult.classList.add("hidden");
+    if (ui.needCalcScheduleSection) {
+      ui.needCalcScheduleSection.classList.add("hidden");
+    }
     return;
   }
 
-  const monthlyPayment = calculateInstallment(principal, monthlyRate, termMonths);
+  const monthlyPayment = calculateInstallment(principal, effectiveMonthlyRate, termMonths);
   const totalPayment = monthlyPayment * termMonths;
   const totalInterest = totalPayment - principal;
 
   ui.needCalcMonthly.textContent = formatTry(monthlyPayment);
   ui.needCalcTotal.textContent = formatTry(totalPayment);
   ui.needCalcInterest.textContent = formatTry(totalInterest);
+  if (ui.needCalcNote) {
+    ui.needCalcNote.textContent = buildLoanTaxNote(getCurrentLoanType());
+  }
+  renderLoanPaymentSchedule({
+    tbodyElement: ui.needCalcScheduleBody,
+    principal,
+    nominalMonthlyRatePercent: monthlyRate,
+    loanType: getCurrentLoanType(),
+    termMonths,
+  });
+  if (ui.needCalcScheduleTitle) {
+    ui.needCalcScheduleTitle.textContent = "Ödeme Planı";
+  }
+  if (ui.needCalcScheduleSection) {
+    ui.needCalcScheduleSection.classList.remove("hidden");
+  }
   ui.needCalcResult.classList.remove("hidden");
 }
 
@@ -3577,26 +5002,56 @@ function renderNeedLoanByInstallment(updateOffers = true) {
   const installmentAmount = parseAmountInput(ui.needInstallmentAmount.value);
   const termMonths = Number.parseInt(ui.needInstallmentTerm.value, 10);
   const monthlyRate = Number.parseFloat(ui.needInstallmentRateInput.value);
+  const effectiveMonthlyRate = getEffectiveLoanMonthlyRate(monthlyRate, getCurrentLoanType());
+  let hasError = false;
 
-  if (
-    !Number.isFinite(installmentAmount) ||
-    installmentAmount <= 0 ||
-    !Number.isFinite(termMonths) ||
-    termMonths <= 0 ||
-    !Number.isFinite(monthlyRate) ||
-    monthlyRate < 0
-  ) {
-    alert("Lütfen geçerli bir taksit tutarı, vade ve faiz oranı gir.");
+  clearNeedCalcFormErrors(ui.needInstallmentForm);
+
+  if (!Number.isFinite(installmentAmount) || installmentAmount <= 0) {
+    setNeedCalcFieldError(ui.needInstallmentAmount, "Taksit tutarı gir.");
+    hasError = true;
+  }
+  if (!Number.isFinite(termMonths) || termMonths <= 0) {
+    setNeedCalcFieldError(ui.needInstallmentTerm, "Vade seç.");
+    hasError = true;
+  }
+  if (!Number.isFinite(monthlyRate) || monthlyRate < 0) {
+    setNeedCalcFieldError(ui.needInstallmentRateInput, "Faiz oranı gir.");
+    hasError = true;
+  }
+
+  if (hasError) {
+    ui.needInstallmentResult.classList.add("hidden");
+    if (ui.needCalcScheduleSection) {
+      ui.needCalcScheduleSection.classList.add("hidden");
+    }
     return;
   }
 
-  const estimatedPrincipal = calculatePrincipalFromInstallment(installmentAmount, monthlyRate, termMonths);
+  const estimatedPrincipal = calculatePrincipalFromInstallment(installmentAmount, effectiveMonthlyRate, termMonths);
   const totalPayment = installmentAmount * termMonths;
   const totalInterest = totalPayment - estimatedPrincipal;
 
   ui.needInstallmentPrincipal.textContent = formatTry(estimatedPrincipal);
   ui.needInstallmentTotal.textContent = formatTry(totalPayment);
   ui.needInstallmentInterest.textContent = formatTry(totalInterest);
+  if (ui.needInstallmentNote) {
+    ui.needInstallmentNote.textContent = buildLoanTaxNote(getCurrentLoanType());
+  }
+  renderLoanPaymentSchedule({
+    tbodyElement: ui.needCalcScheduleBody,
+    principal: estimatedPrincipal,
+    nominalMonthlyRatePercent: monthlyRate,
+    loanType: getCurrentLoanType(),
+    termMonths,
+    paymentOverride: installmentAmount,
+  });
+  if (ui.needCalcScheduleTitle) {
+    ui.needCalcScheduleTitle.textContent = "Ödeme Planı";
+  }
+  if (ui.needCalcScheduleSection) {
+    ui.needCalcScheduleSection.classList.remove("hidden");
+  }
   ui.needInstallmentResult.classList.remove("hidden");
 }
 
@@ -3725,6 +5180,132 @@ function getCurrentLoanType() {
     return datasetLoanType;
   }
   return "need";
+}
+
+function getEffectiveLoanMonthlyRate(monthlyRatePercent, loanType) {
+  const safeRate = Number(monthlyRatePercent);
+  if (!Number.isFinite(safeRate) || safeRate < 0) {
+    return 0;
+  }
+
+  const typeConfig = LOAN_TYPE_CONFIG[loanType] || LOAN_TYPE_CONFIG.need;
+  const bsmvRate = Number(typeConfig?.taxes?.bsmv || 0);
+  const kkdfRate = Number(typeConfig?.taxes?.kkdf || 0);
+  return safeRate * (1 + bsmvRate + kkdfRate);
+}
+
+function getLoanTaxRates(loanType) {
+  const typeConfig = LOAN_TYPE_CONFIG[loanType] || LOAN_TYPE_CONFIG.need;
+  return {
+    bsmv: Number(typeConfig?.taxes?.bsmv || 0),
+    kkdf: Number(typeConfig?.taxes?.kkdf || 0),
+  };
+}
+
+function buildLoanTaxNote(loanType) {
+  const normalizedLoanType = String(loanType || "").trim().toLowerCase();
+  if (normalizedLoanType === "housing") {
+    return "Toplam ödemeye % 0 KKDF ve % 0 BSMV dahil, diğer masraflar hariçtir.";
+  }
+  return "Toplam ödemeye % 15 KKDF ve % 15 BSMV dahil, diğer masraflar hariçtir.";
+}
+
+function buildLoanPaymentSchedule({
+  principal,
+  nominalMonthlyRatePercent,
+  loanType,
+  termMonths,
+  paymentOverride = null,
+}) {
+  if (
+    !Number.isFinite(principal) ||
+    principal <= 0 ||
+    !Number.isFinite(nominalMonthlyRatePercent) ||
+    nominalMonthlyRatePercent < 0 ||
+    !Number.isFinite(termMonths) ||
+    termMonths <= 0
+  ) {
+    return [];
+  }
+
+  const taxRates = getLoanTaxRates(loanType);
+  const nominalMonthlyRate = nominalMonthlyRatePercent / 100;
+  const effectiveMonthlyRate = getEffectiveLoanMonthlyRate(nominalMonthlyRatePercent, loanType);
+  const basePayment = Number.isFinite(paymentOverride) && paymentOverride > 0
+    ? paymentOverride
+    : calculateInstallment(principal, effectiveMonthlyRate, termMonths);
+
+  let remainingPrincipal = principal;
+  const rows = [];
+
+  for (let installmentIndex = 1; installmentIndex <= termMonths; installmentIndex += 1) {
+    const interestAmount = remainingPrincipal * nominalMonthlyRate;
+    const kkdfAmount = interestAmount * taxRates.kkdf;
+    const bsmvAmount = interestAmount * taxRates.bsmv;
+    const totalCharge = interestAmount + kkdfAmount + bsmvAmount;
+    let principalAmount = basePayment - totalCharge;
+    let paymentAmount = basePayment;
+
+    if (installmentIndex === termMonths || principalAmount > remainingPrincipal) {
+      principalAmount = remainingPrincipal;
+      paymentAmount = principalAmount + totalCharge;
+    }
+
+    remainingPrincipal = Math.max(0, remainingPrincipal - principalAmount);
+    rows.push({
+      installmentIndex,
+      paymentAmount,
+      principalAmount,
+      interestAmount,
+      kkdfAmount,
+      bsmvAmount,
+      remainingPrincipal,
+    });
+  }
+
+  return rows;
+}
+
+function renderLoanPaymentSchedule({
+  tbodyElement,
+  principal,
+  nominalMonthlyRatePercent,
+  loanType,
+  termMonths,
+  paymentOverride = null,
+}) {
+  if (!(tbodyElement instanceof HTMLElement)) {
+    return;
+  }
+
+  const rows = buildLoanPaymentSchedule({
+    principal,
+    nominalMonthlyRatePercent,
+    loanType,
+    termMonths,
+    paymentOverride,
+  });
+
+  const fragment = document.createDocumentFragment();
+  rows.forEach((row) => {
+    const tr = document.createElement("tr");
+    [
+      String(row.installmentIndex),
+      `${formatTry(row.paymentAmount)} TL`,
+      `${formatTry(row.principalAmount)} TL`,
+      `${formatTry(row.interestAmount)} TL`,
+      `${formatTry(row.kkdfAmount)} TL`,
+      `${formatTry(row.bsmvAmount)} TL`,
+      `${formatTry(row.remainingPrincipal)} TL`,
+    ].forEach((value) => {
+      const td = document.createElement("td");
+      td.textContent = value;
+      tr.append(td);
+    });
+    fragment.append(tr);
+  });
+
+  tbodyElement.replaceChildren(fragment);
 }
 
 function renderLoanOffers({
@@ -4106,10 +5687,10 @@ function normalizeTermToYears(termValue, unit) {
 
 function getDepositWithholdingRate(termDays) {
   if (termDays <= 180) {
-    return 0.15;
+    return 0.175;
   }
   if (termDays <= 365) {
-    return 0.12;
+    return 0.15;
   }
   return 0.1;
 }

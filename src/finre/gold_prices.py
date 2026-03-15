@@ -15,6 +15,32 @@ import httpx
 
 ENUYGUN_ALTIN_URL: str = "https://www.enuygunfinans.com/altin-fiyatlari/"
 TARGET_SOURCE_NAME: str = "Kapalı Çarşı"
+ONS_USD_DISPLAY_NAME: str = "Altın (Ons/USD)"
+ONS_TRY_SYMBOL_CODE: str = "XAUTRY"
+USD_TRY_SYMBOL_CODE: str = "USDTRY:GB"
+_REMOVED_GOLD_NAME_KEYS: frozenset[str] = frozenset(
+    re.sub(r"[\W_]+", " ", name.casefold()).strip()
+    for name in (
+        "Ata Altın",
+        "14 Ayar Bilezik",
+        "18 Ayar Bilezik",
+        "22 Ayar Bilezik",
+        "Gram Altın (Serb.)",
+        "Gram Altın (Serb)",
+    )
+)
+_GOLD_ORDER_INDEX: dict[str, int] = {
+    re.sub(r"[\W_]+", " ", name.casefold()).strip(): index
+    for index, name in enumerate(
+        (
+            "Gram Altın",
+            "Çeyrek Altın",
+            "Yarım Altın",
+            "Cumhuriyet Altını",
+            ONS_USD_DISPLAY_NAME,
+        )
+    )
+}
 NEXT_DATA_PATTERN: re.Pattern[str] = re.compile(
     r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>',
     flags=re.DOTALL,
@@ -35,6 +61,12 @@ class GoldPriceRow:
     satis_fiyati: float
     gunluk_degisim_yuzde: float | None
     guncellenme_tarihi: str | None
+
+
+def _normalize_gold_name(value: str) -> str:
+    """Normalize a gold label for filtering and sorting."""
+
+    return re.sub(r"[\W_]+", " ", value.casefold()).strip()
 
 
 def fetch_gold_prices(
@@ -118,37 +150,23 @@ def extract_gold_rows_from_next_data(
 
     normalized_rows: list[GoldPriceRow] = []
     for row in source_rows:
-        if not isinstance(row, dict):
-            continue
-        altin_adi_obj: dict[str, Any] = _as_dict(row.get("Altın Adı"))
-        alis_obj: dict[str, Any] = _as_dict(row.get("Alış Fiyatı"))
-        satis_obj: dict[str, Any] = _as_dict(row.get("Satış Fiyatı"))
-        altin_adi: str = str(altin_adi_obj.get("value", "")).strip()
-        if not altin_adi:
-            continue
-
-        guncellenme_tarihi: str | None = _as_optional_text(
-            _as_dict(altin_adi_obj.get("extra")).get("value")
+        normalized_row: GoldPriceRow | None = _build_gold_price_row(
+            row=row,
+            kaynak=source_name,
         )
-        gunluk_degisim_yuzde: float | None = _as_optional_float(
-            _as_dict(satis_obj.get("extra")).get("value")
-        )
+        if normalized_row is not None:
+            normalized_rows.append(normalized_row)
 
-        normalized_rows.append(
-            GoldPriceRow(
-                kaynak=source_name,
-                altin_adi=altin_adi,
-                alis_fiyati=_as_float(alis_obj.get("value")),
-                satis_fiyati=_as_float(satis_obj.get("value")),
-                gunluk_degisim_yuzde=gunluk_degisim_yuzde,
-                guncellenme_tarihi=guncellenme_tarihi,
-            )
-        )
+    optional_ons_row: GoldPriceRow | None = _build_ons_usd_row(payload=payload)
+    final_rows: list[GoldPriceRow] = _filter_and_sort_gold_rows(
+        rows=normalized_rows,
+        optional_ons_row=optional_ons_row,
+    )
 
-    if not normalized_rows:
+    if not final_rows:
         raise GoldPriceFetchError(f"{source_name} için satır bulunamadı.")
 
-    return normalized_rows
+    return final_rows
 
 
 def export_gold_rows(
@@ -254,3 +272,123 @@ def _as_optional_text(value: Any) -> str | None:
         return None
     text: str = str(value).strip()
     return text if text else None
+
+
+def _build_gold_price_row(*, row: Any, kaynak: str) -> GoldPriceRow | None:
+    """Convert one raw table row into normalized gold data."""
+
+    if not isinstance(row, dict):
+        return None
+
+    altin_adi_obj: dict[str, Any] = _as_dict(row.get("Altın Adı"))
+    alis_obj: dict[str, Any] = _as_dict(row.get("Alış Fiyatı"))
+    satis_obj: dict[str, Any] = _as_dict(row.get("Satış Fiyatı"))
+    altin_adi: str = str(altin_adi_obj.get("value", "")).strip()
+    if not altin_adi:
+        return None
+
+    guncellenme_tarihi: str | None = _as_optional_text(
+        _as_dict(altin_adi_obj.get("extra")).get("value")
+    )
+    gunluk_degisim_yuzde: float | None = _as_optional_float(
+        _as_dict(satis_obj.get("extra")).get("value")
+    )
+
+    return GoldPriceRow(
+        kaynak=kaynak,
+        altin_adi=altin_adi,
+        alis_fiyati=_as_float(alis_obj.get("value")),
+        satis_fiyati=_as_float(satis_obj.get("value")),
+        gunluk_degisim_yuzde=gunluk_degisim_yuzde,
+        guncellenme_tarihi=guncellenme_tarihi,
+    )
+
+
+def _build_ons_usd_row(*, payload: dict[str, Any]) -> GoldPriceRow | None:
+    """Infer an Ons/USD row from the live page symbols when both values exist."""
+
+    ons_symbol: dict[str, Any] | None = _find_symbol_attributes(
+        node=payload,
+        symbol_code=ONS_TRY_SYMBOL_CODE,
+    )
+    usd_symbol: dict[str, Any] | None = _find_symbol_attributes(
+        node=payload,
+        symbol_code=USD_TRY_SYMBOL_CODE,
+    )
+    if ons_symbol is None or usd_symbol is None:
+        return None
+
+    ons_alis_try: float = _as_float(ons_symbol.get("buying"))
+    ons_satis_try: float = _as_float(ons_symbol.get("selling"))
+    usd_alis_try: float = _as_float(usd_symbol.get("buying"))
+    usd_satis_try: float = _as_float(usd_symbol.get("selling"))
+    if min(ons_alis_try, ons_satis_try, usd_alis_try, usd_satis_try) <= 0:
+        return None
+
+    return GoldPriceRow(
+        kaynak="ENUYGUN Finans",
+        altin_adi=ONS_USD_DISPLAY_NAME,
+        alis_fiyati=ons_alis_try / usd_alis_try,
+        satis_fiyati=ons_satis_try / usd_satis_try,
+        gunluk_degisim_yuzde=_as_optional_float(ons_symbol.get("dailyChangePercent")),
+        guncellenme_tarihi=_as_optional_text(ons_symbol.get("dataUpdatedAt")),
+    )
+
+
+def _find_symbol_attributes(*, node: Any, symbol_code: str) -> dict[str, Any] | None:
+    """Return the first attributes map for one symbol code."""
+
+    if isinstance(node, dict):
+        if node.get("symbol") == symbol_code:
+            return node
+
+        attributes: Any = node.get("attributes")
+        if isinstance(attributes, dict) and attributes.get("symbol") == symbol_code:
+            return attributes
+
+        for value in node.values():
+            found: dict[str, Any] | None = _find_symbol_attributes(
+                node=value,
+                symbol_code=symbol_code,
+            )
+            if found is not None:
+                return found
+        return None
+
+    if isinstance(node, list):
+        for item in node:
+            found = _find_symbol_attributes(node=item, symbol_code=symbol_code)
+            if found is not None:
+                return found
+
+    return None
+
+
+def _filter_and_sort_gold_rows(
+    *,
+    rows: list[GoldPriceRow],
+    optional_ons_row: GoldPriceRow | None,
+) -> list[GoldPriceRow]:
+    """Drop hidden rows, add optional Ons/USD row, then apply page order."""
+
+    deduped_rows: dict[str, GoldPriceRow] = {}
+    for row in rows:
+        normalized_name: str = _normalize_gold_name(row.altin_adi)
+        if normalized_name in _REMOVED_GOLD_NAME_KEYS:
+            continue
+        deduped_rows[normalized_name] = row
+
+    if optional_ons_row is not None:
+        deduped_rows[_normalize_gold_name(optional_ons_row.altin_adi)] = optional_ons_row
+
+    ordered_rows: list[GoldPriceRow] = list(deduped_rows.values())
+    ordered_rows.sort(
+        key=lambda row: (
+            _GOLD_ORDER_INDEX.get(
+                _normalize_gold_name(row.altin_adi),
+                len(_GOLD_ORDER_INDEX),
+            ),
+            row.altin_adi,
+        )
+    )
+    return ordered_rows
