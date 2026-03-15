@@ -715,12 +715,455 @@ const BANK_PRODUCT_TYPE_CONFIG = Object.freeze({
     terms: [{ value: 24, label: "24 Ay" }],
   },
 });
+const BANK_RATE_LOOKUP_ALIASES = Object.freeze({
+  cepteteb: "teb",
+  "enpara.com": "qnb",
+});
+const GENERIC_BANK_FALLBACK_RATES = Object.freeze({
+  need: 3.89,
+  housing: 2.99,
+  vehicle: 3.39,
+  kobi: 3.79,
+});
 const BANK_PROFILE_WEBSITE_MAP = Object.freeze({
   akbank: "https://www.akbank.com/",
+  "aktif bank": "https://www.aktifbank.com.tr/",
+  anadolubank: "https://www.anadolubank.com.tr/",
+  "albaraka türk": "https://www.albaraka.com.tr/",
+  "alternatif bank": "https://www.alternatifbank.com.tr/",
+  cepteteb: "https://www.teb.com.tr/",
+  denizbank: "https://www.denizbank.com/",
+  "enpara.com": "https://www.enpara.com/",
+  fibabanka: "https://www.fibabanka.com.tr/",
   "garanti bbva": "https://www.garantibbva.com.tr/tr",
+  getirfinans: "https://www.getirfinans.com/",
+  halkbank: "https://www.halkbank.com.tr/",
+  hsbc: "https://www.hsbc.com.tr/",
+  "icbc turkey": "https://www.icbc.com.tr/",
+  ing: "https://www.ing.com.tr/",
   "iş bankası": "https://www.isbank.com.tr/",
+  "kuveyt türk": "https://www.kuveytturk.com.tr/",
+  "n kolay": "https://www.nkolay.com/",
+  odea: "https://www.odeabank.com.tr/",
+  odeabank: "https://www.odeabank.com.tr/",
+  "on dijital": "https://www.on.com.tr/",
+  "on dijital bankacılık": "https://www.on.com.tr/",
+  "on dijital bankacilik": "https://www.on.com.tr/",
   qnb: "https://www.qnb.com.tr/",
+  sekerbank: "https://www.sekerbank.com.tr/",
+  "şekerbank": "https://www.sekerbank.com.tr/",
+  teb: "https://www.teb.com.tr/",
+  "türkiye finans": "https://www.turkiyefinans.com.tr/",
+  "turkiye finans": "https://www.turkiyefinans.com.tr/",
+  "vakıf katılım": "https://www.vakifkatilim.com.tr/",
+  "vakif katilim": "https://www.vakifkatilim.com.tr/",
+  vakıfbank: "https://www.vakifbank.com.tr/",
+  vakifbank: "https://www.vakifbank.com.tr/",
   "yapı kredi": "https://www.yapikredi.com.tr/",
+  "yapi kredi": "https://www.yapikredi.com.tr/",
+  "ziraat bankası": "https://www.ziraatbank.com.tr/",
+  "ziraat bankasi": "https://www.ziraatbank.com.tr/",
+  "ziraat katılım": "https://www.ziraatkatilim.com.tr/",
+  "ziraat katilim": "https://www.ziraatkatilim.com.tr/",
+});
+
+const PARTICIPATION_BANK_NAMES = new Set([
+  "albaraka türk",
+  "albaraka turk",
+  "kuveyt türk",
+  "kuveyt turk",
+  "türkiye finans",
+  "turkiye finans",
+  "vakıf katılım",
+  "vakif katilim",
+  "ziraat katılım",
+  "ziraat katilim",
+]);
+const BANK_PROFILE_OVERRIDES = Object.freeze({
+  "alternatif bank": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 5.000 - 400.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 50000,
+        rateMap: { 12: 1.99, 24: 3.09, 36: 2.99 },
+        selectedTerm: 24,
+      },
+      {
+        kind: "loan",
+        title: "Konut Kredisi",
+        descriptionLines: ["Tutar: Ekspertiz değeri değişimli", "Vade: 36 - 120 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 36: 3.39, 60: 3.39, 120: 3.39 },
+        selectedTerm: 120,
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 200000,
+        rateMap: { 12: 3.52, 24: 3.52, 36: 3.52, 48: 3.52 },
+        selectedTerm: 24,
+      },
+    ],
+  },
+  anadolubank: {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 500 - 2.000.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 50000,
+        rateMap: { 12: 3.49, 24: 3.49, 36: 3.49 },
+        selectedTerm: 24,
+      },
+      {
+        kind: "loan",
+        title: "Konut Kredisi",
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 36: 4.29, 60: 4.29, 120: 4.29 },
+        selectedTerm: 120,
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 200000,
+        rateMap: { 12: 5.3, 24: 5.3, 36: 5.3, 48: 5.3 },
+        selectedTerm: 24,
+      },
+    ],
+  },
+  "icbc turkey": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 1.000 - 500.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 50000,
+        rateMap: { 12: 3.42, 24: 3.42, 36: 3.42 },
+        selectedTerm: 24,
+      },
+      {
+        kind: "loan",
+        title: "Konut Kredisi",
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 36: 3.42, 60: 3.42, 120: 3.42 },
+        selectedTerm: 120,
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 200000,
+        rateMap: { 12: 3.59, 24: 3.59, 36: 3.59, 48: 3.59 },
+        selectedTerm: 24,
+      },
+    ],
+  },
+  "n kolay": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 2.000 - 750.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 50000,
+        rateMap: { 12: 3.39, 24: 3.39, 36: 3.39 },
+        selectedTerm: 24,
+      },
+    ],
+  },
+  hsbc: {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 10.000 TL örnek", "Vade: 36 Ay örnek"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 10000,
+        rateMap: { 36: 5.49 },
+        selectedTerm: 36,
+      },
+    ],
+  },
+  fibabanka: {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 5.000 TL örnek", "Vade: 3 Ay örnek"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 5000,
+        rateMap: { 3: 3.99 },
+        selectedTerm: 3,
+      },
+    ],
+  },
+  halkbank: {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 1.000 - 150.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 50000,
+        rateMap: { 12: 5.06, 24: 5.06, 36: 5.06 },
+        selectedTerm: 24,
+      },
+      {
+        kind: "loan",
+        title: "Konut Kredisi",
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 36: 2.59, 60: 2.59, 120: 2.49 },
+        selectedTerm: 120,
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 200000,
+        rateMap: { 12: 4.95, 24: 4.95, 36: 4.95, 48: 4.95 },
+        selectedTerm: 24,
+      },
+    ],
+  },
+  vakıfbank: {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 3.000 - 50.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 50000,
+        rateMap: { 36: 4.95 },
+        selectedTerm: 36,
+      },
+      {
+        kind: "loan",
+        title: "Konut Kredisi",
+        descriptionLines: ["Tutar: Ekspertiz değeri değişimli", "Vade: 60 - 120 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 60: 2.82, 120: 2.82 },
+        selectedTerm: 120,
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 200000,
+        rateMap: { 12: 3.84, 24: 3.84, 36: 3.84, 48: 3.84 },
+        selectedTerm: 24,
+      },
+    ],
+  },
+  "ziraat bankası": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 10.000 TL örnek", "Vade: 36 Ay örnek"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 10000,
+        rateMap: { 36: 4.99 },
+        selectedTerm: 36,
+      },
+      {
+        kind: "loan",
+        title: "Konut Kredisi",
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 36: 2.49, 60: 2.49, 120: 2.49 },
+        selectedTerm: 120,
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 200000,
+        rateMap: { 12: 2.99, 24: 2.99, 36: 2.99, 48: 2.99 },
+        selectedTerm: 24,
+      },
+    ],
+  },
+  cepteteb: {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 1.000 - 400.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 50000,
+        rateMap: { 3: 2.99, 12: 2.99, 24: 2.99, 36: 2.99 },
+        selectedTerm: 12,
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 200000,
+        rateMap: { 24: 3.31, 36: 3.31, 48: 3.31 },
+        selectedTerm: 24,
+      },
+    ],
+  },
+  "albaraka türk": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Finansmanı",
+        descriptionLines: ["Tutar: 500 - 100.000 TL", "Vade: 3 - 24 Ay"],
+        amountLabel: "Finansman Tutarı",
+        defaultAmount: 50000,
+        rateMap: { 12: 4.0, 24: 4.0, 36: 4.0 },
+        selectedTerm: 24,
+      },
+      {
+        kind: "loan",
+        title: "Konut Finansmanı",
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        amountLabel: "Finansman Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 36: 2.75, 60: 2.75, 120: 2.75 },
+        selectedTerm: 120,
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Finansmanı",
+        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        amountLabel: "Finansman Tutarı",
+        defaultAmount: 200000,
+        rateMap: { 12: 2.96, 24: 2.96, 36: 2.96, 48: 2.96 },
+        selectedTerm: 24,
+      },
+    ],
+  },
+  "vakıf katılım": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Finansmanı",
+        descriptionLines: ["Tutar: 1.000 - 1.000.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Finansman Tutarı",
+        defaultAmount: 50000,
+        rateMap: { 12: 3.68, 24: 3.68, 36: 3.68 },
+        selectedTerm: 24,
+      },
+      {
+        kind: "loan",
+        title: "Konut Finansmanı",
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        amountLabel: "Finansman Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 36: 2.54, 60: 2.54, 120: 2.74 },
+        selectedTerm: 120,
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Finansmanı",
+        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        amountLabel: "Finansman Tutarı",
+        defaultAmount: 200000,
+        rateMap: { 12: 2.94, 24: 2.94, 36: 2.94, 48: 2.94 },
+        selectedTerm: 24,
+      },
+    ],
+  },
+  "ziraat katılım": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Finansmanı",
+        descriptionLines: ["Tutar: 500 - 1.000.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Finansman Tutarı",
+        defaultAmount: 50000,
+        rateMap: { 36: 3.39 },
+        selectedTerm: 36,
+      },
+    ],
+  },
+  "kuveyt türk": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Finansmanı",
+        descriptionLines: ["Tutar: 1.000 - 70.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Finansman Tutarı",
+        defaultAmount: 50000,
+        rateMap: { 12: 3.77, 24: 3.22, 36: 3.22 },
+        selectedTerm: 24,
+      },
+      {
+        kind: "loan",
+        title: "Konut Finansmanı",
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        amountLabel: "Finansman Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 36: 2.6, 60: 2.6, 120: 2.55 },
+        selectedTerm: 120,
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Finansmanı",
+        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        amountLabel: "Finansman Tutarı",
+        defaultAmount: 200000,
+        rateMap: { 12: 2.98, 24: 2.98, 36: 2.92, 48: 2.92 },
+        selectedTerm: 24,
+      },
+    ],
+  },
+  "türkiye finans": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Finansmanı",
+        descriptionLines: ["Tutar: 1.000 - 400.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Finansman Tutarı",
+        defaultAmount: 50000,
+        rateMap: { 12: 3.84, 24: 3.79, 36: 3.59 },
+        selectedTerm: 24,
+      },
+      {
+        kind: "loan",
+        title: "Konut Finansmanı",
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        amountLabel: "Finansman Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 36: 2.7, 60: 2.7, 120: 2.7 },
+        selectedTerm: 120,
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Finansmanı",
+        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        amountLabel: "Finansman Tutarı",
+        defaultAmount: 200000,
+        rateMap: { 12: 3.15, 24: 3.15, 36: 3.15, 48: 3.15 },
+        selectedTerm: 24,
+      },
+    ],
+  },
 });
 const BANK_MOBILE_APP_QUERY_MAP = Object.freeze({
   akbank: "Akbank Mobil",
@@ -750,6 +1193,160 @@ const BANK_MOBILE_APP_QUERY_MAP = Object.freeze({
   "n kolay": "N Kolay",
   getirfinans: "GetirFinans",
   "enpara.com": "Enpara.com Cep Şubesi",
+});
+const BANK_MOBILE_APP_STORE_LINKS = Object.freeze({
+  akbank: {
+    android: "https://play.google.com/store/apps/details?id=com.akbank.android.apps.akbank_direkt&hl=tr",
+    ios: "https://apps.apple.com/tr/app/id560516360",
+  },
+  "garanti bbva": {
+    android: "https://play.google.com/store/apps/details?id=com.garanti.cepsubesi&hl=tr",
+    ios: "https://apps.apple.com/tr/app/id521117624",
+  },
+  "iş bankası": {
+    android: "https://play.google.com/store/apps/details?id=com.pozitron.iscep&hl=tr",
+    ios: "https://apps.apple.com/tr/app/id308261752",
+  },
+  "is bankasi": {
+    android: "https://play.google.com/store/apps/details?id=com.pozitron.iscep&hl=tr",
+    ios: "https://apps.apple.com/tr/app/id308261752",
+  },
+  qnb: {
+    android: "https://play.google.com/store/apps/details?id=com.finansbank.mobile.cepsube&hl=tr",
+    ios: "https://apps.apple.com/tr/app/id739655617",
+  },
+  "enpara.com": {
+    android: "https://play.google.com/store/apps/details?id=finansbank.enpara&hl=tr",
+    ios: "https://apps.apple.com/tr/app/enpara-com-cep-%C5%9Fubesi/id660620273",
+  },
+  "yapı kredi": {
+    android: "https://play.google.com/store/apps/details?id=com.ykb.android&hl=tr",
+    ios: "https://apps.apple.com/tr/app/id458627086",
+  },
+  "yapi kredi": {
+    android: "https://play.google.com/store/apps/details?id=com.ykb.android&hl=tr",
+    ios: "https://apps.apple.com/tr/app/id458627086",
+  },
+  cepteteb: {
+    android: "https://play.google.com/store/apps/details?id=com.teb&hl=tr",
+    ios: "https://apps.apple.com/tr/app/id353385550",
+  },
+  teb: {
+    android: "https://play.google.com/store/apps/details?id=com.teb&hl=tr",
+    ios: "https://apps.apple.com/tr/app/id353385550",
+  },
+  ing: {
+    android: "https://play.google.com/store/apps/details?id=com.ingbanktr.ingmobil&hl=tr",
+    ios: "https://apps.apple.com/tr/app/id395535459",
+  },
+  "ziraat bankası": {
+    android: "https://play.google.com/store/apps/details?id=com.ziraat.ziraatmobil&hl=tr",
+    ios: "https://apps.apple.com/tr/app/id885993234",
+  },
+  halkbank: {
+    android: "https://play.google.com/store/apps/details?id=com.tmobtech.halkbank&hl=tr",
+    ios: "https://apps.apple.com/tr/app/halkbank-mobil/id1068841746",
+  },
+  "alternatif bank": {
+    android: "https://play.google.com/store/apps/details?id=tr.com.alternatifbank.vov&hl=tr",
+    ios: "https://apps.apple.com/tr/app/vov/id6453521320",
+  },
+  anadolubank: {
+    android: "https://play.google.com/store/apps/details?id=com.anadolubank.android&hl=tr",
+    ios: "https://apps.apple.com/tr/app/anadolubank-mobil/id1441752495",
+  },
+  "icbc turkey": {
+    android: "https://play.google.com/store/apps/details?id=tr.com.icbc&hl=tr",
+    ios: "https://apps.apple.com/tr/app/icbc-turkey/id1438010678",
+  },
+  vakıfbank: {
+    android: "https://play.google.com/store/apps/details?id=com.vakifbank.mobile&hl=tr",
+    ios: "https://apps.apple.com/tr/app/id853569450",
+  },
+  vakifbank: {
+    android: "https://play.google.com/store/apps/details?id=com.vakifbank.mobile&hl=tr",
+    ios: "https://apps.apple.com/tr/app/id853569450",
+  },
+  denizbank: {
+    android: "https://play.google.com/store/apps/details?id=com.denizbank.mobildeniz&hl=tr",
+    ios: "https://apps.apple.com/tr/app/id1403334281",
+  },
+  fibabanka: {
+    android: "https://play.google.com/store/apps/details?id=com.fibabanka.mobile&hl=tr",
+    ios: "https://apps.apple.com/tr/app/id1489574086",
+  },
+  odeabank: {
+    android: "https://play.google.com/store/apps/details?id=com.magiclick.odeabank&hl=tr",
+    ios: "https://apps.apple.com/tr/app/odea-mobil-bankac%C4%B1l%C4%B1k/id634414038",
+  },
+  odea: {
+    android: "https://play.google.com/store/apps/details?id=com.magiclick.odeabank&hl=tr",
+    ios: "https://apps.apple.com/tr/app/odea-mobil-bankac%C4%B1l%C4%B1k/id634414038",
+  },
+  hsbc: {
+    android: "https://play.google.com/store/apps/details?id=tr.com.hsbc.hsbcturkey&hl=tr",
+    ios: "https://apps.apple.com/tr/app/hsbc-turkey/id1339127709",
+  },
+  "n kolay": {
+    android: "https://play.google.com/store/apps/details?id=com.aktifbank.nkolay&hl=tr",
+    ios: "https://apps.apple.com/tr/app/n-kolay-dijital-bankac%C4%B1l%C4%B1k/id1449491530",
+  },
+  "on dijital": {
+    android: "https://play.google.com/store/apps/details?id=com.onbank.mobil&hl=tr",
+    ios: "https://apps.apple.com/tr/app/on-mobil/id1584313693",
+  },
+  "on dijital bankacılık": {
+    android: "https://play.google.com/store/apps/details?id=com.onbank.mobil&hl=tr",
+    ios: "https://apps.apple.com/tr/app/on-mobil/id1584313693",
+  },
+  "on dijital bankacilik": {
+    android: "https://play.google.com/store/apps/details?id=com.onbank.mobil&hl=tr",
+    ios: "https://apps.apple.com/tr/app/on-mobil/id1584313693",
+  },
+  sekerbank: {
+    android: "https://play.google.com/store/apps/details?id=tr.com.sekerbilisim.mbank&hl=tr",
+    ios: "https://apps.apple.com/tr/app/%C5%9Feker-mobil/id626133531",
+  },
+  "şekerbank": {
+    android: "https://play.google.com/store/apps/details?id=tr.com.sekerbilisim.mbank&hl=tr",
+    ios: "https://apps.apple.com/tr/app/%C5%9Feker-mobil/id626133531",
+  },
+  "kuveyt türk": {
+    android: "https://play.google.com/store/apps/details?id=com.kuveytturk.mobil&hl=tr",
+    ios: "https://apps.apple.com/tr/app/kuveyt-t%C3%BCrk-mobil/id840914223",
+  },
+  "albaraka türk": {
+    android: "https://play.google.com/store/apps/details?id=com.albarakaapp&hl=tr",
+    ios: "https://apps.apple.com/tr/app/albaraka-mobil/id1428860724",
+  },
+  "türkiye finans": {
+    android: "https://play.google.com/store/apps/details?id=com.tfkb&hl=tr",
+    ios: "https://apps.apple.com/tr/app/t%C3%BCrkiye-finans-mobil/id634936591",
+  },
+  "turkiye finans": {
+    android: "https://play.google.com/store/apps/details?id=com.tfkb&hl=tr",
+    ios: "https://apps.apple.com/tr/app/t%C3%BCrkiye-finans-mobil/id634936591",
+  },
+  "vakıf katılım": {
+    android: "https://play.google.com/store/apps/details?id=com.vakifkatilim.mobil&hl=tr",
+    ios: "https://apps.apple.com/tr/app/vak%C4%B1f-kat%C4%B1l%C4%B1m-mobile/id1144383102",
+  },
+  "vakif katilim": {
+    android: "https://play.google.com/store/apps/details?id=com.vakifkatilim.mobil&hl=tr",
+    ios: "https://apps.apple.com/tr/app/vak%C4%B1f-kat%C4%B1l%C4%B1m-mobile/id1144383102",
+  },
+  "ziraat katılım": {
+    android: "https://play.google.com/store/apps/details?id=com.ziraatkatilim.mobilebanking&hl=tr",
+    ios: "https://apps.apple.com/tr/app/ziraat-kat%C4%B1l%C4%B1m/id1181873648",
+  },
+  "ziraat katilim": {
+    android: "https://play.google.com/store/apps/details?id=com.ziraatkatilim.mobilebanking&hl=tr",
+    ios: "https://apps.apple.com/tr/app/ziraat-kat%C4%B1l%C4%B1m/id1181873648",
+  },
+  getirfinans: {
+    android: "https://play.google.com/store/apps/details?id=com.getir&hl=tr",
+    ios: "https://apps.apple.com/tr/app/getir-groceries-food-beyond/id995280265",
+  },
 });
 const BANK_PRODUCT_DETAIL_LINKS = Object.freeze({
   akbank: {
@@ -884,10 +1481,14 @@ const BANK_LOGO_MAP = Object.freeze({
   halkbank: "./assets/banks/halkbank.svg",
   hsbc: "./assets/banks/hsbc.svg",
   "icbc turkey": "./assets/banks/icbc-turkey.svg",
-  ing: "./assets/banks/ing-official-transparent.png?v=1",
-  "ing bank": "./assets/banks/ing-official-transparent.png?v=1",
-  "ing bank a.ş.": "./assets/banks/ing-official-transparent.png?v=1",
-  "ing bank a.s.": "./assets/banks/ing-official-transparent.png?v=1",
+  ing: "./assets/banks/ing-official-site-transparent.png?v=2",
+  ıng: "./assets/banks/ing-official-site-transparent.png?v=2",
+  "ing bank": "./assets/banks/ing-official-site-transparent.png?v=2",
+  "ıng bank": "./assets/banks/ing-official-site-transparent.png?v=2",
+  "ing bank a.ş.": "./assets/banks/ing-official-site-transparent.png?v=2",
+  "ing bank a.s.": "./assets/banks/ing-official-site-transparent.png?v=2",
+  "ıng bank a.ş.": "./assets/banks/ing-official-site-transparent.png?v=2",
+  "ıng bank a.s.": "./assets/banks/ing-official-site-transparent.png?v=2",
   "iş bankası": "./assets/banks/is-bankasi.svg",
   "is bankasi": "./assets/banks/is-bankasi.svg",
   "kuveyt türk": "./assets/banks/kuveyt-turk.svg",
@@ -948,14 +1549,14 @@ const ui = {
   bankAppQrClose: document.getElementById("bankAppQrClose"),
   bankAppQrBrand: document.getElementById("bankAppQrBrand"),
   bankAppQrDescription: document.getElementById("bankAppQrDescription"),
-  bankAppQrAndroidLink: document.getElementById("bankAppQrAndroidLink"),
-  bankAppQrIosLink: document.getElementById("bankAppQrIosLink"),
+  bankAppQrApplyLink: document.getElementById("bankAppQrApplyLink"),
   bankAppQrImage: document.getElementById("bankAppQrImage"),
   bankAppRedirectPage: document.getElementById("bankAppRedirectPage"),
   bankAppRedirectBankBrand: document.getElementById("bankAppRedirectBankBrand"),
   bankAppRedirectTitle: document.getElementById("bankAppRedirectTitle"),
-  bankAppRedirectAndroidLink: document.getElementById("bankAppRedirectAndroidLink"),
-  bankAppRedirectIosLink: document.getElementById("bankAppRedirectIosLink"),
+  bankAppRedirectStoreLink: document.getElementById("bankAppRedirectStoreLink"),
+  bankAppRedirectApplyLink: document.getElementById("bankAppRedirectApplyLink"),
+  bankAppRedirectManual: document.getElementById("bankAppRedirectManual"),
   signinTabButton: document.getElementById("signinTabButton"),
   signupTabButton: document.getElementById("signupTabButton"),
   signinForm: document.getElementById("signinForm"),
@@ -2249,6 +2850,14 @@ function setupLoanRatesUi() {
       return;
     }
 
+    if (ui.bankAppRedirectPage && !ui.bankAppRedirectPage.classList.contains("hidden")) {
+      closeBankAppRedirectPage();
+      showHomePageContent();
+      setActiveHeaderNav("home");
+      updateRouteHash(ROUTE_HASH.home);
+      return;
+    }
+
     if (ui.loanRatesPage && !ui.loanRatesPage.classList.contains("hidden")) {
       closeLoanRatesPage();
       return;
@@ -2384,6 +2993,14 @@ function setupBankProductCards() {
     buttonElement.addEventListener("click", () => {
       const bankName = String(buttonElement.dataset.bankName || currentBankProfileName || "").trim();
       const productTitle = String(buttonElement.dataset.productTitle || "").trim();
+      const applyHref = String(buttonElement.dataset.applyHref || "").trim();
+      const isTouchLikeDevice = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 760;
+
+      if (isTouchLikeDevice && applyHref) {
+        window.open(applyHref, "_blank", "noopener,noreferrer");
+        return;
+      }
+
       openBankAppQrModal(bankName, productTitle);
     });
   });
@@ -2477,27 +3094,85 @@ function buildBankProfileData(bankName) {
     };
   }
 
+  const website = BANK_PROFILE_WEBSITE_MAP[normalizedBankName] || "";
+  const profileOverride = BANK_PROFILE_OVERRIDES[normalizedBankName];
+
+  if (profileOverride) {
+    return {
+      bankName,
+      website,
+      primaryProducts: normalizeBankProfileProducts(
+        profileOverride.primaryProducts,
+        bankName,
+        website,
+      ),
+      secondaryProducts: normalizeBankProfileProducts(
+        profileOverride.secondaryProducts,
+        bankName,
+        website,
+      ),
+    };
+  }
+
   return {
     bankName,
-    website: BANK_PROFILE_WEBSITE_MAP[normalizedBankName] || "",
-    primaryProducts: buildGenericBankLoanProducts(bankName),
-    secondaryProducts: buildGenericBankDepositProducts(bankName),
+    website,
+    primaryProducts: normalizeBankProfileProducts(buildGenericBankLoanProducts(bankName), bankName, website),
+    secondaryProducts: normalizeBankProfileProducts(
+      buildGenericBankDepositProducts(bankName),
+      bankName,
+      website,
+    ),
   };
+}
+
+function isParticipationBankName(bankName) {
+  return PARTICIPATION_BANK_NAMES.has(normalizeTefasSearchText(bankName));
+}
+
+function normalizeBankProfileProducts(products, bankName, website) {
+  const isParticipationBank = isParticipationBankName(bankName);
+
+  return (products || []).map((product) => {
+    const normalizedProduct = {
+      ...product,
+      detailHref: product.detailHref || website || "",
+      applyHref: product.applyHref || product.detailHref || website || "",
+    };
+
+    if (!isParticipationBank || normalizedProduct.kind !== "loan") {
+      return normalizedProduct;
+    }
+
+    return {
+      ...normalizedProduct,
+      amountLabel:
+        normalizedProduct.amountLabel === "Kredi Tutarı"
+          ? "Finansman Tutarı"
+          : normalizedProduct.amountLabel,
+      rateLabel: "Kar Oranı",
+      secondaryLabel:
+        normalizedProduct.secondaryLabel === "Toplam Faiz"
+          ? "Toplam Kar Payı"
+          : normalizedProduct.secondaryLabel,
+      tertiaryLabel:
+        normalizedProduct.tertiaryLabel === "Toplam Faiz"
+          ? "Toplam Kar Payı"
+          : normalizedProduct.tertiaryLabel,
+    };
+  });
 }
 
 function buildGenericBankLoanProducts(bankName) {
   const normalizedBankName = normalizeTefasSearchText(bankName);
   const loanTypeOrder = ["need", "housing", "vehicle", "kobi"];
+  const rateLookupKey = BANK_RATE_LOOKUP_ALIASES[normalizedBankName] || normalizedBankName;
 
   return loanTypeOrder
     .map((loanTypeKey, index) => {
       const rowData = LOAN_RATES_PAGE_DATA[loanTypeKey]?.rows?.find(
-        (row) => normalizeTefasSearchText(row.bank) === normalizedBankName,
+        (row) => normalizeTefasSearchText(row.bank) === rateLookupKey,
       );
-
-      if (!rowData) {
-        return null;
-      }
 
       const typeConfig = BANK_PRODUCT_TYPE_CONFIG[loanTypeKey];
       if (!typeConfig) {
@@ -2505,6 +3180,12 @@ function buildGenericBankLoanProducts(bankName) {
       }
 
       const defaultTerm = typeConfig.terms[0]?.value || 12;
+      const fallbackRate = GENERIC_BANK_FALLBACK_RATES[loanTypeKey];
+      const resolvedRate = Number.isFinite(rowData?.rate) ? rowData.rate : fallbackRate;
+
+      if (!Number.isFinite(resolvedRate)) {
+        return null;
+      }
 
       return {
         kind: "loan",
@@ -2512,9 +3193,13 @@ function buildGenericBankLoanProducts(bankName) {
         descriptionLines: typeConfig.descriptionLines,
         amountLabel: typeConfig.amountLabel,
         defaultAmount: typeConfig.defaultAmount,
-        rateMap: { [defaultTerm]: rowData.rate },
+        rateMap: { [defaultTerm]: resolvedRate },
         selectedTerm: defaultTerm,
         detailHref: BANK_PRODUCT_DETAIL_LINKS[normalizedBankName]?.[loanTypeKey] || "",
+        applyHref:
+          BANK_PRODUCT_DETAIL_LINKS[normalizedBankName]?.[loanTypeKey] ||
+          BANK_PROFILE_WEBSITE_MAP[normalizedBankName] ||
+          "",
         featured: index === 0,
       };
     })
@@ -2536,7 +3221,22 @@ function buildGenericBankDepositProducts(bankName) {
     selectedTerm: 32,
     secondaryLabel: "Net Getiri",
     tertiaryLabel: "Vade Sonu Tutar",
+    applyHref: BANK_PROFILE_WEBSITE_MAP[normalizedBankName] || "",
   }));
+}
+
+function getBankProductLinks(bankName, productTitle) {
+  const profile = buildBankProfileData(bankName);
+  const normalizedProductTitle = normalizeTefasSearchText(productTitle);
+  const products = [...profile.primaryProducts, ...profile.secondaryProducts];
+  const matchedProduct = products.find(
+    (product) => normalizeTefasSearchText(product.title) === normalizedProductTitle,
+  );
+
+  return {
+    detailHref: matchedProduct?.detailHref || "",
+    applyHref: matchedProduct?.applyHref || matchedProduct?.detailHref || profile.website || "",
+  };
 }
 
 function renderBankDetailPage(bankName) {
@@ -2593,6 +3293,10 @@ function createBankDetailBrand(profile) {
 
 function getBankAppStoreLinks(bankName) {
   const normalizedBankName = normalizeTefasSearchText(bankName);
+  const directLinks = BANK_MOBILE_APP_STORE_LINKS[normalizedBankName];
+  if (directLinks) {
+    return directLinks;
+  }
   const appQuery = BANK_MOBILE_APP_QUERY_MAP[normalizedBankName] || bankName;
   const encodedQuery = encodeURIComponent(appQuery);
   return {
@@ -2632,20 +3336,19 @@ function openBankAppQrModal(bankName, productTitle) {
     !ui.bankAppQrModal ||
     !ui.bankAppQrBrand ||
     !ui.bankAppQrDescription ||
-    !ui.bankAppQrDirectLink ||
+    !ui.bankAppQrApplyLink ||
     !ui.bankAppQrImage ||
-    !ui.bankAppQrAndroidTab ||
-    !ui.bankAppQrIosTab
+    !ui.bankAppQrClose
   ) {
     return;
   }
 
-  const links = getBankAppStoreLinks(bankName);
   const qrTargetUrl = buildAbsoluteBankAppRedirectUrl(bankName, productTitle);
+  const productLinks = getBankProductLinks(bankName, productTitle);
   currentBankAppQrContext = {
     bankName,
     productTitle,
-    links,
+    applyHref: productLinks.applyHref,
   };
   const qrBrandLogo = createBankLogoElement(bankName, "bank-app-qr-brand-logo");
   if (qrBrandLogo) {
@@ -2653,16 +3356,16 @@ function openBankAppQrModal(bankName, productTitle) {
   } else {
     ui.bankAppQrBrand.textContent = bankName;
   }
-  ui.bankAppQrDescription.textContent = `${bankName} mobil uygulamasına geçmek için QR kodu okut. Telefonun Android ise Google Play, iPhone ise App Store açılır.`;
+  ui.bankAppQrDescription.textContent = "Başvurunu tamamlamak için QR kodunu okut.";
+  if (productLinks.applyHref) {
+    ui.bankAppQrApplyLink.href = productLinks.applyHref;
+    ui.bankAppQrApplyLink.classList.remove("hidden");
+  } else {
+    ui.bankAppQrApplyLink.href = "#";
+    ui.bankAppQrApplyLink.classList.add("hidden");
+  }
   ui.bankAppQrImage.src = buildQrImageUrl(qrTargetUrl);
   ui.bankAppQrImage.alt = `${bankName} mobil uygulamasına yönlendiren QR kod`;
-
-  ui.bankAppQrAndroidTab.classList.add("active");
-  ui.bankAppQrAndroidTab.setAttribute("aria-selected", "true");
-  ui.bankAppQrIosTab.classList.remove("active");
-  ui.bankAppQrIosTab.setAttribute("aria-selected", "false");
-  ui.bankAppQrDirectLink.href = links.android;
-  ui.bankAppQrDirectLink.textContent = "Google Play'de aç";
 
   ui.bankAppQrModal.classList.remove("hidden");
   document.body.classList.add("bank-app-qr-open");
@@ -2684,13 +3387,15 @@ function renderBankAppRedirectPage(bankName, productTitle) {
     !ui.bankAppRedirectPage ||
     !ui.bankAppRedirectBankBrand ||
     !ui.bankAppRedirectTitle ||
-    !ui.bankAppRedirectAndroidLink ||
-    !ui.bankAppRedirectIosLink
+    !ui.bankAppRedirectStoreLink ||
+    !ui.bankAppRedirectApplyLink ||
+    !ui.bankAppRedirectManual
   ) {
     return;
   }
 
   const links = getBankAppStoreLinks(bankName);
+  const productLinks = getBankProductLinks(bankName, productTitle);
   const redirectLogo = createBankLogoElement(bankName, "bank-app-redirect-bank-logo");
   if (redirectLogo) {
     ui.bankAppRedirectBankBrand.replaceChildren(redirectLogo);
@@ -2700,8 +3405,17 @@ function renderBankAppRedirectPage(bankName, productTitle) {
   ui.bankAppRedirectTitle.textContent = productTitle
     ? `${bankName} ${productTitle} için mobil uygulamaya yönlendiriliyorsunuz`
     : `${bankName} mobil uygulamasına yönlendiriliyorsunuz`;
-  ui.bankAppRedirectAndroidLink.href = links.android;
-  ui.bankAppRedirectIosLink.href = links.ios;
+  const targetStore = detectMobileStorePreference();
+  const targetHref = targetStore === "ios" ? links.ios : links.android;
+  ui.bankAppRedirectStoreLink.href = targetHref;
+  if (productLinks.applyHref) {
+    ui.bankAppRedirectApplyLink.href = productLinks.applyHref;
+    ui.bankAppRedirectApplyLink.classList.remove("hidden");
+  } else {
+    ui.bankAppRedirectApplyLink.href = "#";
+    ui.bankAppRedirectApplyLink.classList.add("hidden");
+  }
+  ui.bankAppRedirectManual.textContent = "Uygun mağaza cihazına göre otomatik seçilir.";
   closeBankAppQrModal();
 
   hideHomePageContent();
@@ -2711,18 +3425,18 @@ function renderBankAppRedirectPage(bankName, productTitle) {
   ui.investmentPage?.classList.add("hidden");
   ui.bankAppRedirectPage.classList.remove("hidden");
   syncSubpageBodyClasses();
+  window.scrollTo({ top: 0, behavior: "auto" });
 
-  const targetStore = detectMobileStorePreference();
-  const targetHref = targetStore === "ios" ? links.ios : links.android;
   window.setTimeout(() => {
     window.location.href = targetHref;
-  }, 700);
+  }, 1100);
 }
 
 function closeBankAppRedirectPage() {
   if (ui.bankAppRedirectPage) {
     ui.bankAppRedirectPage.classList.add("hidden");
   }
+  syncSubpageBodyClasses();
 }
 
 function createBankProductShowcase(products, bankName) {
@@ -2811,7 +3525,7 @@ function createBankProductCard(product, bankName) {
   const tableCard = document.createElement("div");
   tableCard.className = "bank-product-table-card";
   [
-    ["Faiz Oranı", "rate", "label-primary"],
+    [product.rateLabel || "Faiz Oranı", "rate", "label-primary"],
     [product.secondaryLabel || "Aylık Taksit", "installment", "label-secondary"],
     [product.tertiaryLabel || "Toplam Ödeme", "total-payment", "label-tertiary"],
   ].forEach(([labelText, roleName, labelRole]) => {
@@ -2833,6 +3547,7 @@ function createBankProductCard(product, bankName) {
   actionButton.dataset.bankApplyButton = "";
   actionButton.dataset.bankName = bankName || currentBankProfileName;
   actionButton.dataset.productTitle = product.title;
+  actionButton.dataset.applyHref = product.applyHref || product.detailHref || "";
   actionButton.textContent = "Başvur";
 
   article.append(header, formGrid, tableCard, actionButton);
