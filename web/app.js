@@ -741,6 +741,10 @@ const BANK_PROFILE_WEBSITE_MAP = Object.freeze({
   hsbc: "https://www.hsbc.com.tr/",
   "icbc turkey": "https://www.icbc.com.tr/",
   ing: "https://www.ing.com.tr/",
+  ıng: "https://www.ing.com.tr/",
+  "ıng bank": "https://www.ing.com.tr/",
+  "ıng bank a.ş.": "https://www.ing.com.tr/",
+  "ıng bank a.s.": "https://www.ing.com.tr/",
   "iş bankası": "https://www.isbank.com.tr/",
   "kuveyt türk": "https://www.kuveytturk.com.tr/",
   "n kolay": "https://www.nkolay.com/",
@@ -788,8 +792,10 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         descriptionLines: ["Tutar: 5.000 - 400.000 TL", "Vade: 3 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 50000,
-        rateMap: { 12: 1.99, 24: 3.09, 36: 2.99 },
-        selectedTerm: 24,
+        rateMap: { 12: 1.99, 24: 3.19, 36: 3.09 },
+        selectedTerm: 12,
+        detailHref: "https://www.alternatifbank.com.tr/bireysel/krediler/ihtiyac-kredisi",
+        applyHref: "https://www.alternatifbank.com.tr/bireysel/krediler/ihtiyac-kredisi",
       },
       {
         kind: "loan",
@@ -816,11 +822,13 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       {
         kind: "loan",
         title: "İhtiyaç Kredisi",
-        descriptionLines: ["Tutar: 500 - 2.000.000 TL", "Vade: 3 - 36 Ay"],
+        descriptionLines: ["Tutar: 1.000 - 250.000 TL", "Vade: 3 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 50000,
-        rateMap: { 12: 3.49, 24: 3.49, 36: 3.49 },
+        rateMap: { 12: 4.49, 24: 4.49, 36: 4.49 },
         selectedTerm: 24,
+        detailHref: "https://www.anadolubank.com.tr/sizin-icin/krediler/ihtiyac-kredisi",
+        applyHref: "https://www.anadolubank.com.tr/ihtiyac-kredisi-basvuru/",
       },
       {
         kind: "loan",
@@ -839,6 +847,21 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         defaultAmount: 200000,
         rateMap: { 12: 5.3, 24: 5.3, 36: 5.3, 48: 5.3 },
         selectedTerm: 24,
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "Renkli Hesap",
+        descriptionLines: ["Online başvuru ile %43'e varan hoş geldin faizi sunar."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 43.0, 92: 43.0, 181: 43.0 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.anadolubank.com.tr/sizin-icin/birikim-ve-mevduat/renkli-hesap",
+        applyHref: "https://www.anadolubank.com.tr/sizin-icin/birikim-ve-mevduat/renkli-hesap",
       },
     ],
   },
@@ -891,11 +914,28 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       {
         kind: "loan",
         title: "İhtiyaç Kredisi",
-        descriptionLines: ["Tutar: 10.000 TL örnek", "Vade: 36 Ay örnek"],
+        descriptionLines: ["Tutar: 10.000 TL örnek", "Vade: 12 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 10000,
-        rateMap: { 36: 5.49 },
-        selectedTerm: 36,
+        rateMap: { 12: 3.44, 36: 3.19 },
+        selectedTerm: 12,
+        detailHref: "https://www.hsbc.com.tr/krediler/ihtiyac-kredisi",
+        applyHref: "https://www.hsbc.com.tr/krediler/ihtiyac-kredisi",
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "Modern Hesap",
+        descriptionLines: ["HSBC mobil ve internet şubede sunulan vadeli mevduat ürünü."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 39.0, 92: 39.0, 181: 32.0 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.hsbc.com.tr/mevduat/modern-hesap",
+        applyHref: "https://www.hsbc.com.tr/mevduat/modern-hesap",
       },
     ],
   },
@@ -909,6 +949,23 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         defaultAmount: 5000,
         rateMap: { 3: 3.99 },
         selectedTerm: 3,
+        detailHref: "https://www.fibabanka.com.tr/krediler/ihtiyac-kredisi",
+        applyHref: "https://www.fibabanka.com.tr/krediler/ihtiyac-kredisi",
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "e-Mevduat",
+        descriptionLines: ["Fibabanka dijital kanalda açılan vadeli mevduat ürünü."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 37.0, 92: 36.5, 181: 30.0 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.fibabanka.com.tr/mevduat/e-mevduat",
+        applyHref: "https://www.fibabanka.com.tr/mevduat/e-mevduat",
       },
     ],
   },
@@ -920,7 +977,7 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         descriptionLines: ["Tutar: 1.000 - 150.000 TL", "Vade: 3 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 50000,
-        rateMap: { 12: 5.06, 24: 5.06, 36: 5.06 },
+        rateMap: { 12: 5.25, 24: 5.25, 36: 5.25 },
         selectedTerm: 24,
       },
       {
@@ -940,6 +997,21 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         defaultAmount: 200000,
         rateMap: { 12: 4.95, 24: 4.95, 36: 4.95, 48: 4.95 },
         selectedTerm: 24,
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "E-Mevduat",
+        descriptionLines: ["Halkbank mobil ve internet şubede açılan vadeli hesap."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 39.0, 92: 37.0, 181: 35.0 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.halkbank.com.tr/tr/bireysel/mevduat/vadeli-hesaplar/e-mevduat.html",
+        applyHref: "https://www.halkbank.com.tr/tr/bireysel/mevduat/vadeli-hesaplar/e-mevduat.html",
       },
     ],
   },
@@ -973,6 +1045,21 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         selectedTerm: 24,
       },
     ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "ARI Hesabı",
+        descriptionLines: ["VakıfBank mobil ve internet bankacılığında günlük faizli hesap."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 41.0, 92: 23.0, 181: 23.0 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.vakifbank.com.tr/tr/bireysel/hesaplar/vadeli-hesaplar/ari-hesabi",
+        applyHref: "https://www.vakifbank.com.tr/tr/bireysel/hesaplar/vadeli-hesaplar/ari-hesabi",
+      },
+    ],
   },
   "ziraat bankası": {
     primaryProducts: [
@@ -1002,6 +1089,23 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         defaultAmount: 200000,
         rateMap: { 12: 2.99, 24: 2.99, 36: 2.99, 48: 2.99 },
         selectedTerm: 24,
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "Vadeli TL Mevduat Hesabı",
+        descriptionLines: ["Ziraat Mobil ve internet şubede açılan vadeli TL mevduat ürünü."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 34.0, 92: 33.0, 181: 27.0 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref:
+          "https://www.ziraatbank.com.tr/tr/bireysel/mevduat/vadeli-hesaplar/vadeli-tl-mevduat-hesaplari/vadeli-tl-mevduat-hesabi",
+        applyHref:
+          "https://www.ziraatbank.com.tr/tr/bireysel/mevduat/vadeli-hesaplar/vadeli-tl-mevduat-hesaplari/vadeli-tl-mevduat-hesabi",
       },
     ],
   },
@@ -1161,6 +1265,497 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         defaultAmount: 200000,
         rateMap: { 12: 3.15, 24: 3.15, 36: 3.15, 48: 3.15 },
         selectedTerm: 24,
+      },
+    ],
+  },
+  "garanti bbva": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 5.000 - 500.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 12: 3.49, 24: 3.49, 36: 3.49 },
+        selectedTerm: 12,
+        detailHref: "https://www.garantibbva.com.tr/krediler/ihtiyac-kredisi",
+        applyHref: "https://www.garantibbva.com.tr/krediler/ihtiyac-kredisi",
+      },
+      {
+        kind: "loan",
+        title: "Esnaf Destek Kredisi",
+        descriptionLines: ["Tutar: 5.000 - 500.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 12: 2.99, 24: 2.99, 36: 2.99 },
+        selectedTerm: 12,
+        detailHref: "https://www.garantibbva.com.tr/esnaf-ve-kobi/esnaf-bankaciligi/esnaf-destek-kredisi",
+        applyHref: "https://www.garantibbva.com.tr/esnaf-ve-kobi/esnaf-bankaciligi/esnaf-destek-kredisi",
+      },
+    ],
+  },
+  qnb: {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 1.000 - 500.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 12: 3.89, 24: 3.89, 36: 3.89 },
+        selectedTerm: 12,
+        detailHref: "https://www.qnb.com.tr/krediler/ihtiyac-kredisi",
+        applyHref: "https://www.qnb.com.tr/krediler/ihtiyac-kredisi",
+      },
+      {
+        kind: "loan",
+        title: "Konut Kredisi",
+        descriptionLines: ["Tutar: Ekspertiz değeri değişimli", "Vade: 12 - 120 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 36: 3.53, 60: 3.53, 120: 3.53 },
+        selectedTerm: 120,
+        detailHref: "https://www.qnb.com.tr/krediler/konut-kredisi",
+        applyHref: "https://www.qnb.com.tr/krediler/konut-kredisi",
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Tutar: 50.000 - 400.000 TL", "Vade: 12 - 48 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 12: 4.72, 24: 4.72, 36: 4.72, 48: 4.72 },
+        selectedTerm: 24,
+        detailHref: "https://www.qnb.com.tr/krediler/tasit-kredisi",
+        applyHref: "https://www.qnb.com.tr/krediler/tasit-kredisi",
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "E-Vadeli Hesap",
+        descriptionLines: ["QNB Mobil ve internet şubeden açılan vadeli mevduat hesabı."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 40.75, 92: 40.75, 181: 40.75 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.qnb.com.tr/mevduat/e-vadeli-hesap",
+        applyHref: "https://www.qnb.com.tr/mevduat/e-vadeli-hesap",
+      },
+    ],
+  },
+  denizbank: {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 10.000 - 125.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 12: 2.99, 24: 2.99, 36: 2.99 },
+        selectedTerm: 36,
+        detailHref: "https://www.denizbank.com/kendim-icin/krediler/ihtiyac-kredileri/ihtiyac-kredisi",
+        applyHref: "https://www.denizbank.com/kendim-icin/krediler/ihtiyac-kredileri/ihtiyac-kredisi",
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Tutar: 50.000 - 400.000 TL", "Vade: 12 - 48 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 12: 4.51, 24: 4.51, 36: 4.51, 48: 4.51 },
+        selectedTerm: 48,
+        detailHref: "https://www.denizbank.com/kendim-icin/krediler/tasit-kredisi",
+        applyHref: "https://www.denizbank.com/kendim-icin/krediler/tasit-kredisi",
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "Para Çekilebilir Mevduat",
+        descriptionLines: ["Vade içinde para çekme esnekliği sunan mevduat ürünü."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 32.25, 92: 32.25, 181: 32.25 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.denizbank.com/kendim-icin/mevduat/para-cekilebilir-mevduat",
+        applyHref: "https://www.denizbank.com/kendim-icin/mevduat/para-cekilebilir-mevduat",
+      },
+    ],
+  },
+  ing: {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 10.000 - 100.000 TL", "Vade: 6 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 6: 0.99, 12: 4.44, 24: 4.24, 36: 3.19 },
+        selectedTerm: 36,
+        detailHref: "https://www.ing.com.tr/tr/bireysel/krediler/ihtiyac-kredisi",
+        applyHref: "https://www.ing.com.tr/tr/bireysel/krediler/ihtiyac-kredisi",
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "Turuncu Hesap",
+        descriptionLines: ["Hoş geldin faizli birikim hesabı."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 46.0, 92: 46.0, 181: 23.0 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.ing.com.tr/tr/bireysel/mevduat/turuncu-hesap",
+        applyHref: "https://www.ing.com.tr/tr/bireysel/mevduat/turuncu-hesap",
+      },
+    ],
+  },
+  odeabank: {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 10.000 TL örnek", "Vade: 24 Ay örnek"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 10000,
+        rateMap: { 24: 5.99 },
+        selectedTerm: 24,
+        detailHref: "https://www.odeabank.com.tr/tr-tr/bireysel/krediler/ihtiyac-kredisi",
+        applyHref: "https://www.odeabank.com.tr/tr-tr/bireysel/krediler/ihtiyac-kredisi",
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "Oksijen Hesap",
+        descriptionLines: ["Dijital kanalda açılan yüksek faizli mevduat hesabı."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 39.0, 92: 40.0, 181: 23.5 },
+        selectedTerm: 92,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.odeabank.com.tr/tr-tr/bireysel/mevduat/oksijen-hesap",
+        applyHref: "https://www.odeabank.com.tr/tr-tr/bireysel/mevduat/oksijen-hesap",
+      },
+    ],
+  },
+  akbank: {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 2.500 - 750.000 TL", "Vade: 1 - 24 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 250500,
+        rateMap: { 12: 3.59, 24: 3.59 },
+        selectedTerm: 24,
+        insuranceOptions: [
+          {
+            label: "Hayat Sigortalı",
+            rateMap: { 12: 3.59, 24: 3.59 },
+            selected: true,
+          },
+          {
+            label: "Hayat Sigortasız",
+            rateMap: { 12: 5.09, 24: 5.09 },
+          },
+        ],
+        detailHref: "https://www.akbank.com/krediler/ihtiyac-kredileri",
+        applyHref: "https://www.akbank.com/krediler/ihtiyac-kredileri",
+      },
+      {
+        kind: "loan",
+        title: "Konut Kredisi",
+        descriptionLines: ["Tutar: 10.000 - 999.999.999 TL", "Vade: 1 - 120 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 500000,
+        rateMap: { 36: 3.15, 60: 3.15, 120: 3.15 },
+        selectedTerm: 36,
+        insuranceOptions: [
+          {
+            label: "Hayat Sigortalı",
+            rateMap: { 36: 3.15, 60: 3.15, 120: 3.15 },
+            selected: true,
+          },
+          {
+            label: "Hayat Sigortasız",
+            rateMap: { 36: 3.38, 60: 3.38, 120: 3.38 },
+          },
+        ],
+        detailHref: "https://www.akbank.com/krediler/konut-kredileri/akbank-konut-kredisi",
+        applyHref: "https://www.akbank.com/krediler/konut-kredileri/akbank-konut-kredisi",
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Akbank resmi taşıt kredisi sayfası üzerinden başvurulabilir."],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 12: 3.59, 24: 3.59, 36: 3.59, 48: 3.59 },
+        selectedTerm: 24,
+        detailHref: "https://www.akbank.com/krediler/tasit-kredileri/ikinci-el-tasit-kredisi",
+        applyHref: "https://www.akbank.com/krediler/tasit-kredileri/ikinci-el-tasit-kredisi",
+      },
+      {
+        kind: "loan",
+        title: "KOBİ Kredisi",
+        descriptionLines: ["Akbank ticari kredi sayfası üzerinden değerlendirilir."],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 200000,
+        rateMap: { 12: 3.59, 24: 3.59, 36: 3.59 },
+        selectedTerm: 12,
+        detailHref: "https://www.akbank.com/kurumsal/krediler/ticari-krediler/ticari-kredi-faiz-oranlari",
+        applyHref: "https://www.akbank.com/kurumsal/krediler/ticari-krediler/ticari-kredi-faiz-oranlari",
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "Vadeli Mevduat Hesabı",
+        descriptionLines: ["Akbank resmi vadeli mevduat sayfasında duyurulan oran."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 40.5, 92: 40.5, 181: 40.5 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.akbank.com/tr-tr/urunler/Sayfalar/Vadeli-Mevduat-Hesabi.aspx",
+        applyHref: "https://www.akbank.com/tr-tr/urunler/Sayfalar/Vadeli-Mevduat-Hesabi.aspx",
+      },
+    ],
+  },
+  "yapı kredi": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 1.000 - 250.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 12: 1.79, 24: 1.79, 36: 1.79 },
+        selectedTerm: 12,
+        detailHref: "https://www.yapikredi.com.tr/kredi/ihtiyac-kredisi",
+        applyHref: "https://www.yapikredi.com.tr/kredi/ihtiyac-kredisi",
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "E-Vadeli Hesap",
+        descriptionLines: ["Yapı Kredi e-mevduat sayfasında duyurulan oran."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 43.0, 92: 43.0, 181: 43.0 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.yapikredi.com.tr/mevduat/e-vadeli-hesap",
+        applyHref: "https://www.yapikredi.com.tr/mevduat/e-vadeli-hesap",
+      },
+    ],
+  },
+  "yapi kredi": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 1.000 - 250.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 12: 1.79, 24: 1.79, 36: 1.79 },
+        selectedTerm: 12,
+        detailHref: "https://www.yapikredi.com.tr/kredi/ihtiyac-kredisi",
+        applyHref: "https://www.yapikredi.com.tr/kredi/ihtiyac-kredisi",
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "E-Vadeli Hesap",
+        descriptionLines: ["Yapı Kredi e-mevduat sayfasında duyurulan oran."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 43.0, 92: 43.0, 181: 43.0 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.yapikredi.com.tr/mevduat/e-vadeli-hesap",
+        applyHref: "https://www.yapikredi.com.tr/mevduat/e-vadeli-hesap",
+      },
+    ],
+  },
+  "on dijital": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 1.000 - 300.000 TL", "Vade: 12 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 12: 3.39, 18: 3.25, 24: 2.99, 36: 2.99 },
+        selectedTerm: 24,
+        detailHref: "https://www.on.com.tr/ihtiyac-kredisi",
+        applyHref: "https://www.on.com.tr/ihtiyac-kredisi",
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "ON Plus Hesap",
+        descriptionLines: ["Mobil kanal üzerinden yüksek faizli birikim hesabı."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 47.5, 92: 47.5, 181: 42.5 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.on.com.tr/mevduat",
+        applyHref: "https://www.on.com.tr/mevduat",
+      },
+    ],
+  },
+  "on dijital bankacılık": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 1.000 - 300.000 TL", "Vade: 12 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 12: 3.39, 18: 3.25, 24: 2.99, 36: 2.99 },
+        selectedTerm: 24,
+        detailHref: "https://www.on.com.tr/ihtiyac-kredisi",
+        applyHref: "https://www.on.com.tr/ihtiyac-kredisi",
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "ON Plus Hesap",
+        descriptionLines: ["Mobil kanal üzerinden yüksek faizli birikim hesabı."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 47.5, 92: 47.5, 181: 42.5 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.on.com.tr/mevduat",
+        applyHref: "https://www.on.com.tr/mevduat",
+      },
+    ],
+  },
+  "on dijital bankacilik": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 1.000 - 300.000 TL", "Vade: 12 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 12: 3.39, 18: 3.25, 24: 2.99, 36: 2.99 },
+        selectedTerm: 24,
+        detailHref: "https://www.on.com.tr/ihtiyac-kredisi",
+        applyHref: "https://www.on.com.tr/ihtiyac-kredisi",
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "ON Plus Hesap",
+        descriptionLines: ["Mobil kanal üzerinden yüksek faizli birikim hesabı."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 47.5, 92: 47.5, 181: 42.5 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.on.com.tr/mevduat",
+        applyHref: "https://www.on.com.tr/mevduat",
+      },
+    ],
+  },
+  "aktif bank": {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "N Kolay İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 1.000 - 250.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 12: 3.89, 24: 3.89, 36: 3.89 },
+        selectedTerm: 12,
+        detailHref: "https://www.nkolay.com/ihtiyac-kredisi",
+        applyHref: "https://www.nkolay.com/ihtiyac-kredisi",
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "N Kolay Bono",
+        descriptionLines: ["Günlük getiri sunan dijital birikim ürünü."],
+        amountLabel: "Tutar",
+        defaultAmount: 250000,
+        rateMap: { 32: 37.0, 92: 37.0, 181: 37.0 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.nkolay.com/bono",
+        applyHref: "https://www.nkolay.com/bono",
+      },
+    ],
+  },
+  enpara: {
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "Birikim Hesabı",
+        descriptionLines: ["Enpara.com birikim hesabı için duyurulan yıllık faiz oranı."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 39.5, 92: 39.5, 181: 39.5 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.enpara.com/birikim-hesabi",
+        applyHref: "https://www.enpara.com/birikim-hesabi",
+      },
+    ],
+  },
+  getirfinans: {
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "GetirFinans İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 1.000 - 100.000 TL", "Vade: 3 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 50000,
+        rateMap: { 12: 2.79, 24: 3.49, 36: 4.2 },
+        selectedTerm: 12,
+        detailHref: "https://www.getirfinans.com/",
+        applyHref: "https://www.getirfinans.com/",
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "deposit",
+        title: "GetirFinans Birikim",
+        descriptionLines: ["GetirFinans uygulamasında sunulan yüksek faizli birikim ürünü."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 41.0, 92: 41.0, 181: 41.0 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.getirfinans.com/",
+        applyHref: "https://www.getirfinans.com/",
       },
     ],
   },
@@ -2906,6 +3501,7 @@ function setupBankProductCards() {
   document.querySelectorAll("[data-bank-product-card]").forEach((cardElement) => {
     const amountInput = cardElement.querySelector('[data-role="amount"]');
     const termSelect = cardElement.querySelector('[data-role="term"]');
+    const insuranceSelect = cardElement.querySelector('[data-role="insurance-select"]');
     const rateOutput = cardElement.querySelector('[data-role="rate"]');
     const installmentOutput = cardElement.querySelector('[data-role="installment"]');
     const totalPaymentOutput = cardElement.querySelector('[data-role="total-payment"]');
@@ -2940,7 +3536,15 @@ function setupBankProductCards() {
 
       const principal = parseAmountInput(amountInput.value);
       const termMonths = Number.parseInt(termSelect.value, 10);
-      const monthlyRatePercent = rateMap[String(termMonths)];
+      const selectedInsuranceOption =
+        insuranceSelect instanceof HTMLSelectElement
+          ? insuranceSelect.selectedOptions[0] || null
+          : null;
+      const activeRateMap =
+        selectedInsuranceOption instanceof HTMLOptionElement
+          ? parseBankProductRateMap(selectedInsuranceOption.dataset.rateMap || "")
+          : rateMap;
+      const monthlyRatePercent = activeRateMap[String(termMonths)];
 
       if (
         !Number.isFinite(principal) ||
@@ -2980,6 +3584,9 @@ function setupBankProductCards() {
     amountInput.addEventListener("input", renderCardOutcome);
     amountInput.addEventListener("blur", renderCardOutcome);
     termSelect.addEventListener("change", renderCardOutcome);
+    if (insuranceSelect instanceof HTMLSelectElement) {
+      insuranceSelect.addEventListener("change", renderCardOutcome);
+    }
 
     renderCardOutcome();
   });
@@ -3098,16 +3705,20 @@ function buildBankProfileData(bankName) {
   const profileOverride = BANK_PROFILE_OVERRIDES[normalizedBankName];
 
   if (profileOverride) {
+    const genericPrimaryProducts = buildGenericBankLoanProducts(bankName);
+    const genericSecondaryProducts = buildGenericBankDepositProducts(bankName);
     return {
       bankName,
       website,
-      primaryProducts: normalizeBankProfileProducts(
+      primaryProducts: mergeBankProfileProducts(
         profileOverride.primaryProducts,
+        genericPrimaryProducts,
         bankName,
         website,
       ),
-      secondaryProducts: normalizeBankProfileProducts(
+      secondaryProducts: mergeBankProfileProducts(
         profileOverride.secondaryProducts,
+        genericSecondaryProducts,
         bankName,
         website,
       ),
@@ -3124,6 +3735,23 @@ function buildBankProfileData(bankName) {
       website,
     ),
   };
+}
+
+function mergeBankProfileProducts(preferredProducts, fallbackProducts, bankName, website) {
+  const mergedProducts = new Map();
+
+  normalizeBankProfileProducts(preferredProducts, bankName, website).forEach((product) => {
+    mergedProducts.set(normalizeTefasSearchText(product.title), product);
+  });
+
+  normalizeBankProfileProducts(fallbackProducts, bankName, website).forEach((product) => {
+    const productKey = normalizeTefasSearchText(product.title);
+    if (!mergedProducts.has(productKey)) {
+      mergedProducts.set(productKey, product);
+    }
+  });
+
+  return Array.from(mergedProducts.values());
 }
 
 function isParticipationBankName(bankName) {
@@ -3461,6 +4089,22 @@ function createBankProductCard(product, bankName) {
   article.dataset.bankName = bankName || currentBankProfileName;
   article.dataset.kind = product.kind || "loan";
   article.dataset.rateMap = buildBankProductRateMapText(product.rateMap);
+  const insuranceOptions =
+    product.kind === "loan"
+      ? Array.isArray(product.insuranceOptions) && product.insuranceOptions.length > 0
+        ? product.insuranceOptions
+        : [
+            {
+              label: "Hayat Sigortalı",
+              rateMap: product.rateMap || {},
+              selected: true,
+            },
+            {
+              label: "Hayat Sigortasız",
+              rateMap: product.rateMap || {},
+            },
+          ]
+      : [];
 
   if (product.secondaryLabel) {
     article.dataset.secondaryLabel = product.secondaryLabel;
@@ -3484,6 +4128,9 @@ function createBankProductCard(product, bankName) {
 
   const formGrid = document.createElement("div");
   formGrid.className = "bank-product-form-grid";
+  if (insuranceOptions.length > 0) {
+    formGrid.classList.add("bank-product-form-grid-with-insurance");
+  }
 
   const amountField = document.createElement("label");
   amountField.className = "bank-product-field";
@@ -3522,6 +4169,31 @@ function createBankProductCard(product, bankName) {
   termField.append(termLabel, termShell);
   formGrid.append(amountField, termField);
 
+  let insuranceField = null;
+  if (insuranceOptions.length > 0) {
+    insuranceField = document.createElement("label");
+    insuranceField.className = "bank-product-field";
+    const insuranceLabel = document.createElement("span");
+    insuranceLabel.textContent = "Hayat Sigortası";
+    const insuranceShell = document.createElement("div");
+    insuranceShell.className = "bank-product-input-shell bank-product-input-shell-select";
+    const insuranceSelect = document.createElement("select");
+    insuranceSelect.setAttribute("data-role", "insurance-select");
+
+    insuranceOptions.forEach((option, index) => {
+      const optionElement = document.createElement("option");
+      optionElement.value = option.label;
+      optionElement.textContent = option.label;
+      optionElement.dataset.rateMap = buildBankProductRateMapText(option.rateMap || {});
+      optionElement.selected = Boolean(option.selected) || (!insuranceOptions.some((item) => item.selected) && index === 0);
+      insuranceSelect.append(optionElement);
+    });
+
+    insuranceShell.append(insuranceSelect);
+    insuranceField.append(insuranceLabel, insuranceShell);
+    formGrid.append(insuranceField);
+  }
+
   const tableCard = document.createElement("div");
   tableCard.className = "bank-product-table-card";
   [
@@ -3550,7 +4222,8 @@ function createBankProductCard(product, bankName) {
   actionButton.dataset.applyHref = product.applyHref || product.detailHref || "";
   actionButton.textContent = "Başvur";
 
-  article.append(header, formGrid, tableCard, actionButton);
+  article.append(header, formGrid);
+  article.append(tableCard, actionButton);
 
   if (product.detailHref) {
     const detailLink = document.createElement("a");

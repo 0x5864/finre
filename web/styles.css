@@ -861,6 +861,10 @@ body.suppress-header-hover .header-nav-item:focus-within .header-mega-menu {
   gap: 0.55rem;
 }
 
+.bank-product-form-grid-with-insurance {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .bank-product-field {
   display: grid;
   gap: 0.38rem;
@@ -1305,6 +1309,10 @@ body.bank-app-qr-open {
 
 @media (max-width: 760px) {
   .bank-product-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bank-product-form-grid-with-insurance {
     grid-template-columns: 1fr;
   }
 
