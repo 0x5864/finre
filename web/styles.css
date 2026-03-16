@@ -830,9 +830,9 @@ body.suppress-header-hover .header-nav-item:focus-within .header-mega-menu {
   border: 1px solid #b8c8dc;
   border-radius: 14px;
   background: #f8fbff;
-  padding: 0.95rem;
+  padding: 0.78rem;
   display: grid;
-  gap: 0.72rem;
+  gap: 0.58rem;
   align-content: start;
   box-shadow: 0 10px 24px rgba(35, 57, 88, 0.05);
 }
@@ -849,41 +849,45 @@ body.suppress-header-hover .header-nav-item:focus-within .header-mega-menu {
 }
 
 .bank-product-head p {
-  margin: 0.28rem 0 0;
+  margin: 0.18rem 0 0;
   color: #66768d;
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   line-height: 1.45;
 }
 
 .bank-product-form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.55rem;
+  gap: 0.45rem;
 }
 
 .bank-product-form-grid-with-insurance {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .bank-product-field {
   display: grid;
-  gap: 0.38rem;
+  gap: 0.28rem;
+}
+
+.bank-product-field-insurance {
+  grid-column: 1 / -1;
 }
 
 .bank-product-field span {
   color: #23344d;
-  font-size: 0.82rem;
-  font-weight: 600;
+  font-size: 0.79rem;
+  font-weight: 400;
 }
 
 .bank-product-input-shell {
   border: 1px solid #cfdae8;
   border-radius: 10px;
   background: #ffffff;
-  padding: 0.72rem 0.8rem;
+  padding: 0.58rem 0.68rem;
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 0.5rem;
+  gap: 0.4rem;
   align-items: center;
 }
 
@@ -894,8 +898,8 @@ body.suppress-header-hover .header-nav-item:focus-within .header-mega-menu {
   outline: 0;
   background: transparent;
   color: #17263d;
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 0.95rem;
+  font-weight: 400;
   padding: 0;
   appearance: none;
 }
@@ -903,7 +907,7 @@ body.suppress-header-hover .header-nav-item:focus-within .header-mega-menu {
 .bank-product-input-shell em {
   color: #60718a;
   font-style: normal;
-  font-size: 0.94rem;
+  font-size: 0.88rem;
 }
 
 .bank-product-input-shell-select {
@@ -937,7 +941,7 @@ body.suppress-header-hover .header-nav-item:focus-within .header-mega-menu {
   grid-template-columns: 1fr auto;
   gap: 0.8rem;
   align-items: center;
-  padding: 0.8rem 0.9rem;
+  padding: 0.66rem 0.78rem;
   border-top: 1px solid #e7edf4;
 }
 
@@ -947,25 +951,129 @@ body.suppress-header-hover .header-nav-item:focus-within .header-mega-menu {
 
 .bank-product-table-row span {
   color: #5f7087;
-  font-size: 0.9rem;
+  font-size: 0.86rem;
 }
 
 .bank-product-table-row strong {
   color: #1f2f46;
+  font-size: 0.92rem;
+  font-weight: 400;
+}
+
+.bank-product-fee-card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  width: 100%;
+  border: 1px solid #d6e0eb;
+  border-radius: 10px;
+  background: #f2f3f5;
+  color: #5f7087;
+  font-size: 0.9rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    color 160ms ease,
+    background-color 160ms ease;
+}
+
+.bank-product-fee-card:hover {
+  border-color: #b8c8dc;
+  background: #eef3f8;
+  color: #243958;
+}
+
+.bank-product-fee-card:focus-visible {
+  outline: 2px solid #32445e;
+  outline-offset: 2px;
+}
+
+.bank-fee-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 72;
+}
+
+.bank-fee-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(21, 33, 52, 0.44);
+  backdrop-filter: blur(4px);
+}
+
+.bank-fee-dialog {
+  position: relative;
+  width: min(320px, calc(100vw - 2rem));
+  margin: min(16vh, 7rem) auto 0;
+  padding: 1rem;
+  border: 1px solid #b8c8dc;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 22px 42px rgba(17, 31, 56, 0.16);
+}
+
+.bank-fee-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid #d6e0eb;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #243958;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.bank-fee-title {
+  margin: 0 0 0.85rem;
+  color: #1f2f46;
   font-size: 0.96rem;
-  font-weight: 700;
+  font-weight: 600;
+}
+
+.bank-fee-list {
+  display: grid;
+  gap: 0;
+  border: 1px solid #d6e0eb;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.bank-fee-item {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.8rem;
+  align-items: center;
+  padding: 0.8rem 0.9rem;
+  border-top: 1px solid #e3eaf2;
+}
+
+.bank-fee-item:first-child {
+  border-top: 0;
+}
+
+.bank-fee-item span {
+  color: #5f7087;
+  font-size: 0.9rem;
 }
 
 .bank-product-action {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 50px;
+  min-height: 42px;
+  border: 1px solid #1873db;
   border-radius: 10px;
   background: #1f81f0;
   color: #ffffff;
-  font-size: 0.98rem;
-  font-weight: 700;
+  font-size: 0.92rem;
+  font-weight: 400;
   text-decoration: none;
   transition:
     background-color 180ms ease,
@@ -977,31 +1085,6 @@ body.suppress-header-hover .header-nav-item:focus-within .header-mega-menu {
   background: #166fd4;
   transform: translateY(-1px);
   box-shadow: 0 10px 20px rgba(31, 129, 240, 0.16);
-}
-
-.bank-product-secondary-link {
-  border: 0;
-  background: transparent;
-  padding: 0;
-  justify-self: center;
-  color: #465a77;
-  font-size: 0.92rem;
-  font-weight: 500;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.bank-product-secondary-link:hover {
-  color: #1f81f0;
-}
-
-.bank-product-secondary-link-muted {
-  color: #6c7d94;
-  cursor: default;
-}
-
-.bank-product-secondary-link-muted:hover {
-  color: #6c7d94;
 }
 
 .bank-product-empty {
@@ -1556,10 +1639,14 @@ body.subpage-open .header-inner {
 }
 
 .loan-rates-title {
-  margin: 0 0 1rem;
+  margin: 0 0 1.1rem;
   color: #101824;
   font-size: 2rem;
   line-height: 1.2;
+}
+
+.loan-rates-meta {
+  margin: 0 0 1rem;
 }
 
 .calculation-title {
@@ -2850,6 +2937,76 @@ body.subpage-open .header-inner {
   margin: 0;
 }
 
+.loan-rates-filters {
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) minmax(180px, 220px);
+  gap: 0.8rem;
+  justify-content: start;
+  align-items: end;
+}
+
+.loan-rates-filter-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.loan-rates-filter-field > span {
+  color: #304968;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.loan-rates-filter-shell {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  border: 1px solid #b8c8dc;
+  border-radius: 10px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.loan-rates-filter-shell input,
+.loan-rates-filter-shell select {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #243958;
+  font: inherit;
+  padding: 0.9rem 1rem;
+}
+
+.loan-rates-filter-shell em {
+  flex: 0 0 auto;
+  padding: 0 1rem 0 0;
+  color: #5d7087;
+  font-style: normal;
+}
+
+.loan-rates-filter-shell-select {
+  position: relative;
+}
+
+.loan-rates-filter-shell-select::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid #4e6178;
+  border-bottom: 2px solid #4e6178;
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+.loan-rates-filter-shell-select select {
+  appearance: none;
+  padding-right: 2.4rem;
+}
+
 .bank-logo-cell {
   display: inline-flex;
   align-items: center;
@@ -2879,12 +3036,31 @@ body.subpage-open .header-inner {
 }
 
 .loan-apply-btn {
-  border: none;
-  background: transparent;
-  color: #0b7d94;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  min-width: 88px;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid #1873db;
+  border-radius: 8px;
+  background: #1f81f0;
+  color: #ffffff;
   font: inherit;
-  font-weight: 700;
+  font-size: 0.86rem;
+  font-weight: 400;
   cursor: pointer;
+  text-decoration: none;
+  transition:
+    background-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.loan-apply-btn:hover {
+  background: #166fd4;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 16px rgba(31, 129, 240, 0.14);
 }
 
 .eyebrow {
@@ -4042,6 +4218,10 @@ body.question-format .consent-check {
 
   .loan-rates-title {
     font-size: 1.55rem;
+  }
+
+  .loan-rates-filters {
+    grid-template-columns: 1fr;
   }
 
   .calculation-title {

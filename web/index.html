@@ -296,6 +296,21 @@
       </div>
     </section>
 
+    <section
+      id="bankFeeModal"
+      class="bank-fee-modal hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="bankFeeTitle"
+    >
+      <div id="bankFeeBackdrop" class="bank-fee-backdrop"></div>
+      <div class="bank-fee-dialog">
+        <button id="bankFeeClose" class="bank-fee-close" type="button" aria-label="Ücret popup kapat">×</button>
+        <h3 id="bankFeeTitle" class="bank-fee-title">Diğer ücretler</h3>
+        <div id="bankFeeList" class="bank-fee-list"></div>
+      </div>
+    </section>
+
     <section id="bankAppRedirectPage" class="bank-app-redirect-page hidden" aria-live="polite">
       <div class="bank-app-redirect-shell">
         <div class="bank-app-redirect-brand-row">
@@ -451,11 +466,26 @@
 
     <section id="loanRatesPage" class="loan-rates-page hidden" aria-live="polite" aria-modal="true">
       <div class="container loan-rates-shell">
+        <h2 id="loanRatesTitle" class="loan-rates-title">İhtiyaç Kredisi Banka Karşılaştırması</h2>
+        <p id="loanRatesDate" class="tefas-meta loan-rates-meta">Güncelleme: 13 Mart 2026</p>
         <article class="investment-gold-table-panel loan-rates-table-panel">
-          <div class="investment-gold-table-head loan-rates-table-head">
-            <h3 id="loanRatesTitle">İhtiyaç Kredisi Banka Karşılaştırması</h3>
+
+          <div class="loan-rates-filters" aria-label="Kredi karşılaştırma filtreleri">
+            <label class="loan-rates-filter-field" for="loanRatesAmountInput">
+              <span>Kredi Tutarı</span>
+              <div class="loan-rates-filter-shell">
+                <input id="loanRatesAmountInput" type="text" inputmode="numeric" value="100,000" />
+                <em>TL</em>
+              </div>
+            </label>
+
+            <label class="loan-rates-filter-field" for="loanRatesTermSelect">
+              <span>Vade</span>
+              <div class="loan-rates-filter-shell loan-rates-filter-shell-select">
+                <select id="loanRatesTermSelect"></select>
+              </div>
+            </label>
           </div>
-          <p id="loanRatesDate" class="tefas-meta">Güncelleme: 13 Mart 2026</p>
 
           <div class="investment-gold-table-wrap loan-rates-table-wrap">
             <table class="investment-gold-table loan-rates-table">
@@ -468,92 +498,7 @@
                   <th></th>
                 </tr>
               </thead>
-              <tbody id="loanRatesTableBody">
-                <tr>
-                  <td>
-                    <div class="bank-logo-cell">
-                      <img class="bank-logo-image" src="./assets/banks/akbank.svg" alt="Akbank logosu" loading="lazy" />
-                      <span class="bank-logo-name">Akbank</span>
-                    </div>
-                  </td>
-                  <td>% 0,99</td>
-                  <td>4.523 ₺</td>
-                  <td>54.531 ₺</td>
-                  <td><button class="loan-apply-btn" type="button">Başvur</button></td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="bank-logo-cell">
-                      <img class="bank-logo-image" src="./assets/banks/qnb.svg" alt="QNB logosu" loading="lazy" />
-                      <span class="bank-logo-name">QNB</span>
-                    </div>
-                  </td>
-                  <td>% 1,99</td>
-                  <td>4.900 ₺</td>
-                  <td>59.051 ₺</td>
-                  <td><button class="loan-apply-btn" type="button">Başvur</button></td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="bank-logo-cell">
-                      <img class="bank-logo-image" src="./assets/banks/ing-official-transparent.png?v=1" alt="ING logosu" loading="lazy" />
-                      <span class="bank-logo-name">ING</span>
-                    </div>
-                  </td>
-                  <td>% 3,29</td>
-                  <td>5.414 ₺</td>
-                  <td>65.213 ₺</td>
-                  <td><button class="loan-apply-btn" type="button">Başvur</button></td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="bank-logo-cell">
-                      <img class="bank-logo-image" src="./assets/banks/denizbank.svg" alt="DenizBank logosu" loading="lazy" />
-                      <span class="bank-logo-name">DenizBank</span>
-                    </div>
-                  </td>
-                  <td>% 3,61</td>
-                  <td>5.544 ₺</td>
-                  <td>66.778 ₺</td>
-                  <td><button class="loan-apply-btn" type="button">Başvur</button></td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="bank-logo-cell">
-                      <img class="bank-logo-image" src="./assets/banks/is-bankasi.svg" alt="İş Bankası logosu" loading="lazy" />
-                      <span class="bank-logo-name">İş Bankası</span>
-                    </div>
-                  </td>
-                  <td>% 3,74</td>
-                  <td>5.601 ₺</td>
-                  <td>67.212 ₺</td>
-                  <td><button class="loan-apply-btn" type="button">Başvur</button></td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="bank-logo-cell">
-                      <img class="bank-logo-image" src="./assets/banks/garanti-bbva.svg" alt="Garanti BBVA logosu" loading="lazy" />
-                      <span class="bank-logo-name">Garanti BBVA</span>
-                    </div>
-                  </td>
-                  <td>% 3,78</td>
-                  <td>5.617 ₺</td>
-                  <td>67.404 ₺</td>
-                  <td><button class="loan-apply-btn" type="button">Başvur</button></td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="bank-logo-cell">
-                      <img class="bank-logo-image" src="./assets/banks/yapi-kredi.svg" alt="Yapı Kredi logosu" loading="lazy" />
-                      <span class="bank-logo-name">Yapı Kredi</span>
-                    </div>
-                  </td>
-                  <td>% 3,82</td>
-                  <td>5.633 ₺</td>
-                  <td>67.596 ₺</td>
-                  <td><button class="loan-apply-btn" type="button">Başvur</button></td>
-                </tr>
-              </tbody>
+              <tbody id="loanRatesTableBody"></tbody>
             </table>
           </div>
         </article>
