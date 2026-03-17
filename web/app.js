@@ -853,15 +853,23 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     ],
   },
   hsbc: {
+    disableGenericPrimaryProducts: true,
     primaryProducts: [
       {
         kind: "loan",
         title: "İhtiyaç Kredisi",
-        descriptionLines: ["Tutar: 10.000 TL örnek", "Vade: 12 - 36 Ay"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 12 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
-        defaultAmount: 10000,
-        rateMap: { 12: 3.44, 36: 3.19 },
+        defaultAmount: 100000,
+        rateMap: { 12: 3.76, 24: 3.61, 36: 3.54 },
         selectedTerm: 12,
+        insuranceOptions: [
+          {
+            label: "Hayat sigortası var",
+            rateMap: { 12: 3.76, 24: 3.61, 36: 3.54 },
+            selected: true,
+          },
+        ],
         detailHref: "https://www.hsbc.com.tr/krediler/ihtiyac-kredisi",
         applyHref: "https://www.hsbc.com.tr/krediler/ihtiyac-kredisi",
       },
@@ -887,13 +895,42 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       {
         kind: "loan",
         title: "İhtiyaç Kredisi",
-        descriptionLines: ["Tutar: 5.000 TL örnek", "Vade: 3 Ay örnek"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 12 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
-        defaultAmount: 5000,
-        rateMap: { 3: 3.99 },
-        selectedTerm: 3,
+        defaultAmount: 100000,
+        rateMap: { 12: 4.36, 24: 3.97, 36: 3.79 },
+        selectedTerm: 12,
+        insuranceOptions: [
+          {
+            label: "Hayat sigortası var",
+            rateMap: { 12: 4.36, 24: 3.97, 36: 3.79 },
+            selected: true,
+          },
+        ],
         detailHref: "https://www.fibabanka.com.tr/krediler/ihtiyac-kredisi",
         applyHref: "https://www.fibabanka.com.tr/krediler/ihtiyac-kredisi",
+      },
+      {
+        kind: "loan",
+        title: "Konut Kredisi",
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 36: 4.22, 60: 4.22, 120: 4.57 },
+        selectedTerm: 120,
+        detailHref: "https://www.fibabanka.com.tr/krediler/konut-kredisi",
+        applyHref: "https://www.fibabanka.com.tr/krediler/konut-kredisi",
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 12 - 48 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 12: 4.21, 24: 4.27, 36: 4.38, 48: 4.58 },
+        selectedTerm: 24,
+        detailHref: "https://www.fibabanka.com.tr/krediler/tasit-kredisi",
+        applyHref: "https://www.fibabanka.com.tr/krediler/tasit-kredisi",
       },
     ],
     secondaryProducts: [
@@ -956,19 +993,19 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       {
         kind: "loan",
         title: "Konut Kredisi",
-        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 24 - 120 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 1000000,
-        rateMap: { 36: 2.59, 60: 2.59, 120: 2.49 },
+        rateMap: { 24: 3.25, 60: 3.25, 120: 3.25 },
         selectedTerm: 120,
       },
       {
         kind: "loan",
         title: "Taşıt Kredisi",
-        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 24 - 48 Ay"],
         amountLabel: "Kredi Tutarı",
-        defaultAmount: 200000,
-        rateMap: { 12: 4.95, 24: 4.95, 36: 4.95, 48: 4.95 },
+        defaultAmount: 100000,
+        rateMap: { 24: 4.89, 36: 4.89, 48: 4.89 },
         selectedTerm: 24,
       },
     ],
@@ -993,28 +1030,28 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       {
         kind: "loan",
         title: "İhtiyaç Kredisi",
-        descriptionLines: ["Tutar: 3.000 - 50.000 TL", "Vade: 3 - 36 Ay"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 12 - 24 Ay"],
         amountLabel: "Kredi Tutarı",
-        defaultAmount: 50000,
-        rateMap: { 36: 4.95 },
-        selectedTerm: 36,
+        defaultAmount: 100000,
+        rateMap: { 12: 3.99, 24: 3.99 },
+        selectedTerm: 12,
       },
       {
         kind: "loan",
         title: "Konut Kredisi",
-        descriptionLines: ["Tutar: Ekspertiz değeri değişimli", "Vade: 60 - 120 Ay"],
+        descriptionLines: ["Tutar: Ekspertiz değeri değişimli", "Vade: 24 - 120 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 1000000,
-        rateMap: { 60: 2.82, 120: 2.82 },
+        rateMap: { 24: 2.54, 60: 2.54, 120: 2.54 },
         selectedTerm: 120,
       },
       {
         kind: "loan",
         title: "Taşıt Kredisi",
-        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 24 - 48 Ay"],
         amountLabel: "Kredi Tutarı",
-        defaultAmount: 200000,
-        rateMap: { 12: 3.84, 24: 3.84, 36: 3.84, 48: 3.84 },
+        defaultAmount: 100000,
+        rateMap: { 24: 3.84, 36: 3.84, 48: 3.84 },
         selectedTerm: 24,
       },
     ],
@@ -1039,28 +1076,28 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       {
         kind: "loan",
         title: "İhtiyaç Kredisi",
-        descriptionLines: ["Tutar: 10.000 TL örnek", "Vade: 36 Ay örnek"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 12 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
-        defaultAmount: 10000,
-        rateMap: { 36: 4.99 },
-        selectedTerm: 36,
+        defaultAmount: 100000,
+        rateMap: { 12: 4.99, 24: 4.99, 36: 4.99 },
+        selectedTerm: 12,
       },
       {
         kind: "loan",
         title: "Konut Kredisi",
-        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 24 - 120 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 1000000,
-        rateMap: { 36: 2.49, 60: 2.49, 120: 2.49 },
+        rateMap: { 24: 3.19, 60: 3.19, 120: 3.19 },
         selectedTerm: 120,
       },
       {
         kind: "loan",
         title: "Taşıt Kredisi",
-        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 24 - 48 Ay"],
         amountLabel: "Kredi Tutarı",
-        defaultAmount: 200000,
-        rateMap: { 12: 2.99, 24: 2.99, 36: 2.99, 48: 2.99 },
+        defaultAmount: 100000,
+        rateMap: { 24: 4.79, 36: 4.79, 48: 4.79 },
         selectedTerm: 24,
       },
     ],
@@ -1100,11 +1137,44 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
           },
           {
             label: "Hayat Sigortasız",
-            rateMap: { 12: 3.99, 24: 3.99, 36: 3.99 },
+            rateMap: { 12: 5.8, 24: 5.8, 36: 5.8 },
           },
         ],
         detailHref: "https://www.teb.com.tr/sizin-icin/ihtiyac-kredisi/",
         applyHref: "https://www.teb.com.tr/sizin-icin/ihtiyac-kredisi/",
+      },
+      {
+        kind: "loan",
+        title: "Konut Kredisi",
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 36: 3.02, 60: 2.93, 120: 2.69 },
+        selectedTerm: 120,
+        detailHref: "https://www.teb.com.tr/sizin-icin/konut-kredisi/",
+        applyHref: "https://www.teb.com.tr/sizin-icin/konut-kredisi/",
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 12 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 12: 3.29, 24: 3.24, 36: 3.19 },
+        selectedTerm: 24,
+        insuranceOptions: [
+          {
+            label: "Hayat sigortası var",
+            rateMap: { 12: 3.29, 24: 3.24, 36: 3.19 },
+            selected: true,
+          },
+          {
+            label: "Hayat sigortası yok",
+            rateMap: { 12: 3.39, 24: 3.34, 36: 3.29 },
+          },
+        ],
+        detailHref: "https://www.teb.com.tr/sizin-icin/tasit-kredisi/",
+        applyHref: "https://www.teb.com.tr/sizin-icin/tasit-kredisi/",
       },
     ],
     secondaryProducts: [
@@ -1359,7 +1429,7 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         descriptionLines: ["Tutar: 1.000 - 500.000 TL", "Vade: 3 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 100000,
-        rateMap: { 12: 3.89, 24: 3.89, 36: 3.89 },
+        rateMap: { 12: 1.99, 24: 2.54, 36: 3.04 },
         selectedTerm: 12,
         detailHref: "https://www.qnb.com.tr/krediler/ihtiyac-kredisi",
         applyHref: "https://www.qnb.com.tr/krediler/ihtiyac-kredisi",
@@ -1370,7 +1440,7 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         descriptionLines: ["Tutar: Ekspertiz değeri değişimli", "Vade: 12 - 120 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 1000000,
-        rateMap: { 36: 3.53, 60: 3.53, 120: 3.53 },
+        rateMap: { 24: 2.49, 60: 2.49, 120: 2.49, 180: 3.62 },
         selectedTerm: 120,
         detailHref: "https://www.qnb.com.tr/krediler/konut-kredisi",
         applyHref: "https://www.qnb.com.tr/krediler/konut-kredisi",
@@ -1383,6 +1453,14 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         defaultAmount: 250000,
         rateMap: { 12: 4.72, 24: 4.72, 36: 4.72, 48: 4.72 },
         selectedTerm: 24,
+        insuranceOptions: [
+          {
+            label: "Hayat sigortası yok",
+            rateMap: { 12: 4.72, 24: 4.72, 36: 4.72, 48: 4.72 },
+            selected: true,
+          },
+        ],
+        feeItems: [{ label: "Tahsis Ücreti" }, { label: "Rehin Tesis Ücreti" }],
         detailHref: "https://www.qnb.com.tr/krediler/tasit-kredisi",
         applyHref: "https://www.qnb.com.tr/krediler/tasit-kredisi",
       },
@@ -1411,10 +1489,21 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         descriptionLines: ["Tutar: 10.000 - 125.000 TL", "Vade: 3 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 100000,
-        rateMap: { 12: 2.99, 24: 2.99, 36: 2.99 },
+        rateMap: { 12: 4.11, 24: 3.77, 36: 2.89 },
         selectedTerm: 36,
         detailHref: "https://www.denizbank.com/kendim-icin/krediler/ihtiyac-kredileri/ihtiyac-kredisi",
         applyHref: "https://www.denizbank.com/kendim-icin/krediler/ihtiyac-kredileri/ihtiyac-kredisi",
+      },
+      {
+        kind: "loan",
+        title: "Konut Kredisi",
+        descriptionLines: ["Tutar: Ekspertiz değeri değişimli", "Vade: 24 - 120 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 24: 3.51, 60: 3.21, 120: 3.21 },
+        selectedTerm: 120,
+        detailHref: "https://www.denizbank.com/kendim-icin/krediler/konut-kredisi",
+        applyHref: "https://www.denizbank.com/kendim-icin/krediler/konut-kredisi",
       },
       {
         kind: "loan",
@@ -1424,6 +1513,7 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         defaultAmount: 250000,
         rateMap: { 12: 4.51, 24: 4.51, 36: 4.51, 48: 4.51 },
         selectedTerm: 48,
+        feeItems: [{ label: "Tahsis Ücreti" }],
         detailHref: "https://www.denizbank.com/kendim-icin/krediler/tasit-kredisi",
         applyHref: "https://www.denizbank.com/kendim-icin/krediler/tasit-kredisi",
       },
@@ -3895,7 +3985,9 @@ function buildBankProfileData(bankName) {
   const profileOverride = BANK_PROFILE_OVERRIDES[normalizedBankName];
 
   if (profileOverride) {
-    const genericPrimaryProducts = buildGenericBankLoanProducts(bankName);
+    const genericPrimaryProducts = profileOverride.disableGenericPrimaryProducts
+      ? []
+      : buildGenericBankLoanProducts(bankName);
     const genericSecondaryProducts = buildGenericBankDepositProducts(bankName);
     return {
       bankName,
@@ -4953,10 +5045,6 @@ function createLoanRatesRow(rowData) {
   if (logoElement) {
     bankWrap.append(logoElement);
   }
-  const bankName = document.createElement("span");
-  bankName.className = "bank-logo-name";
-  bankName.textContent = rowData.bank;
-  bankWrap.append(bankName);
   bankCell.append(bankWrap);
 
   const rateCell = document.createElement("td");
