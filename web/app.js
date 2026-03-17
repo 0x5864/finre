@@ -655,6 +655,17 @@ const BANK_PRODUCT_TYPE_CONFIG = Object.freeze({
 const BANK_RATE_LOOKUP_ALIASES = Object.freeze({
   cepteteb: "teb",
   "enpara.com": "qnb",
+  "ıcbc turkey": "icbc turkey",
+  ıng: "ing",
+  "ıng bank": "ing",
+  "ıng bank a.ş.": "ing",
+  "ıng bank a.s.": "ing",
+  "şekerbank": "sekerbank",
+  "vakif katilim": "vakıf katılım",
+  "turkiye finans": "türkiye finans",
+  "albaraka turk": "albaraka türk",
+  "kuveyt turk": "kuveyt türk",
+  "ziraat katilim": "ziraat katılım",
 });
 const GENERIC_BANK_FALLBACK_RATES = Object.freeze({
   need: 3.89,
@@ -677,6 +688,7 @@ const BANK_PROFILE_WEBSITE_MAP = Object.freeze({
   halkbank: "https://www.halkbank.com.tr/",
   hsbc: "https://www.hsbc.com.tr/",
   "icbc turkey": "https://www.icbc.com.tr/",
+  "ıcbc turkey": "https://www.icbc.com.tr/",
   ing: "https://www.ing.com.tr/",
   ıng: "https://www.ing.com.tr/",
   "ıng bank": "https://www.ing.com.tr/",
@@ -728,28 +740,39 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         title: "İhtiyaç Kredisi",
         descriptionLines: ["Tutar: 5.000 - 400.000 TL", "Vade: 3 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
-        defaultAmount: 50000,
-        rateMap: { 12: 1.99, 24: 3.19, 36: 3.09 },
+        defaultAmount: 100000,
+        rateMap: { 12: 1.99, 24: 1.99, 36: 1.99 },
         selectedTerm: 12,
+        insuranceOptions: [
+          {
+            label: "Hayat sigortası var",
+            rateMap: { 12: 1.99, 24: 1.99, 36: 1.99 },
+            selected: true,
+          },
+          {
+            label: "Hayat sigortası yok",
+            rateMap: { 12: 3.89, 24: 3.89, 36: 3.89 },
+          },
+        ],
         detailHref: "https://www.alternatifbank.com.tr/bireysel/krediler/ihtiyac-kredisi",
         applyHref: "https://www.alternatifbank.com.tr/bireysel/krediler/ihtiyac-kredisi",
       },
       {
         kind: "loan",
         title: "Konut Kredisi",
-        descriptionLines: ["Tutar: Ekspertiz değeri değişimli", "Vade: 36 - 120 Ay"],
+        descriptionLines: ["Tutar: Ekspertiz değeri değişimli", "Vade: 24 - 120 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 1000000,
-        rateMap: { 36: 3.39, 60: 3.39, 120: 3.39 },
+        rateMap: { 24: 3.59, 60: 3.59, 120: 3.59 },
         selectedTerm: 120,
       },
       {
         kind: "loan",
         title: "Taşıt Kredisi",
-        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 24 - 48 Ay"],
         amountLabel: "Kredi Tutarı",
-        defaultAmount: 200000,
-        rateMap: { 12: 3.52, 24: 3.52, 36: 3.52, 48: 3.52 },
+        defaultAmount: 100000,
+        rateMap: { 24: 3.49, 36: 3.49, 48: 3.49 },
         selectedTerm: 24,
       },
     ],
@@ -761,28 +784,35 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         title: "İhtiyaç Kredisi",
         descriptionLines: ["Tutar: 1.000 - 250.000 TL", "Vade: 3 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
-        defaultAmount: 50000,
-        rateMap: { 12: 4.49, 24: 4.49, 36: 4.49 },
-        selectedTerm: 24,
+        defaultAmount: 100000,
+        rateMap: { 12: 3.49, 24: 3.49, 36: 3.49 },
+        selectedTerm: 12,
+        insuranceOptions: [
+          {
+            label: "Hayat sigortası var",
+            rateMap: { 12: 3.49, 24: 3.49, 36: 3.49 },
+            selected: true,
+          },
+        ],
         detailHref: "https://www.anadolubank.com.tr/sizin-icin/krediler/ihtiyac-kredisi",
         applyHref: "https://www.anadolubank.com.tr/ihtiyac-kredisi-basvuru/",
       },
       {
         kind: "loan",
         title: "Konut Kredisi",
-        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 24 - 120 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 1000000,
-        rateMap: { 36: 4.29, 60: 4.29, 120: 4.29 },
+        rateMap: { 24: 4.29, 60: 4.29, 120: 4.29 },
         selectedTerm: 120,
       },
       {
         kind: "loan",
         title: "Taşıt Kredisi",
-        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 24 - 48 Ay"],
         amountLabel: "Kredi Tutarı",
-        defaultAmount: 200000,
-        rateMap: { 12: 5.3, 24: 5.3, 36: 5.3, 48: 5.3 },
+        defaultAmount: 100000,
+        rateMap: { 24: 4.82, 36: 4.82, 48: 4.82 },
         selectedTerm: 24,
       },
     ],
@@ -803,25 +833,33 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     ],
   },
   "icbc turkey": {
+    disableGenericPrimaryProducts: true,
     primaryProducts: [
       {
         kind: "loan",
         title: "Hesaplı Kredi",
-        descriptionLines: ["Tutar: 1.000 - 500.000 TL", "Vade: 3 - 36 Ay"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 12 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
-        defaultAmount: 50000,
+        defaultAmount: 100000,
         rateMap: { 12: 3.42, 24: 3.42, 36: 3.42 },
-        selectedTerm: 24,
+        selectedTerm: 12,
+        insuranceOptions: [
+          {
+            label: "Hayat sigortası var",
+            rateMap: { 12: 3.42, 24: 3.42, 36: 3.42 },
+            selected: true,
+          },
+        ],
         detailHref: "https://www.icbc.com.tr/tr/sizin-icin/detay/Ihtiyac-Kredisi/40/11/0",
         applyHref: "https://www.icbc.com.tr/tr/sizin-icin/detay/Ihtiyac-Kredisi/40/11/0",
       },
       {
         kind: "loan",
         title: "Yeni Evim Kredisi",
-        descriptionLines: ["Tutar: Ekspertiz değerinin %90'ına kadar", "Vade: 12 - 120 Ay"],
+        descriptionLines: ["Tutar: Ekspertiz değerinin %90'ına kadar", "Vade: 24 - 120 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 1000000,
-        rateMap: { 36: 3.42, 60: 3.42, 120: 3.42 },
+        rateMap: { 24: 3.42, 60: 3.42, 120: 3.42 },
         selectedTerm: 120,
         detailHref: "https://www.icbc.com.tr/tr/sizin-icin/detay/Konut-Kredisi/417/12/0",
         applyHref: "https://www.icbc.com.tr/tr/sizin-icin/detay/Konut-Kredisi/417/12/0",
@@ -953,14 +991,47 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     primaryProducts: [
       {
         kind: "loan",
-        title: "Dijital İhtiyaç Kredisi",
-        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 36 Ay örnek"],
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 12 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 100000,
-        rateMap: { 36: 3.5 },
-        selectedTerm: 36,
+        rateMap: { 12: 3.83, 24: 3.83, 36: 3.68 },
+        selectedTerm: 12,
+        insuranceOptions: [
+          {
+            label: "Hayat sigortası var",
+            rateMap: { 12: 3.83, 24: 3.83, 36: 3.68 },
+            selected: true,
+          },
+          {
+            label: "Hayat sigortası yok",
+            rateMap: { 12: 5.17, 24: 5.17, 36: 5.02 },
+          },
+        ],
         detailHref: "https://www.sekerbank.com.tr/bireysel/bireysel-krediler/ihtiyac-kredisi/dijital-ihtiyac-kredisi-kampanyasi",
         applyHref: "https://www.sekerbank.com.tr/bireysel/bireysel-krediler/ihtiyac-kredisi/dijital-ihtiyac-kredisi-kampanyasi",
+      },
+      {
+        kind: "loan",
+        title: "Konut Kredisi",
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 36: 5.42, 60: 5.01, 120: 4.92 },
+        selectedTerm: 120,
+        detailHref: "https://www.sekerbank.com.tr/bireysel/bireysel-krediler/konut-kredisi",
+        applyHref: "https://www.sekerbank.com.tr/bireysel/bireysel-krediler/konut-kredisi",
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 24 - 48 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 24: 4.84, 36: 4.84, 48: 4.84 },
+        selectedTerm: 24,
+        detailHref: "https://www.sekerbank.com.tr/bireysel/bireysel-krediler/tasit-kredisi",
+        applyHref: "https://www.sekerbank.com.tr/bireysel/bireysel-krediler/tasit-kredisi",
       },
     ],
     secondaryProducts: [
@@ -1216,63 +1287,65 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     ],
   },
   "albaraka türk": {
+    disableGenericPrimaryProducts: true,
     primaryProducts: [
       {
         kind: "loan",
         title: "İhtiyaç Finansmanı",
-        descriptionLines: ["Tutar: 500 - 100.000 TL", "Vade: 3 - 24 Ay"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 12 - 36 Ay"],
         amountLabel: "Finansman Tutarı",
-        defaultAmount: 50000,
-        rateMap: { 12: 4.0, 24: 4.0, 36: 4.0 },
-        selectedTerm: 24,
+        defaultAmount: 100000,
+        rateMap: { 12: 1.99, 24: 1.99, 36: 1.99 },
+        selectedTerm: 12,
       },
       {
         kind: "loan",
         title: "Konut Finansmanı",
-        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 24 - 120 Ay"],
         amountLabel: "Finansman Tutarı",
         defaultAmount: 1000000,
-        rateMap: { 36: 2.75, 60: 2.75, 120: 2.75 },
+        rateMap: { 24: 2.53, 60: 2.53, 120: 2.53 },
         selectedTerm: 120,
       },
       {
         kind: "loan",
         title: "Taşıt Finansmanı",
-        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 24 - 48 Ay"],
         amountLabel: "Finansman Tutarı",
-        defaultAmount: 200000,
-        rateMap: { 12: 2.96, 24: 2.96, 36: 2.96, 48: 2.96 },
+        defaultAmount: 100000,
+        rateMap: { 24: 2.99, 36: 2.99, 48: 2.99 },
         selectedTerm: 24,
       },
     ],
   },
   "vakıf katılım": {
+    disableGenericPrimaryProducts: true,
     primaryProducts: [
       {
         kind: "loan",
         title: "İhtiyaç Finansmanı",
         descriptionLines: ["Tutar: 1.000 - 1.000.000 TL", "Vade: 3 - 36 Ay"],
         amountLabel: "Finansman Tutarı",
-        defaultAmount: 50000,
-        rateMap: { 12: 3.68, 24: 3.68, 36: 3.68 },
-        selectedTerm: 24,
+        defaultAmount: 100000,
+        rateMap: { 12: 3.83, 24: 3.83, 36: 3.83 },
+        selectedTerm: 12,
       },
       {
         kind: "loan",
         title: "Konut Finansmanı",
-        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 24 - 120 Ay"],
         amountLabel: "Finansman Tutarı",
         defaultAmount: 1000000,
-        rateMap: { 36: 2.54, 60: 2.54, 120: 2.74 },
+        rateMap: { 24: 2.79, 60: 2.69, 120: 2.58 },
         selectedTerm: 120,
       },
       {
         kind: "loan",
         title: "Taşıt Finansmanı",
-        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 24 - 48 Ay"],
         amountLabel: "Finansman Tutarı",
-        defaultAmount: 200000,
-        rateMap: { 12: 2.94, 24: 2.94, 36: 2.94, 48: 2.94 },
+        defaultAmount: 100000,
+        rateMap: { 24: 3.09, 36: 3.09, 48: 2.96 },
         selectedTerm: 24,
       },
     ],
@@ -1281,62 +1354,64 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     primaryProducts: [
       {
         kind: "loan",
-        title: "İhtiyaç Finansmanı",
-        descriptionLines: ["Tutar: 1 - 125.000 TL örnek", "Vade: 1 - 36 Ay"],
+        title: "Taşıt Finansmanı",
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 24 - 48 Ay"],
         amountLabel: "Finansman Tutarı",
-        defaultAmount: 50000,
-        rateMap: { 12: 3.79, 24: 3.79, 36: 3.79 },
-        selectedTerm: 36,
-        detailHref: "https://www.ziraatkatilim.com.tr/bireysel/finansman-urunleri/ihtiyac-finansmani",
-        applyHref: "https://www.ziraatkatilim.com.tr/bireysel/finansman-urunleri/ihtiyac-finansmani",
+        defaultAmount: 100000,
+        rateMap: { 24: 3.09, 36: 3.09, 48: 3.09 },
+        selectedTerm: 24,
+        detailHref: "https://www.ziraatkatilim.com.tr/bireysel/finansman-urunleri/tasit-finansmani",
+        applyHref: "https://www.ziraatkatilim.com.tr/bireysel/finansman-urunleri/tasit-finansmani",
       },
     ],
   },
   "kuveyt türk": {
+    disableGenericPrimaryProducts: true,
     primaryProducts: [
       {
         kind: "loan",
         title: "İhtiyaç Finansmanı",
-        descriptionLines: ["Tutar: 1.000 - 70.000 TL", "Vade: 3 - 36 Ay"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 12 - 36 Ay"],
         amountLabel: "Finansman Tutarı",
-        defaultAmount: 50000,
-        rateMap: { 12: 3.77, 24: 3.22, 36: 3.22 },
-        selectedTerm: 24,
+        defaultAmount: 100000,
+        rateMap: { 12: 3.97, 24: 3.42, 36: 3.42 },
+        selectedTerm: 12,
       },
       {
         kind: "loan",
         title: "Konut Finansmanı",
-        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 24 - 120 Ay"],
         amountLabel: "Finansman Tutarı",
         defaultAmount: 1000000,
-        rateMap: { 36: 2.6, 60: 2.6, 120: 2.55 },
+        rateMap: { 24: 2.71, 60: 2.71, 120: 2.66 },
         selectedTerm: 120,
       },
       {
         kind: "loan",
         title: "Taşıt Finansmanı",
-        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 24 - 48 Ay"],
         amountLabel: "Finansman Tutarı",
-        defaultAmount: 200000,
-        rateMap: { 12: 2.98, 24: 2.98, 36: 2.92, 48: 2.92 },
+        defaultAmount: 100000,
+        rateMap: { 24: 3.17, 36: 3.11, 48: 3.11 },
         selectedTerm: 24,
       },
     ],
   },
   "türkiye finans": {
+    disableGenericPrimaryProducts: true,
     primaryProducts: [
       {
         kind: "loan",
         title: "Dijital İhtiyaç Finansmanı",
-        descriptionLines: ["Tutar: 1.000 - 400.000 TL", "Vade: 3 - 36 Ay"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 12 - 36 Ay"],
         amountLabel: "Finansman Tutarı",
-        defaultAmount: 50000,
-        rateMap: { 12: 3.69, 24: 3.62, 36: 3.58 },
-        selectedTerm: 24,
+        defaultAmount: 100000,
+        rateMap: { 12: 3.79, 24: 3.74, 36: 3.59 },
+        selectedTerm: 12,
         insuranceOptions: [
           {
             label: "Hayat Sigortalı",
-            rateMap: { 12: 3.69, 24: 3.62, 36: 3.58 },
+            rateMap: { 12: 3.79, 24: 3.74, 36: 3.59 },
             selected: true,
           },
           {
@@ -1350,19 +1425,19 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       {
         kind: "loan",
         title: "Konut Finansmanı",
-        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 24 - 120 Ay"],
         amountLabel: "Finansman Tutarı",
         defaultAmount: 1000000,
-        rateMap: { 36: 2.7, 60: 2.7, 120: 2.7 },
+        rateMap: { 24: 3.27, 60: 2.87, 120: 2.83 },
         selectedTerm: 120,
       },
       {
         kind: "loan",
         title: "Taşıt Finansmanı",
-        descriptionLines: ["Tutar: 200.000 TL örnek", "Vade: 12 - 48 Ay"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 24 - 48 Ay"],
         amountLabel: "Finansman Tutarı",
-        defaultAmount: 200000,
-        rateMap: { 12: 3.15, 24: 3.15, 36: 3.15, 48: 3.15 },
+        defaultAmount: 100000,
+        rateMap: { 24: 3.43, 36: 3.38, 48: 3.34 },
         selectedTerm: 24,
       },
     ],
@@ -1535,17 +1610,48 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     ],
   },
   ing: {
+    disableGenericPrimaryProducts: true,
     primaryProducts: [
       {
         kind: "loan",
         title: "İhtiyaç Kredisi",
-        descriptionLines: ["Tutar: 10.000 - 100.000 TL", "Vade: 6 - 36 Ay"],
+        descriptionLines: ["Tutar: 10.000 - 100.000 TL", "Vade: 12 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 100000,
-        rateMap: { 6: 0.99, 12: 4.44, 24: 4.24, 36: 3.19 },
-        selectedTerm: 36,
+        rateMap: { 12: 3.29, 24: 3.04, 36: 2.99 },
+        selectedTerm: 12,
+        insuranceOptions: [
+          {
+            label: "Hayat sigortası yok",
+            rateMap: { 12: 3.29, 24: 3.04, 36: 2.99 },
+            selected: true,
+          },
+        ],
         detailHref: "https://www.ing.com.tr/tr/bireysel/krediler/ihtiyac-kredisi",
         applyHref: "https://www.ing.com.tr/tr/bireysel/krediler/ihtiyac-kredisi",
+      },
+      {
+        kind: "loan",
+        title: "Konut Kredisi",
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 36 - 120 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 36: 3.69, 60: 3.49, 120: 3.54 },
+        selectedTerm: 120,
+        detailHref: "https://www.ing.com.tr/tr/bireysel/krediler/konut-kredisi",
+        applyHref: "https://www.ing.com.tr/tr/bireysel/krediler/konut-kredisi",
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 12 - 48 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 12: 3.29, 24: 3.24, 36: 3.14, 48: 3.14 },
+        selectedTerm: 24,
+        hideInsuranceSelect: true,
+        detailHref: "https://www.ing.com.tr/tr/bireysel/krediler/tasit-kredisi",
+        applyHref: "https://www.ing.com.tr/tr/bireysel/krediler/tasit-kredisi",
       },
     ],
     secondaryProducts: [
@@ -1569,13 +1675,42 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       {
         kind: "loan",
         title: "İhtiyaç Kredisi",
-        descriptionLines: ["Tutar: 10.000 TL örnek", "Vade: 24 Ay örnek"],
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 12 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
-        defaultAmount: 10000,
-        rateMap: { 24: 5.99 },
-        selectedTerm: 24,
+        defaultAmount: 100000,
+        rateMap: { 12: 5.99, 24: 5.99, 36: 5.99 },
+        selectedTerm: 12,
+        insuranceOptions: [
+          {
+            label: "Hayat sigortası var",
+            rateMap: { 12: 5.99, 24: 5.99, 36: 5.99 },
+            selected: true,
+          },
+        ],
         detailHref: "https://www.odeabank.com.tr/tr-tr/bireysel/krediler/ihtiyac-kredisi",
         applyHref: "https://www.odeabank.com.tr/tr-tr/bireysel/krediler/ihtiyac-kredisi",
+      },
+      {
+        kind: "loan",
+        title: "Konut Kredisi",
+        descriptionLines: ["Tutar: 1.000.000 TL örnek", "Vade: 24 - 120 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 1000000,
+        rateMap: { 24: 5.99, 60: 5.99, 120: 5.99 },
+        selectedTerm: 120,
+        detailHref: "https://www.odeabank.com.tr/tr-tr/bireysel/krediler/konut-kredisi",
+        applyHref: "https://www.odeabank.com.tr/tr-tr/bireysel/krediler/konut-kredisi",
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 24 - 48 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 24: 5.99, 36: 5.99, 48: 5.99 },
+        selectedTerm: 24,
+        detailHref: "https://www.odeabank.com.tr/tr-tr/bireysel/krediler/tasit-kredisi",
+        applyHref: "https://www.odeabank.com.tr/tr-tr/bireysel/krediler/tasit-kredisi",
       },
     ],
     secondaryProducts: [
@@ -1791,6 +1926,7 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     ],
   },
   "on dijital": {
+    disableGenericPrimaryProducts: true,
     primaryProducts: [
       {
         kind: "loan",
@@ -1821,6 +1957,7 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     ],
   },
   "on dijital bankacılık": {
+    disableGenericPrimaryProducts: true,
     primaryProducts: [
       {
         kind: "loan",
@@ -1851,6 +1988,7 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     ],
   },
   "on dijital bankacilik": {
+    disableGenericPrimaryProducts: true,
     primaryProducts: [
       {
         kind: "loan",
@@ -1881,6 +2019,7 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     ],
   },
   "aktif bank": {
+    disableGenericPrimaryProducts: true,
     primaryProducts: [
       {
         kind: "loan",
@@ -1888,10 +2027,35 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         descriptionLines: ["Tutar: 1.000 - 250.000 TL", "Vade: 3 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
         defaultAmount: 100000,
-        rateMap: { 12: 3.89, 24: 3.89, 36: 3.89 },
+        rateMap: { 12: 3.49, 24: 3.29, 36: 2.99 },
         selectedTerm: 12,
+        insuranceOptions: [
+          {
+            label: "Hayat sigortası var",
+            rateMap: { 12: 3.49, 24: 3.29, 36: 2.99 },
+            selected: true,
+          },
+        ],
         detailHref: "https://www.nkolay.com/ihtiyac-kredisi",
         applyHref: "https://www.nkolay.com/ihtiyac-kredisi",
+      },
+      {
+        kind: "loan",
+        title: "Taşıt Kredisi",
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 12 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 12: 3.91, 24: 3.91, 36: 3.91 },
+        selectedTerm: 12,
+        insuranceOptions: [
+          {
+            label: "Hayat sigortası var",
+            rateMap: { 12: 3.91, 24: 3.91, 36: 3.91 },
+            selected: true,
+          },
+        ],
+        detailHref: "https://www.nkolay.com/",
+        applyHref: "https://www.nkolay.com/",
       },
     ],
     secondaryProducts: [
@@ -1911,6 +2075,27 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     ],
   },
   enpara: {
+    disableGenericPrimaryProducts: true,
+    primaryProducts: [
+      {
+        kind: "loan",
+        title: "İhtiyaç Kredisi",
+        descriptionLines: ["Tutar: 100.000 TL örnek", "Vade: 12 - 36 Ay"],
+        amountLabel: "Kredi Tutarı",
+        defaultAmount: 100000,
+        rateMap: { 12: 3.79, 24: 3.79, 36: 3.79 },
+        selectedTerm: 12,
+        insuranceOptions: [
+          {
+            label: "Hayat sigortası var",
+            rateMap: { 12: 3.79, 24: 3.79, 36: 3.79 },
+            selected: true,
+          },
+        ],
+        detailHref: "https://www.enpara.com/ihtiyac-kredisi/",
+        applyHref: "https://www.enpara.com/ihtiyac-kredisi/",
+      },
+    ],
     secondaryProducts: [
       {
         kind: "deposit",
@@ -1928,15 +2113,23 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     ],
   },
   getirfinans: {
+    disableGenericPrimaryProducts: true,
     primaryProducts: [
       {
         kind: "loan",
         title: "GetirFinans İhtiyaç Kredisi",
         descriptionLines: ["Tutar: 1.000 - 100.000 TL", "Vade: 3 - 36 Ay"],
         amountLabel: "Kredi Tutarı",
-        defaultAmount: 50000,
-        rateMap: { 12: 2.79, 24: 3.49, 36: 4.2 },
+        defaultAmount: 100000,
+        rateMap: { 12: 3.39, 24: 3.19, 36: 2.99 },
         selectedTerm: 12,
+        insuranceOptions: [
+          {
+            label: "Hayat sigortası var",
+            rateMap: { 12: 3.39, 24: 3.19, 36: 2.99 },
+            selected: true,
+          },
+        ],
         detailHref: "https://www.getirfinans.com/",
         applyHref: "https://www.getirfinans.com/",
       },
@@ -1982,6 +2175,7 @@ const BANK_MOBILE_APP_QUERY_MAP = Object.freeze({
   "türkiye finans": "Türkiye Finans Mobil",
   ing: "ING Mobil",
   "icbc turkey": "ICBC Turkey Mobil",
+  "ıcbc turkey": "ICBC Turkey Mobil",
   on: "ON Dijital Bankacılık",
   "n kolay": "N Kolay",
   getirfinans: "GetirFinans",
@@ -2049,6 +2243,10 @@ const BANK_MOBILE_APP_STORE_LINKS = Object.freeze({
     ios: "https://apps.apple.com/tr/app/anadolubank-mobil/id1441752495",
   },
   "icbc turkey": {
+    android: "https://play.google.com/store/apps/details?id=tr.com.icbc&hl=tr",
+    ios: "https://apps.apple.com/tr/app/icbc-turkey/id1438010678",
+  },
+  "ıcbc turkey": {
     android: "https://play.google.com/store/apps/details?id=tr.com.icbc&hl=tr",
     ios: "https://apps.apple.com/tr/app/icbc-turkey/id1438010678",
   },
@@ -2296,6 +2494,7 @@ const BANK_LOGO_MAP = Object.freeze({
   halkbank: "./assets/banks/halkbank.svg",
   hsbc: "./assets/banks/hsbc.svg",
   "icbc turkey": "./assets/banks/icbc-turkey.svg",
+  "ıcbc turkey": "./assets/banks/icbc-turkey.svg",
   ing: "./assets/banks/ing-official-site-transparent.png?v=2",
   ıng: "./assets/banks/ing-official-site-transparent.png?v=2",
   "ing bank": "./assets/banks/ing-official-site-transparent.png?v=2",
@@ -2317,16 +2516,26 @@ const BANK_LOGO_MAP = Object.freeze({
   sekerbank: "./assets/banks/sekerbank.svg",
   "şekerbank": "./assets/banks/sekerbank.svg",
   teb: "./assets/banks/teb.svg",
+  "türkiye finans": "./assets/banks/turkiye-finans.svg",
+  "turkiye finans": "./assets/banks/turkiye-finans.svg",
   "türkiye finans katılım bankası": "./assets/banks/turkiye-finans.svg",
   "turkiye finans katilim bankasi": "./assets/banks/turkiye-finans.svg",
   "vakıf katılım": "./assets/banks/vakif-katilim.svg",
   "vakif katilim": "./assets/banks/vakif-katilim.svg",
+  "vakıf katılım bankası": "./assets/banks/vakif-katilim.svg",
+  "vakif katilim bankasi": "./assets/banks/vakif-katilim.svg",
+  "vakıf katılım bankası a.ş.": "./assets/banks/vakif-katilim.svg",
+  "vakif katilim bankasi a.s.": "./assets/banks/vakif-katilim.svg",
+  "vakıf katılım mobil": "./assets/banks/vakif-katilim.svg",
+  "vakif katilim mobil": "./assets/banks/vakif-katilim.svg",
   vakıfbank: "./assets/banks/vakifbank.svg",
   vakifbank: "./assets/banks/vakifbank.svg",
   "yapı kredi": "./assets/banks/yapi-kredi.svg",
   "yapi kredi": "./assets/banks/yapi-kredi.svg",
   "ziraat bankası": "./assets/banks/ziraat-bankasi.svg",
   "ziraat bankasi": "./assets/banks/ziraat-bankasi.svg",
+  "ziraat katılım": "./assets/banks/zk.svg",
+  "ziraat katilim": "./assets/banks/zk.svg",
 });
 let layoutHeightLocked = false;
 let panelHeightsLocked = false;
@@ -3567,7 +3776,7 @@ function setupLoanRatesUi() {
       if (action === "loan-rates") {
         const tabKey = String(menuCard.dataset.loanRatesTab || "need");
         openLoanRatesPage({ updateHash: false, tabKey });
-        updateRouteHash(ROUTE_HASH.loan);
+        updateRouteHash(buildLoanRatesHash(tabKey));
         return;
       }
 
@@ -3971,18 +4180,19 @@ function createBankSlug(bankName) {
 
 function buildBankProfileData(bankName) {
   const normalizedBankName = normalizeTefasSearchText(bankName);
+  const resolvedBankKey = BANK_RATE_LOOKUP_ALIASES[normalizedBankName] || normalizedBankName;
 
-  if (normalizedBankName === "iş bankası") {
+  if (resolvedBankKey === "iş bankası") {
     return {
       bankName: "İş Bankası",
-      website: BANK_PROFILE_WEBSITE_MAP[normalizedBankName] || "",
+      website: BANK_PROFILE_WEBSITE_MAP[resolvedBankKey] || "",
       primaryProducts: ISBANK_PROFILE_DATA.primaryProducts,
       secondaryProducts: ISBANK_PROFILE_DATA.secondaryProducts,
     };
   }
 
-  const website = BANK_PROFILE_WEBSITE_MAP[normalizedBankName] || "";
-  const profileOverride = BANK_PROFILE_OVERRIDES[normalizedBankName];
+  const website = BANK_PROFILE_WEBSITE_MAP[resolvedBankKey] || BANK_PROFILE_WEBSITE_MAP[normalizedBankName] || "";
+  const profileOverride = BANK_PROFILE_OVERRIDES[resolvedBankKey];
 
   if (profileOverride) {
     const genericPrimaryProducts = profileOverride.disableGenericPrimaryProducts
@@ -4521,16 +4731,16 @@ function createBankProductCard(product, bankName) {
   }
   const insuranceOptions =
     product.kind === "loan" && !product.hideInsuranceSelect
-      ? inferredLoanType === "need"
-        ? [
-            {
-              label: "Hayat sigortası var",
-              rateMap: product.rateMap || {},
-              selected: true,
-            },
-          ]
-        : Array.isArray(product.insuranceOptions) && product.insuranceOptions.length > 0
-          ? product.insuranceOptions
+      ? Array.isArray(product.insuranceOptions) && product.insuranceOptions.length > 0
+        ? product.insuranceOptions
+        : inferredLoanType === "need"
+          ? [
+              {
+                label: "Hayat sigortası var",
+                rateMap: product.rateMap || {},
+                selected: true,
+              },
+            ]
           : [
               {
                 label: "Hayat sigortası var",
@@ -4876,7 +5086,8 @@ function getLoanRatesComparisonRows(tabKey, selectedTerm) {
 
 function getComparableLoanProduct(bankName, targetLoanType) {
   const normalizedBankName = normalizeTefasSearchText(bankName);
-  if (normalizedBankName !== "iş bankası" && !BANK_PROFILE_OVERRIDES[normalizedBankName]) {
+  const resolvedBankKey = BANK_RATE_LOOKUP_ALIASES[normalizedBankName] || normalizedBankName;
+  if (resolvedBankKey !== "iş bankası" && !BANK_PROFILE_OVERRIDES[resolvedBankKey]) {
     return null;
   }
 
@@ -6547,23 +6758,42 @@ function setupNeedLoanCalculator() {
   setNeedCalculatorTab("principal");
 
   [
-    ui.needPrincipal,
-    ui.needRate,
-    ui.needInstallmentAmount,
-    ui.needInstallmentRateInput,
-    ui.depositPrincipal,
-    ui.investmentDepositPrincipal,
-    ui.compoundPrincipal,
-    ui.realInitialAmount,
-    ui.realFinalAmount,
-  ].forEach((inputElement) => {
+    {
+      element: ui.needPrincipal,
+      formatter: formatDecimalAmountInput,
+    },
+    {
+      element: ui.needInstallmentAmount,
+      formatter: formatDecimalAmountInput,
+    },
+    {
+      element: ui.depositPrincipal,
+      formatter: formatAmountInput,
+    },
+    {
+      element: ui.investmentDepositPrincipal,
+      formatter: formatAmountInput,
+    },
+    {
+      element: ui.compoundPrincipal,
+      formatter: formatAmountInput,
+    },
+    {
+      element: ui.realInitialAmount,
+      formatter: formatAmountInput,
+    },
+    {
+      element: ui.realFinalAmount,
+      formatter: formatAmountInput,
+    },
+  ].forEach(({ element: inputElement, formatter }) => {
     if (!inputElement) {
       return;
     }
 
-    inputElement.value = formatAmountInput(inputElement.value);
+    inputElement.value = formatter(inputElement.value);
     inputElement.addEventListener("input", () => {
-      inputElement.value = formatAmountInput(inputElement.value);
+      inputElement.value = formatter(inputElement.value);
       clearNeedCalcFieldError(inputElement);
     });
   });
@@ -7735,6 +7965,42 @@ function calculatePrincipalFromInstallment(installmentAmount, monthlyRatePercent
   return (installmentAmount * (factor - 1)) / (monthlyRate * factor);
 }
 
+function extractAmountParts(rawValue, maxFractionDigits = 2) {
+  const normalizedValue = String(rawValue || "").replace(/\s/g, "").replace(/[^\d,.-]/g, "");
+  if (!normalizedValue) {
+    return {
+      integerDigits: "",
+      fractionDigits: "",
+      hasDecimalSeparator: false,
+    };
+  }
+
+  const lastCommaIndex = normalizedValue.lastIndexOf(",");
+  const lastDotIndex = normalizedValue.lastIndexOf(".");
+  const decimalIndex = Math.max(lastCommaIndex, lastDotIndex);
+  let integerPart = normalizedValue;
+  let fractionDigits = "";
+  let hasDecimalSeparator = false;
+
+  if (decimalIndex >= 0) {
+    const fractionalSlice = normalizedValue.slice(decimalIndex + 1);
+    const cleanedFractionalDigits = fractionalSlice.replace(/[^\d]/g, "");
+    const hasTrailingSeparator = decimalIndex === normalizedValue.length - 1;
+    if (hasTrailingSeparator || cleanedFractionalDigits.length <= maxFractionDigits) {
+      integerPart = normalizedValue.slice(0, decimalIndex);
+      fractionDigits = cleanedFractionalDigits.slice(0, maxFractionDigits);
+      hasDecimalSeparator = true;
+    }
+  }
+
+  const integerDigits = integerPart.replace(/[^\d]/g, "").replace(/^0+(?=\d)/, "");
+  return {
+    integerDigits,
+    fractionDigits,
+    hasDecimalSeparator,
+  };
+}
+
 function formatAmountInput(rawValue) {
   const digitsOnly = String(rawValue || "").replace(/[^\d]/g, "");
   if (!digitsOnly) {
@@ -7751,12 +8017,43 @@ function formatAmountInput(rawValue) {
   }).format(numericValue);
 }
 
+function formatDecimalAmountInput(rawValue) {
+  const {
+    integerDigits,
+    fractionDigits,
+    hasDecimalSeparator,
+  } = extractAmountParts(rawValue);
+
+  if (!integerDigits && !fractionDigits && !hasDecimalSeparator) {
+    return "";
+  }
+
+  const groupedIntegerPart = integerDigits
+    ? new Intl.NumberFormat("tr-TR", {
+      maximumFractionDigits: 0,
+    }).format(Number.parseInt(integerDigits, 10))
+    : "0";
+
+  if (!hasDecimalSeparator) {
+    return groupedIntegerPart;
+  }
+
+  if (!fractionDigits) {
+    return `${groupedIntegerPart},`;
+  }
+
+  return `${groupedIntegerPart},${fractionDigits}`;
+}
+
 function parseAmountInput(rawValue) {
-  const normalizedValue = String(rawValue || "").replace(/,/g, "").trim();
-  if (!normalizedValue) {
+  const { integerDigits, fractionDigits } = extractAmountParts(rawValue);
+  if (!integerDigits && !fractionDigits) {
     return Number.NaN;
   }
 
+  const normalizedValue = fractionDigits
+    ? `${integerDigits || "0"}.${fractionDigits}`
+    : integerDigits;
   const numericValue = Number.parseFloat(normalizedValue);
   return Number.isFinite(numericValue) ? numericValue : Number.NaN;
 }
