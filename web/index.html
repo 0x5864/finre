@@ -50,13 +50,13 @@
                   </span>
                   <p>Taşıt Kredisi</p>
                 </button>
-                <button class="header-mega-card" type="button" data-nav-action="calculator" data-loan-type="deposit">
+                <button class="header-mega-card" type="button" data-nav-action="loan-rates" data-loan-rates-tab="interestfree">
                   <span class="calc-icon calc-icon-d" aria-hidden="true">
                     <img class="calc-icon-image" src="./assets/sifir.png" alt="" />
                   </span>
                   <p>Faizsiz Kredi</p>
                 </button>
-                <button class="header-mega-card" type="button" data-nav-action="calculator" data-loan-type="deposit">
+                <button class="header-mega-card" type="button" data-nav-action="loan-rates" data-loan-rates-tab="kmh">
                   <span class="calc-icon calc-icon-h" aria-hidden="true">
                     <img class="calc-icon-image" src="./assets/mevduat.svg" alt="" />
                   </span>
@@ -492,9 +492,9 @@
               <thead>
                 <tr>
                   <th>Banka</th>
-                  <th>Faiz Oranı</th>
-                  <th>Aylık Taksit</th>
-                  <th>Toplam Ödeme</th>
+                  <th id="loanRatesRateHeading">Faiz Oranı</th>
+                  <th id="loanRatesSecondaryHeading">Aylık Taksit</th>
+                  <th id="loanRatesTertiaryHeading">Toplam Ödeme</th>
                   <th></th>
                 </tr>
               </thead>
@@ -985,11 +985,10 @@
     <section id="investmentPage" class="investment-page hidden" aria-live="polite" aria-modal="true">
       <div class="container investment-shell">
         <section id="investmentGoldSection" class="investment-gold-section hidden" aria-live="polite">
-          <article class="investment-gold-table-panel">
-            <div class="investment-gold-table-head">
-              <h3>Piyasalarda Altın Fiyatları</h3>
-            </div>
-            <p id="investmentGoldMeta" class="tefas-meta">Kaynak: Kapalı Çarşı, 15 Mart 2026</p>
+          <h2 class="need-calc-page-heading investment-panel-heading">Piyasalarda Altın Fiyatları</h2>
+          <p id="investmentGoldMeta" class="tefas-meta investment-panel-meta">Kaynak: Kapalı Çarşı, 15 Mart 2026</p>
+
+          <article class="investment-gold-table-panel investment-gold-table-shell">
 
             <div class="investment-gold-table-wrap">
               <table class="investment-gold-table">
@@ -1057,11 +1056,10 @@
         </section>
 
         <section id="investmentFxSection" class="investment-gold-section hidden" aria-live="polite">
-          <article class="investment-gold-table-panel">
-            <div class="investment-gold-table-head">
-              <h3>Piyasalarda Döviz Kurları</h3>
-            </div>
-            <p id="investmentFxMeta" class="tefas-meta">Kaynak: Kapalı Çarşı, 15 Mart 2026</p>
+          <h2 class="need-calc-page-heading investment-panel-heading">Piyasalarda Döviz Kurları</h2>
+          <p id="investmentFxMeta" class="tefas-meta investment-panel-meta">Kaynak: Kapalı Çarşı, 15 Mart 2026</p>
+
+          <article class="investment-gold-table-panel investment-fx-panel">
 
             <div class="investment-gold-table-wrap">
               <table class="investment-gold-table">
@@ -1280,11 +1278,10 @@
         </section>
 
         <section id="investmentFundSection" class="investment-gold-section hidden" aria-live="polite">
-          <article class="investment-gold-table-panel">
-            <div class="investment-gold-table-head">
-              <h3>TEFAS Fon Karşılaştırma</h3>
-              <span id="tefasFundMeta" class="tefas-meta">Veri yükleniyor...</span>
-            </div>
+          <h2 class="need-calc-page-heading investment-panel-heading">TEFAŞ Fon Karşılaştırma</h2>
+          <p id="tefasFundMeta" class="tefas-meta investment-panel-meta">Veri yükleniyor...</p>
+
+          <article class="investment-gold-table-panel investment-fund-panel">
 
             <div class="tefas-search-row">
               <label class="tefas-search-label" for="tefasFundSearchInput">Arama Yap</label>
@@ -1326,82 +1323,58 @@
         </section>
 
         <section id="investmentSilverSection" class="investment-gold-section hidden" aria-live="polite">
-          <article class="investment-gold-table-panel">
-            <div class="investment-gold-table-head">
-              <h3>Piyasalarda Mevduat Faiz Oranları</h3>
-            </div>
-            <p id="investmentSilverMeta" class="tefas-meta">Güncelleme: 13.03.2026</p>
+          <h2 class="need-calc-page-heading investment-panel-heading">Mevduat Faiz Oranları Banka Karşılaştırması</h2>
+          <p id="investmentSilverMeta" class="tefas-meta investment-panel-meta">Güncelleme: 13.03.2026</p>
 
-            <form id="investmentDepositForm" class="deposit-calc-form investment-deposit-form" novalidate>
-              <label class="need-calc-field" for="investmentDepositPrincipal">
+          <article class="investment-gold-table-panel loan-rates-table-panel investment-deposit-compare-panel">
+            <div class="loan-rates-filters investment-deposit-compare-filters" aria-label="Mevduat karşılaştırma filtreleri">
+              <label class="loan-rates-filter-field" for="investmentDepositComparePrincipal">
                 <span>Mevduat Tutarı</span>
-                <input
-                  id="investmentDepositPrincipal"
-                  name="investment_deposit_principal"
-                  type="text"
-                  inputmode="numeric"
-                  autocomplete="off"
-                  value="100,000"
-                  required
-                />
-              </label>
-
-              <label class="need-calc-field" for="investmentDepositTermDays">
-                <span>Vade</span>
-                <select id="investmentDepositTermDays" name="investment_deposit_term_days" required>
-                  <option value="32" selected>32 gün</option>
-                  <option value="46">46 gün</option>
-                  <option value="92">92 gün</option>
-                  <option value="181">181 gün</option>
-                  <option value="365">365 gün</option>
-                </select>
-              </label>
-
-              <button class="need-calc-submit" type="submit">Teklifleri güncelle</button>
-            </form>
-
-            <section class="deposit-offers-panel" aria-live="polite">
-              <div class="deposit-offers-head">
-                <div>
-                  <p class="deposit-offers-kicker">Mevduat Teklifleri</p>
-                  <h4 id="investmentDepositOfferTitle" class="deposit-offers-title">
-                    100,000 TL için 32 gün vadeli mevduat karşılaştırması
-                  </h4>
+                <div class="loan-rates-filter-shell">
+                  <input
+                    id="investmentDepositComparePrincipal"
+                    name="investment_deposit_compare_principal"
+                    type="text"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    value="100,000"
+                  />
+                  <em>TL</em>
                 </div>
-                <p class="deposit-offers-meta">Net getiriye göre örnek sıralama</p>
-              </div>
+              </label>
 
-              <div class="deposit-offers-filters">
-                <label class="need-calc-field" for="investmentDepositAccountTypeFilter">
-                  <span>Hesap Tipi</span>
-                  <select id="investmentDepositAccountTypeFilter" name="investment_deposit_account_type_filter">
-                    <option value="all" selected>Tümü</option>
-                    <option value="new">Yeni Müşteri</option>
-                    <option value="standard">Standart Vadeli</option>
-                    <option value="daily">Günlük Kazandıran</option>
+              <label class="loan-rates-filter-field" for="investmentDepositCompareTermDays">
+                <span>Vade</span>
+                <div class="loan-rates-filter-shell loan-rates-filter-shell-select">
+                  <select id="investmentDepositCompareTermDays" name="investment_deposit_compare_term_days">
+                    <option value="32" selected>32 gün</option>
+                    <option value="46">46 gün</option>
+                    <option value="92">92 gün</option>
+                    <option value="181">181 gün</option>
+                    <option value="365">365 gün</option>
                   </select>
-                </label>
+                </div>
+              </label>
+            </div>
 
-                <label class="need-calc-field" for="investmentDepositBankTypeFilter">
-                  <span>Banka Tipi</span>
-                  <select id="investmentDepositBankTypeFilter" name="investment_deposit_bank_type_filter">
-                    <option value="all" selected>Tümü</option>
-                    <option value="digital">Dijital Banka</option>
-                    <option value="traditional">Mevduat Bankası</option>
-                  </select>
-                </label>
-              </div>
-
-              <div id="investmentDepositOffersList" class="deposit-offers-grid">
-                <article class="deposit-offer-card">
-                  <p class="deposit-offer-empty">Teklifler hazırlanıyor...</p>
-                </article>
-              </div>
-
-              <p class="deposit-offers-note">
-                Kartlardaki değerler örnek ürünler üzerinden hesaplanır. Nihai oran bankanın güncel teklifine göre değişebilir.
-              </p>
-            </section>
+            <div class="investment-gold-table-wrap loan-rates-table-wrap">
+              <table class="investment-gold-table loan-rates-table">
+                <thead>
+                  <tr>
+                    <th>Banka</th>
+                    <th>Oran</th>
+                    <th>Net Getiri</th>
+                    <th>Vade Sonu</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="investmentDepositComparisonBody">
+                  <tr>
+                    <td colspan="5" class="table-empty">Banka kartlarından mevduat verileri hazırlanıyor...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </article>
         </section>
       </div>

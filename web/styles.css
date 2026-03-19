@@ -837,6 +837,14 @@ body.suppress-header-hover .header-nav-item:focus-within .header-mega-menu {
   box-shadow: 0 10px 24px rgba(35, 57, 88, 0.05);
 }
 
+.bank-product-card-footer-bottom {
+  grid-template-rows: auto auto 1fr auto;
+}
+
+.bank-product-card-footer-bottom .bank-product-action {
+  align-self: end;
+}
+
 .bank-product-card-featured {
   border-color: #b8c8dc;
   box-shadow: 0 10px 24px rgba(35, 57, 88, 0.05);
@@ -1685,14 +1693,14 @@ body.subpage-open .header-inner {
   gap: 1rem;
 }
 
-#investmentGoldSection,
 #investmentFxSection,
-#investmentSilverSection,
-#investmentFundSection {
-  background: #ecf4fa;
-  border: 1px solid #d7e0ec;
-  border-radius: 10px;
-  padding: 0.9rem;
+#investmentGoldSection,
+#investmentFundSection,
+#investmentSilverSection {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
 }
 
 .investment-gold-hero {
@@ -2559,6 +2567,42 @@ body.subpage-open .header-inner {
   gap: 0.7rem;
 }
 
+.investment-panel-heading {
+  margin-bottom: 0.3rem;
+}
+
+.investment-panel-meta {
+  margin: -0.1rem 0 0.15rem;
+}
+
+.investment-deposit-panel {
+  border: 1px solid #d7e0ec;
+  border-radius: 10px;
+  background: #ecf4fa;
+  padding: 0.9rem;
+}
+
+.investment-fund-panel {
+  border: 1px solid #d7e0ec;
+  border-radius: 10px;
+  background: #ecf4fa;
+  padding: 0.9rem;
+}
+
+.investment-gold-table-shell {
+  border: 1px solid #d7e0ec;
+  border-radius: 10px;
+  background: #ecf4fa;
+  padding: 0.9rem;
+}
+
+.investment-fx-panel {
+  border: 1px solid #d7e0ec;
+  border-radius: 10px;
+  background: #ecf4fa;
+  padding: 0.9rem;
+}
+
 .deposit-calc-tabs {
   display: inline-flex;
   gap: 0.3rem;
@@ -2829,6 +2873,14 @@ body.subpage-open .header-inner {
   margin: 0;
   color: #607189;
   font-size: 0.84rem;
+}
+
+.investment-deposit-compare-panel {
+  margin-top: 0.9rem;
+}
+
+.investment-deposit-compare-filters {
+  margin-bottom: 0.9rem;
 }
 
 .tefas-cell-left {

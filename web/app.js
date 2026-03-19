@@ -270,6 +270,104 @@ const EMBEDDED_FX_FALLBACK_PAYLOAD = Object.freeze({
     },
   ],
 });
+const EMBEDDED_TEFAS_FALLBACK_ROWS = Object.freeze([
+  {
+    fon_kodu: "GRO",
+    fon_unvani: "GARANTİ PORTFÖY OTUZUNCU SERBEST (DÖVİZ) FON",
+    fiyat: 49.073087,
+    portfoy_buyuklugu: 193036581521.93,
+    bir_aylik_getiri: 1.2312,
+    bir_yillik_getiri: 25.2639,
+  },
+  {
+    fon_kodu: "PAL",
+    fon_unvani: "AK PORTFÖY ALTINCI SERBEST(DÖVİZ) FON",
+    fiyat: 51.641909,
+    portfoy_buyuklugu: 172062236137.39,
+    bir_aylik_getiri: 1.2366,
+    bir_yillik_getiri: 25.222,
+  },
+  {
+    fon_kodu: "TI1",
+    fon_unvani: "İŞ PORTFÖY PARA PİYASASI (TL) FONU",
+    fiyat: 1405.364062,
+    portfoy_buyuklugu: 166615116993.02,
+    bir_aylik_getiri: 2.6576,
+    bir_yillik_getiri: 49.9555,
+  },
+  {
+    fon_kodu: "ILH",
+    fon_unvani: "İŞ PORTFÖY BİRİNCİ PARA PİYASASI SERBEST (TL) FON",
+    fiyat: 3.360922,
+    portfoy_buyuklugu: 153698880452.88,
+    bir_aylik_getiri: 2.8356,
+    bir_yillik_getiri: 51.2039,
+  },
+  {
+    fon_kodu: "ONS",
+    fon_unvani: "İŞ PORTFÖY ONİKİNCİ SERBEST (DÖVİZ) FON",
+    fiyat: 49.005091,
+    portfoy_buyuklugu: 144533496127.9,
+    bir_aylik_getiri: 1.2679,
+    bir_yillik_getiri: 25.042,
+  },
+  {
+    fon_kodu: "GTL",
+    fon_unvani: "GARANTİ PORTFÖY BİRİNCİ PARA PİYASASI (TL) FONU",
+    fiyat: 0.113742,
+    portfoy_buyuklugu: 138757239115.74,
+    bir_aylik_getiri: 2.6237,
+    bir_yillik_getiri: 50.5201,
+  },
+  {
+    fon_kodu: "DAS",
+    fon_unvani: "DENİZ PORTFÖY ONİKİNCİ SERBEST (DÖVİZ) FON",
+    fiyat: 49.884021,
+    portfoy_buyuklugu: 138305994529.55,
+    bir_aylik_getiri: 1.2384,
+    bir_yillik_getiri: 25.0239,
+  },
+  {
+    fon_kodu: "YP4",
+    fon_unvani: "YAPI KREDİ PORTFÖY FERİKÖY SERBEST (DÖVİZ) FON",
+    fiyat: 49.337805,
+    portfoy_buyuklugu: 137313722787.42,
+    bir_aylik_getiri: 1.2445,
+    bir_yillik_getiri: 24.7472,
+  },
+  {
+    fon_kodu: "EUZ",
+    fon_unvani: "GARANTİ PORTFÖY SERBEST (DÖVİZ-AVRO) FON",
+    fiyat: 57.212607,
+    portfoy_buyuklugu: 131563204187.5,
+    bir_aylik_getiri: -1.4362,
+    bir_yillik_getiri: 31.4385,
+  },
+  {
+    fon_kodu: "DCB",
+    fon_unvani: "DENİZ PORTFÖY PARA PİYASASI SERBEST (TL) FON",
+    fiyat: 4.004994,
+    portfoy_buyuklugu: 128508600050.44,
+    bir_aylik_getiri: 2.8171,
+    bir_yillik_getiri: 51.4299,
+  },
+  {
+    fon_kodu: "FPZ",
+    fon_unvani: "QNB PORTFÖY BİRİNCİ SERBEST (DÖVİZ) FON",
+    fiyat: 62.587196,
+    portfoy_buyuklugu: 127677765155.4,
+    bir_aylik_getiri: 1.2879,
+    bir_yillik_getiri: 25.1329,
+  },
+  {
+    fon_kodu: "GJH",
+    fon_unvani: "GARANTİ PORTFÖY PARA PİYASASI SERBEST (TL) FON",
+    fiyat: 3.315245,
+    portfoy_buyuklugu: 127323926880.51,
+    bir_aylik_getiri: 2.8134,
+    bir_yillik_getiri: 50.4497,
+  },
+]);
 const LOAN_TYPE_CONFIG = {
   need: {
     title: "İhtiyaç Kredisi",
@@ -305,6 +403,30 @@ const LOAN_TYPE_CONFIG = {
     taxes: {
       bsmv: 0.15,
       kkdf: 0.15,
+    },
+  },
+  kmh: {
+    title: "Kredili Mevduat Hesabı",
+    defaultPrincipal: 50_000,
+    defaultInstallment: 0,
+    defaultRate: 4.25,
+    terms: [1, 30],
+    defaultTerm: 1,
+    taxes: {
+      bsmv: 0,
+      kkdf: 0,
+    },
+  },
+  interestfree: {
+    title: "Faizsiz Kredi",
+    defaultPrincipal: 50_000,
+    defaultInstallment: 5_000,
+    defaultRate: 0,
+    terms: [3, 6, 12],
+    defaultTerm: 6,
+    taxes: {
+      bsmv: 0,
+      kkdf: 0,
     },
   },
   deposit: {},
@@ -556,6 +678,20 @@ const LOAN_RATES_PAGE_DATA = Object.freeze({
     title: "Taşıt Kredisi Banka Karşılaştırması",
     dateLabel: "Güncelleme: 13 Mart 2026",
   },
+  interestfree: {
+    title: "Faizsiz Kredi Banka Karşılaştırması",
+    dateLabel: "Güncelleme: 18 Mart 2026",
+    rateHeading: "Oran",
+    secondaryHeading: "Tahmini Faiz",
+    tertiaryHeading: "Toplam Geri Ödeme",
+  },
+  kmh: {
+    title: "Kredili Mevduat Hesabı Banka Karşılaştırması",
+    dateLabel: "Güncelleme: 18 Mart 2026",
+    rateHeading: "Oran",
+    secondaryHeading: "Tahmini Faiz",
+    tertiaryHeading: "Toplam Geri Ödeme",
+  },
   kobi: {
     title: "KOBİ Kredisi Banka Karşılaştırması",
     dateLabel: "Güncelleme: 13 Mart 2026",
@@ -609,6 +745,19 @@ const LOAN_RATES_FILTER_CONFIG = Object.freeze({
     terms: [12, 24, 36, 48],
     loanType: "vehicle",
   },
+  kmh: {
+    defaultAmount: 50000,
+    defaultTerm: 1,
+    terms: [1, 30],
+    termUnit: "day",
+    loanType: "kmh",
+  },
+  interestfree: {
+    defaultAmount: 50000,
+    defaultTerm: 6,
+    terms: [3, 6, 12],
+    loanType: "interestfree",
+  },
   kobi: {
     defaultAmount: 100000,
     defaultTerm: 24,
@@ -620,6 +769,8 @@ const loanRatesFilterState = {
   need: { amount: 100000, term: 12 },
   housing: { amount: 1000000, term: 120 },
   vehicle: { amount: 100000, term: 24 },
+  kmh: { amount: 50000, term: 1 },
+  interestfree: { amount: 50000, term: 6 },
   kobi: { amount: 100000, term: 24 },
 };
 const BANK_PRODUCT_TYPE_CONFIG = Object.freeze({
@@ -973,6 +1124,20 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     ],
     secondaryProducts: [
       {
+        kind: "kmh",
+        title: "Hızlı Para",
+        descriptionLines: ["Fibabanka resmi KMH ürün sayfasındaki güncel yapıyla örnek hesaplama sunar."],
+        amountLabel: "Tutar",
+        defaultAmount: 50000,
+        rateMap: { 1: 4.25, 30: 4.25 },
+        selectedTerm: 1,
+        termUnit: "day",
+        secondaryLabel: "Tahmini Faiz",
+        tertiaryLabel: "Toplam Geri Ödeme",
+        detailHref: "https://www.fibabanka.com.tr/bireysel/krediler/kredili-mevduat-hesabi",
+        applyHref: "https://www.fibabanka.com.tr/bireysel/krediler/kredili-mevduat-hesabi",
+      },
+      {
         kind: "deposit",
         title: "e-Mevduat",
         descriptionLines: ["Fibabanka dijital kanalda açılan vadeli mevduat ürünü."],
@@ -1082,6 +1247,20 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     ],
     secondaryProducts: [
       {
+        kind: "kmh",
+        title: "Açık Hesap",
+        descriptionLines: ["Halkbank resmi KMH yapısına göre örnek hesaplama sunar."],
+        amountLabel: "Tutar",
+        defaultAmount: 50000,
+        rateMap: { 1: 4.25, 30: 4.25 },
+        selectedTerm: 1,
+        termUnit: "day",
+        secondaryLabel: "Tahmini Faiz",
+        tertiaryLabel: "Toplam Geri Ödeme",
+        detailHref: "https://www.halkbank.com.tr/tr/bireysel/krediler/ihtiyac-kredileri/acik-hesap",
+        applyHref: "https://www.halkbank.com.tr/tr/bireysel/krediler/ihtiyac-kredileri/acik-hesap",
+      },
+      {
         kind: "deposit",
         title: "E-Mevduat",
         descriptionLines: ["Halkbank mobil ve internet şubede açılan vadeli hesap."],
@@ -1128,6 +1307,20 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     ],
     secondaryProducts: [
       {
+        kind: "kmh",
+        title: "Kredili Bankomat Hesabı",
+        descriptionLines: ["VakıfBank resmi KMH yapısına göre örnek hesaplama sunar."],
+        amountLabel: "Tutar",
+        defaultAmount: 50000,
+        rateMap: { 1: 4.25, 30: 4.25 },
+        selectedTerm: 1,
+        termUnit: "day",
+        secondaryLabel: "Tahmini Faiz",
+        tertiaryLabel: "Toplam Geri Ödeme",
+        detailHref: "https://www.vakifbank.com.tr/tr/bireysel/hesaplar/kredili-mevduat-hesaplari/vakifbank-ek-hesap",
+        applyHref: "https://www.vakifbank.com.tr/tr/bireysel/hesaplar/kredili-mevduat-hesaplari/vakifbank-ek-hesap",
+      },
+      {
         kind: "deposit",
         title: "ARI Hesabı",
         descriptionLines: ["VakıfBank mobil ve internet bankacılığında günlük faizli hesap."],
@@ -1173,6 +1366,22 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       },
     ],
     secondaryProducts: [
+      {
+        kind: "kmh",
+        title: "Kredili Mevduat Hesabı",
+        descriptionLines: ["Ziraat resmi KMH ürün sayfasındaki güncel yapıyla örnek hesaplama sunar."],
+        amountLabel: "Tutar",
+        defaultAmount: 50000,
+        rateMap: { 1: 4.25, 30: 4.25 },
+        selectedTerm: 1,
+        termUnit: "day",
+        secondaryLabel: "Tahmini Faiz",
+        tertiaryLabel: "Toplam Geri Ödeme",
+        detailHref:
+          "https://www.ziraatbank.com.tr/tr/bireysel/krediler/genel-ihtiyaclar/kredili-mevduat-hesabi",
+        applyHref:
+          "https://www.ziraatbank.com.tr/tr/bireysel/krediler/genel-ihtiyaclar/kredili-mevduat-hesabi",
+      },
       {
         kind: "deposit",
         title: "Vadeli TL Mevduat Hesabı",
@@ -1255,8 +1464,9 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         descriptionLines: ["Resmi TEB sayfasındaki güncel KMH oranıyla örnek hesaplama sunar."],
         amountLabel: "Tutar",
         defaultAmount: 25000,
-        rateMap: { 1: 4.25 },
+        rateMap: { 1: 4.25, 30: 4.25 },
         selectedTerm: 1,
+        termUnit: "day",
         secondaryLabel: "Tahmini Faiz",
         tertiaryLabel: "Toplam Geri Ödeme",
         detailHref: "https://www.teb.com.tr/sizin-icin/kredili-mevduat-hesabi/",
@@ -1453,7 +1663,7 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         rateMap: { 12: 4.74, 24: 3.94, 36: 3.64 },
         selectedTerm: 12,
         detailHref: "https://www.garantibbva.com.tr/krediler/ihtiyac-kredisi",
-        applyHref: "https://www.garantibbva.com.tr/krediler/ihtiyac-kredisi",
+        applyHref: "https://www.garantibbva.com.tr/krediler/bireysel-ihtiyac-kredisi",
       },
       {
         kind: "loan",
@@ -1493,6 +1703,22 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         ],
         detailHref: "https://www.garantibbva.com.tr/krediler/444-otom",
         applyHref: "https://www.garantibbva.com.tr/krediler/444-otom",
+      },
+    ],
+    secondaryProducts: [
+      {
+        kind: "kmh",
+        title: "Avans Hesap",
+        descriptionLines: ["Garanti BBVA resmi KMH ürün sayfasındaki güncel oranla örnek hesaplama sunar."],
+        amountLabel: "Tutar",
+        defaultAmount: 50000,
+        rateMap: { 1: 4.25, 30: 4.25 },
+        selectedTerm: 1,
+        termUnit: "day",
+        secondaryLabel: "Tahmini Faiz",
+        tertiaryLabel: "Toplam Geri Ödeme",
+        detailHref: "https://www.garantibbva.com.tr/mevduat-ve-yatirim/vadesiz-mevduat/avans-hesap",
+        applyHref: "https://www.garantibbva.com.tr/mevduat-ve-yatirim/vadesiz-mevduat/avans-hesap",
       },
     ],
   },
@@ -1541,6 +1767,20 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       },
     ],
     secondaryProducts: [
+      {
+        kind: "kmh",
+        title: "Ek Hesap",
+        descriptionLines: ["QNB resmi KMH ürün sayfasındaki güncel oranla örnek hesaplama sunar."],
+        amountLabel: "Tutar",
+        defaultAmount: 50000,
+        rateMap: { 1: 4.25, 30: 4.25 },
+        selectedTerm: 1,
+        termUnit: "day",
+        secondaryLabel: "Tahmini Faiz",
+        tertiaryLabel: "Toplam Geri Ödeme",
+        detailHref: "https://www.qnb.com.tr/kendim-icin/krediler/nakit-ihtiyaclariniz-icin/ek-hesap",
+        applyHref: "https://www.qnb.com.tr/kendim-icin/krediler/nakit-ihtiyaclariniz-icin/ek-hesap",
+      },
       {
         kind: "deposit",
         title: "E-Vadeli Hesap",
@@ -1594,6 +1834,20 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       },
     ],
     secondaryProducts: [
+      {
+        kind: "kmh",
+        title: "Kurtaran Hesap",
+        descriptionLines: ["DenizBank resmi KMH ürün sayfasındaki güncel oranla örnek hesaplama sunar."],
+        amountLabel: "Tutar",
+        defaultAmount: 50000,
+        rateMap: { 1: 4.25, 30: 4.25 },
+        selectedTerm: 1,
+        termUnit: "day",
+        secondaryLabel: "Tahmini Faiz",
+        tertiaryLabel: "Toplam Geri Ödeme",
+        detailHref: "https://www.denizbank.com/krediler/bireysel-bankacilik/kredili-mevduat-hesabi-kurtaran-hesap",
+        applyHref: "https://www.denizbank.com/krediler/bireysel-bankacilik/kredili-mevduat-hesabi-kurtaran-hesap",
+      },
       {
         kind: "deposit",
         title: "Para Çekilebilir Mevduat",
@@ -1805,6 +2059,20 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     ],
     secondaryProducts: [
       {
+        kind: "kmh",
+        title: "Artı Para",
+        descriptionLines: ["Akbank resmi KMH ürün sayfasındaki güncel oranla örnek hesaplama sunar."],
+        amountLabel: "Tutar",
+        defaultAmount: 50000,
+        rateMap: { 1: 4.25, 30: 4.25 },
+        selectedTerm: 1,
+        termUnit: "day",
+        secondaryLabel: "Tahmini Faiz",
+        tertiaryLabel: "Toplam Geri Ödeme",
+        detailHref: "https://www.akbank.com/krediler/arti-para-kredisi/arti-para",
+        applyHref: "https://www.akbank.com/krediler/arti-para-kredisi/arti-para",
+      },
+      {
         kind: "deposit",
         title: "Vadeli Mevduat Hesabı",
         descriptionLines: ["Akbank resmi vadeli mevduat sayfasında duyurulan oran."],
@@ -1857,6 +2125,20 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       },
     ],
     secondaryProducts: [
+      {
+        kind: "kmh",
+        title: "Esnek Hesap",
+        descriptionLines: ["Yapı Kredi resmi KMH ürün sayfasındaki güncel yapıyla örnek hesaplama sunar."],
+        amountLabel: "Tutar",
+        defaultAmount: 50000,
+        rateMap: { 1: 4.25, 30: 4.25 },
+        selectedTerm: 1,
+        termUnit: "day",
+        secondaryLabel: "Tahmini Faiz",
+        tertiaryLabel: "Toplam Geri Ödeme",
+        detailHref: "https://www.yapikredi.com.tr/bireysel-bankacilik/krediler/esnek-hesap/",
+        applyHref: "https://www.yapikredi.com.tr/bireysel-bankacilik/krediler/esnek-hesap/",
+      },
       {
         kind: "deposit",
         title: "E-Vadeli Hesap",
@@ -2424,9 +2706,19 @@ const ISBANK_PROFILE_DATA = Object.freeze({
       title: "Ek Hesap",
       descriptionLines: ["Tutar: 0 - 150.000 TL arasında", "Vade: 1 - 30 gün arasında"],
       amountLabel: "Kredi Tutarı",
-      defaultAmount: 500000,
-      rateMap: { 12: 3.68, 24: 3.79, 36: 3.92 },
-      selectedTerm: 12,
+      defaultAmount: 50000,
+      rateMap: { 1: 4.25, 30: 4.25 },
+      insuranceOptions: [
+        {
+          label: "Hayat sigortası yok",
+          rateMap: { 1: 4.25, 30: 4.25 },
+          selected: true,
+        },
+      ],
+      hideFeeCard: true,
+      hideSummaryCard: true,
+      termUnit: "day",
+      selectedTerm: 1,
       detailHref: "https://www.isbank.com.tr/ek-hesap",
     },
   ],
@@ -2454,10 +2746,46 @@ const ISBANK_PROFILE_DATA = Object.freeze({
     {
       kind: "deposit",
       title: "Vadeli TL Mevduat",
-      descriptionLines: ["Standart şube kanalından vadeli TL hesap açılşında kullanılır"],
+      descriptionLines: [
+        "Tutar Kademeleri: 5.000 - 100.000 TL",
+        "100.000 - 1.000.000 TL",
+        "1.000.000 TL üzeri",
+      ],
       amountLabel: "Mevduat Tutarı",
       defaultAmount: 250000,
-      rateMap: { 32: 41.5, 92: 43.0, 181: 44.25 },
+      rateMap: { 32: 38.5, 92: 38.0, 181: 35.5 },
+      amountRateTiers: [
+        {
+          min: 5000,
+          max: 100000,
+          rateMap: { 32: 38.0, 92: 38.0, 181: 35.0 },
+        },
+        {
+          min: 100001,
+          max: 250000,
+          rateMap: { 32: 38.5, 92: 38.0, 181: 35.5 },
+        },
+        {
+          min: 250001,
+          max: 500000,
+          rateMap: { 32: 38.5, 92: 38.5, 181: 36.0 },
+        },
+        {
+          min: 500001,
+          max: 1000000,
+          rateMap: { 32: 38.5, 92: 38.5, 181: 36.0 },
+        },
+        {
+          min: 1000001,
+          max: 10000000,
+          rateMap: { 32: 39.0, 92: 39.0, 181: 37.0 },
+        },
+        {
+          min: 10000001,
+          max: null,
+          rateMap: { 32: 39.0, 92: 39.0, 181: 37.5 },
+        },
+      ],
       selectedTerm: 92,
       secondaryLabel: "Net Getiri",
       tertiaryLabel: "Vade Sonu Tutar",
@@ -2466,10 +2794,31 @@ const ISBANK_PROFILE_DATA = Object.freeze({
     {
       kind: "deposit",
       title: "Dijital Vadeli Mevduat",
-      descriptionLines: ["%39'a varan faiz oranları için İşCep’e giriş yapın."],
+      descriptionLines: [
+        "Tutar Kademeleri: 5.000 - 100.000 TL",
+        "100.000 - 1.000.000 TL",
+        "1.000.000 TL üzeri",
+      ],
       amountLabel: "Mevduat Tutarı",
       defaultAmount: 400000,
       rateMap: { 32: 42.25, 92: 43.5, 181: 44.5 },
+      amountRateTiers: [
+        {
+          min: 5000,
+          max: 100000,
+          rateMap: { 32: 42.25, 92: 43.5, 181: 44.5 },
+        },
+        {
+          min: 100001,
+          max: 1000000,
+          rateMap: { 32: 42.25, 92: 43.5, 181: 44.5 },
+        },
+        {
+          min: 1000001,
+          max: null,
+          rateMap: { 32: 42.25, 92: 43.5, 181: 44.5 },
+        },
+      ],
       selectedTerm: 92,
       secondaryLabel: "Net Getiri",
       tertiaryLabel: "Vade Sonu Tutar",
@@ -2616,6 +2965,9 @@ const ui = {
   bankDetailSections: document.getElementById("bankDetailSections"),
   loanRatesTitle: document.getElementById("loanRatesTitle"),
   loanRatesDate: document.getElementById("loanRatesDate"),
+  loanRatesRateHeading: document.getElementById("loanRatesRateHeading"),
+  loanRatesSecondaryHeading: document.getElementById("loanRatesSecondaryHeading"),
+  loanRatesTertiaryHeading: document.getElementById("loanRatesTertiaryHeading"),
   loanRatesAmountInput: document.getElementById("loanRatesAmountInput"),
   loanRatesTermSelect: document.getElementById("loanRatesTermSelect"),
   loanRatesTableBody: document.getElementById("loanRatesTableBody"),
@@ -2702,10 +3054,13 @@ const ui = {
   investmentDepositForm: document.getElementById("investmentDepositForm"),
   investmentDepositPrincipal: document.getElementById("investmentDepositPrincipal"),
   investmentDepositTermDays: document.getElementById("investmentDepositTermDays"),
+  investmentDepositComparePrincipal: document.getElementById("investmentDepositComparePrincipal"),
+  investmentDepositCompareTermDays: document.getElementById("investmentDepositCompareTermDays"),
   investmentDepositAccountTypeFilter: document.getElementById("investmentDepositAccountTypeFilter"),
   investmentDepositBankTypeFilter: document.getElementById("investmentDepositBankTypeFilter"),
   investmentDepositOfferTitle: document.getElementById("investmentDepositOfferTitle"),
   investmentDepositOffersList: document.getElementById("investmentDepositOffersList"),
+  investmentDepositComparisonBody: document.getElementById("investmentDepositComparisonBody"),
   compoundCalcForm: document.getElementById("compoundCalcForm"),
   compoundPrincipal: document.getElementById("compoundPrincipal"),
   compoundFrequency: document.getElementById("compoundFrequency"),
@@ -3987,12 +4342,14 @@ function setupBankProductCards() {
     }
 
     const rateMap = parseBankProductRateMap(cardElement.dataset.rateMap || "");
+    const amountRateTiers = parseBankProductAmountRateTiers(cardElement.dataset.amountRateTiers || "");
     if (Object.keys(rateMap).length === 0) {
       return;
     }
 
     const productKind = String(cardElement.dataset.kind || "loan");
     const productLoanType = String(cardElement.dataset.loanType || "").trim().toLowerCase();
+    const productTermUnit = String(cardElement.dataset.termUnit || "").trim().toLowerCase();
     if (secondaryLabel instanceof HTMLElement && cardElement.dataset.secondaryLabel) {
       secondaryLabel.textContent = String(cardElement.dataset.secondaryLabel);
     }
@@ -4013,7 +4370,11 @@ function setupBankProductCards() {
         selectedInsuranceOption instanceof HTMLOptionElement
           ? parseBankProductRateMap(selectedInsuranceOption.dataset.rateMap || "")
           : rateMap;
-      const monthlyRatePercent = activeRateMap[String(termMonths)];
+      const resolvedRateMap =
+        productKind === "deposit"
+          ? resolveAmountTierRateMap(amountRateTiers, principal) || activeRateMap
+          : activeRateMap;
+      const monthlyRatePercent = resolvedRateMap[String(termMonths)];
 
       if (
         !Number.isFinite(principal) ||
@@ -4031,16 +4392,17 @@ function setupBankProductCards() {
 
       if (productKind === "deposit") {
         const depositOutcome = calculateDepositOutcome(principal, monthlyRatePercent, termMonths);
-        installmentOutput.textContent = `${formatTry(depositOutcome.netReturn)} TL`;
-        totalPaymentOutput.textContent = `${formatTry(depositOutcome.maturityAmount)} TL`;
+        installmentOutput.textContent = formatTryWithCents(depositOutcome.netReturn);
+        totalPaymentOutput.textContent = formatTryWithCents(depositOutcome.maturityAmount);
         return;
       }
 
       if (productKind === "kmh") {
-        const estimatedInterest = principal * (monthlyRatePercent / 100) * termMonths;
+        const termFactor = productTermUnit === "day" ? termMonths / 30 : termMonths;
+        const estimatedInterest = principal * (monthlyRatePercent / 100) * termFactor;
         const totalRepayment = principal + estimatedInterest;
-        installmentOutput.textContent = `${formatTry(estimatedInterest)} TL`;
-        totalPaymentOutput.textContent = `${formatTry(totalRepayment)} TL`;
+        installmentOutput.textContent = formatTryWithCents(estimatedInterest);
+        totalPaymentOutput.textContent = formatTryWithCents(totalRepayment);
         return;
       }
 
@@ -4048,8 +4410,8 @@ function setupBankProductCards() {
         productLoanType ? getEffectiveLoanMonthlyRate(monthlyRatePercent, productLoanType) : monthlyRatePercent;
       const monthlyPayment = calculateInstallment(principal, effectiveMonthlyRate, termMonths);
       const totalPayment = monthlyPayment * termMonths;
-      installmentOutput.textContent = `${formatTryWithCents(monthlyPayment)} TL`;
-      totalPaymentOutput.textContent = `${formatTry(totalPayment)} TL`;
+      installmentOutput.textContent = formatTryWithCents(monthlyPayment);
+      totalPaymentOutput.textContent = formatTryWithCents(totalPayment);
     };
 
     amountInput.addEventListener("input", renderCardOutcome);
@@ -4199,15 +4561,23 @@ function buildBankProfileData(bankName) {
       ? []
       : buildGenericBankLoanProducts(bankName);
     const genericSecondaryProducts = buildGenericBankDepositProducts(bankName);
+    const mergedPrimaryProducts = mergeBankProfileProducts(
+      profileOverride.primaryProducts,
+      genericPrimaryProducts,
+      bankName,
+      website,
+    );
+    const sanitizedPrimaryProducts =
+      resolvedBankKey === "icbc turkey"
+        ? mergedPrimaryProducts.filter((product) => {
+            const normalizedTitle = normalizeTefasSearchText(product.title);
+            return !["ihtiyaç kredisi", "konut kredisi", "taşıt kredisi"].includes(normalizedTitle);
+          })
+        : mergedPrimaryProducts;
     return {
       bankName,
       website,
-      primaryProducts: mergeBankProfileProducts(
-        profileOverride.primaryProducts,
-        genericPrimaryProducts,
-        bankName,
-        website,
-      ),
+      primaryProducts: sanitizedPrimaryProducts,
       secondaryProducts: mergeBankProfileProducts(
         profileOverride.secondaryProducts,
         genericSecondaryProducts,
@@ -4677,8 +5047,44 @@ function createBankProductShowcase(products, bankName) {
 }
 
 function inferBankProductLoanType(product) {
+  const explicitLoanType = String(product?.loanType || "").trim().toLowerCase();
+  if (explicitLoanType) {
+    return explicitLoanType;
+  }
+
   const normalizedTitle = normalizeTefasSearchText(product?.title || "");
   const normalizedHref = normalizeTefasSearchText(product?.detailHref || product?.applyHref || "");
+
+  if (
+    normalizedTitle.includes("kredili mevduat") ||
+    normalizedTitle.includes("ek hesap") ||
+    normalizedTitle.includes("avans hesap") ||
+    normalizedTitle.includes("artı para") ||
+    normalizedTitle.includes("arti para") ||
+    normalizedTitle.includes("esnek hesap") ||
+    normalizedTitle.includes("açık hesap") ||
+    normalizedTitle.includes("acik hesap") ||
+    normalizedTitle.includes("kurtaran hesap") ||
+    normalizedTitle.includes("hızlı para") ||
+    normalizedTitle.includes("hizli para") ||
+    normalizedTitle.includes("bankomat hesabı") ||
+    normalizedTitle.includes("bankomat hesabi") ||
+    normalizedTitle.includes("tamamlayan hesap") ||
+    normalizedHref.includes("kredili-mevduat") ||
+    normalizedHref.includes("ek-hesap") ||
+    normalizedHref.includes("avans-hesap") ||
+    normalizedHref.includes("arti-para") ||
+    normalizedHref.includes("esnek-hesap") ||
+    normalizedHref.includes("acik-hesap") ||
+    normalizedHref.includes("kurtaran-hesap") ||
+    normalizedHref.includes("bankomat")
+  ) {
+    return "kmh";
+  }
+
+  if (normalizedTitle.includes("faizsiz") || normalizedHref.includes("faizsiz")) {
+    return "interestfree";
+  }
 
   if (
     normalizedTitle.includes("konut") ||
@@ -4725,6 +5131,9 @@ function createBankProductCard(product, bankName) {
   article.dataset.bankName = bankName || currentBankProfileName;
   article.dataset.kind = product.kind || "loan";
   article.dataset.rateMap = buildBankProductRateMapText(product.rateMap);
+  if (Array.isArray(product.amountRateTiers) && product.amountRateTiers.length > 0) {
+    article.dataset.amountRateTiers = JSON.stringify(product.amountRateTiers);
+  }
   const inferredLoanType = product.kind === "loan" ? inferBankProductLoanType(product) : "";
   if (inferredLoanType) {
     article.dataset.loanType = inferredLoanType;
@@ -4759,6 +5168,9 @@ function createBankProductCard(product, bankName) {
   }
   if (product.tertiaryLabel) {
     article.dataset.tertiaryLabel = product.tertiaryLabel;
+  }
+  if (product.termUnit) {
+    article.dataset.termUnit = product.termUnit;
   }
 
   const header = document.createElement("header");
@@ -4808,7 +5220,7 @@ function createBankProductCard(product, bankName) {
   getTermsFromRateMap(product.rateMap).forEach((termValue) => {
     const option = document.createElement("option");
     option.value = String(termValue);
-    option.textContent = formatBankTermLabel(product.kind || "loan", termValue);
+    option.textContent = formatBankTermLabel(product.kind || "loan", termValue, product.termUnit);
     option.selected = Number(termValue) === Number(product.selectedTerm || termValue);
     termSelect.append(option);
   });
@@ -4840,27 +5252,30 @@ function createBankProductCard(product, bankName) {
     formGrid.append(insuranceField);
   }
 
-  const tableCard = document.createElement("div");
-  tableCard.className = "bank-product-table-card";
-  [
-    [product.rateLabel || "Faiz Oranı", "rate", "label-primary"],
-    [product.secondaryLabel || "Aylık Taksit", "installment", "label-secondary"],
-    [product.tertiaryLabel || "Toplam Ödeme", "total-payment", "label-tertiary"],
-  ].forEach(([labelText, roleName, labelRole]) => {
-    const row = document.createElement("div");
-    row.className = "bank-product-table-row";
-    const label = document.createElement("span");
-    label.textContent = labelText;
-    label.dataset.role = labelRole;
-    const value = document.createElement("strong");
-    value.dataset.role = roleName;
-    value.textContent = "-";
-    row.append(label, value);
-    tableCard.append(row);
-  });
+  let tableCard = null;
+  if (!product.hideSummaryCard) {
+    tableCard = document.createElement("div");
+    tableCard.className = "bank-product-table-card";
+    [
+      [product.rateLabel || "Faiz Oranı", "rate", "label-primary"],
+      [product.secondaryLabel || "Aylık Taksit", "installment", "label-secondary"],
+      [product.tertiaryLabel || "Toplam Ödeme", "total-payment", "label-tertiary"],
+    ].forEach(([labelText, roleName, labelRole]) => {
+      const row = document.createElement("div");
+      row.className = "bank-product-table-row";
+      const label = document.createElement("span");
+      label.textContent = labelText;
+      label.dataset.role = labelRole;
+      const value = document.createElement("strong");
+      value.dataset.role = roleName;
+      value.textContent = "-";
+      row.append(label, value);
+      tableCard.append(row);
+    });
+  }
 
   let feeCard = null;
-  if ((product.kind || "loan") === "loan") {
+  if ((product.kind || "loan") === "loan" && !product.hideFeeCard) {
     feeCard = document.createElement("button");
     feeCard.type = "button";
     feeCard.className = "bank-product-fee-card";
@@ -4904,7 +5319,12 @@ function createBankProductCard(product, bankName) {
   actionButton.dataset.applyHref = product.applyHref || product.detailHref || "";
   actionButton.textContent = "Başvur";
 
-  article.append(header, formGrid, tableCard);
+  article.append(header, formGrid);
+  if (tableCard) {
+    article.append(tableCard);
+  } else {
+    article.classList.add("bank-product-card-footer-bottom");
+  }
   if (feeCard) {
     article.append(feeCard);
   }
@@ -4942,8 +5362,8 @@ function getTermsFromRateMap(rateMap) {
     .sort((leftValue, rightValue) => leftValue - rightValue);
 }
 
-function formatBankTermLabel(productKind, termValue) {
-  if (productKind === "deposit") {
+function formatBankTermLabel(productKind, termValue, termUnit = "") {
+  if (termUnit === "day" || productKind === "deposit") {
     return `${termValue} Gün`;
   }
 
@@ -4964,6 +5384,39 @@ function parseBankProductRateMap(rawValue) {
 
       return accumulator;
     }, {});
+}
+
+function parseBankProductAmountRateTiers(rawValue) {
+  try {
+    const parsedValue = JSON.parse(String(rawValue || "[]"));
+    if (!Array.isArray(parsedValue)) {
+      return [];
+    }
+
+    return parsedValue
+      .map((tier) => ({
+        min: Number.isFinite(Number(tier?.min)) ? Number(tier.min) : null,
+        max: Number.isFinite(Number(tier?.max)) ? Number(tier.max) : null,
+        rateMap: tier?.rateMap && typeof tier.rateMap === "object" ? tier.rateMap : {},
+      }))
+      .filter((tier) => tier.min !== null || tier.max !== null);
+  } catch (_error) {
+    return [];
+  }
+}
+
+function resolveAmountTierRateMap(amountRateTiers, principal) {
+  if (!Array.isArray(amountRateTiers) || amountRateTiers.length === 0 || !Number.isFinite(principal)) {
+    return null;
+  }
+
+  const matchedTier = amountRateTiers.find((tier) => {
+    const minValue = Number.isFinite(tier.min) ? tier.min : -Infinity;
+    const maxValue = Number.isFinite(tier.max) ? tier.max : Infinity;
+    return principal >= minValue && principal <= maxValue;
+  });
+
+  return matchedTier?.rateMap || null;
 }
 
 function closeHeaderMegaMenus() {
@@ -5024,24 +5477,49 @@ function renderLoanRatesPage(tabKey = "need") {
   if (ui.loanRatesDate) {
     ui.loanRatesDate.textContent = tabData.dateLabel;
   }
+  if (ui.loanRatesRateHeading) {
+    ui.loanRatesRateHeading.textContent = tabData.rateHeading || "Faiz Oranı";
+  }
+  if (ui.loanRatesSecondaryHeading) {
+    ui.loanRatesSecondaryHeading.textContent = tabData.secondaryHeading || "Aylık Taksit";
+  }
+  if (ui.loanRatesTertiaryHeading) {
+    ui.loanRatesTertiaryHeading.textContent = tabData.tertiaryHeading || "Toplam Ödeme";
+  }
 
   renderLoanRatesFilters(resolvedTabKey);
 
   if (ui.loanRatesTableBody) {
     const rowsFragment = document.createDocumentFragment();
-    const { amount, term, loanType } = getLoanRatesFilterValues(resolvedTabKey);
+    const { amount, term, loanType, termUnit } = getLoanRatesFilterValues(resolvedTabKey);
     const comparisonRows = getLoanRatesComparisonRows(resolvedTabKey, term);
-    comparisonRows.forEach((rowData) => {
-      rowsFragment.append(
-        createLoanRatesRow(
-          buildLoanRatesTableRow(rowData, {
-            principal: amount,
-            termMonths: term,
-            loanType,
-          }),
-        ),
-      );
-    });
+    if (comparisonRows.length === 0) {
+      const emptyRow = document.createElement("tr");
+      const emptyCell = document.createElement("td");
+      emptyCell.colSpan = 5;
+      emptyCell.className = "table-empty";
+      emptyCell.textContent =
+        resolvedTabKey === "interestfree"
+          ? "Faizsiz kredi kartları eklendikçe burada görünecek."
+          : resolvedTabKey === "kmh"
+            ? "Kredili mevduat hesabı kartları eklendikçe burada görünecek."
+          : "Bu vade için gösterilecek banka verisi bulunamadı.";
+      emptyRow.append(emptyCell);
+      rowsFragment.append(emptyRow);
+    } else {
+      comparisonRows.forEach((rowData) => {
+        rowsFragment.append(
+          createLoanRatesRow(
+            buildLoanRatesTableRow(rowData, {
+              principal: amount,
+              termMonths: term,
+              termUnit,
+              loanType,
+            }),
+          ),
+        );
+      });
+    }
     ui.loanRatesTableBody.replaceChildren(rowsFragment);
   }
 
@@ -5095,7 +5573,7 @@ function getComparableLoanProduct(bankName, targetLoanType) {
   const products = [...profile.primaryProducts, ...profile.secondaryProducts];
   return (
     products.find((product) => {
-      if (product.kind !== "loan") {
+      if (product.kind !== "loan" && product.kind !== "kmh") {
         return false;
       }
       return inferBankProductLoanType(product) === targetLoanType;
@@ -5104,7 +5582,7 @@ function getComparableLoanProduct(bankName, targetLoanType) {
 }
 
 function getComparableRateMap(product) {
-  if (!product || product.kind !== "loan") {
+  if (!product || (product.kind !== "loan" && product.kind !== "kmh")) {
     return {};
   }
 
@@ -5135,7 +5613,8 @@ function renderLoanRatesFilters(tabKey) {
     config.terms.forEach((termValue) => {
       const option = document.createElement("option");
       option.value = String(termValue);
-      option.textContent = `${termValue} Ay`;
+      option.textContent =
+        config.termUnit === "day" ? `${termValue} Gün` : `${termValue} Ay`;
       option.selected = Number(termValue) === Number(state.term || config.defaultTerm);
       optionsFragment.append(option);
     });
@@ -5166,6 +5645,7 @@ function getLoanRatesFilterValues(tabKey) {
     amount: Number.isFinite(state.amount) && state.amount > 0 ? state.amount : config.defaultAmount,
     term: Number.isFinite(state.term) ? state.term : config.defaultTerm,
     loanType: config.loanType,
+    termUnit: config.termUnit || "month",
   };
 }
 
@@ -5173,6 +5653,7 @@ function buildLoanRatesTableRow(rowData, options = {}) {
   const principal = Number(options.principal);
   const termMonths = Number(options.termMonths);
   const loanType = String(options.loanType || "need");
+  const termUnit = String(options.termUnit || "month");
   const nominalRate = Number(rowData.rate);
 
   if (
@@ -5183,6 +5664,17 @@ function buildLoanRatesTableRow(rowData, options = {}) {
     !Number.isFinite(nominalRate)
   ) {
     return rowData;
+  }
+
+  if (loanType === "kmh") {
+    const termFactor = termUnit === "day" ? termMonths / 30 : termMonths;
+    const estimatedInterest = principal * (nominalRate / 100) * termFactor;
+    const totalPayment = principal + estimatedInterest;
+    return {
+      ...rowData,
+      monthlyInstallment: estimatedInterest,
+      totalPayment,
+    };
   }
 
   const effectiveMonthlyRate = getEffectiveLoanMonthlyRate(nominalRate, loanType);
@@ -5262,10 +5754,10 @@ function createLoanRatesRow(rowData) {
   rateCell.textContent = `% ${formatPercentNumber(rowData.rate)}`;
 
   const installmentCell = document.createElement("td");
-  installmentCell.textContent = `${formatTry(rowData.monthlyInstallment)} ₺`;
+  installmentCell.textContent = formatTryWithCents(rowData.monthlyInstallment);
 
   const totalCell = document.createElement("td");
-  totalCell.textContent = `${formatTry(rowData.totalPayment)} ₺`;
+  totalCell.textContent = formatTryWithCents(rowData.totalPayment);
 
   const actionCell = document.createElement("td");
   const actionButton = document.createElement("button");
@@ -5602,7 +6094,7 @@ function buildCalculationHash(loanType) {
 
 function buildLoanRatesHash(tabKey) {
   const normalizedTabKey = String(tabKey || "").trim().toLowerCase();
-  const supportedTabKeys = new Set(["need", "housing", "vehicle", "kobi"]);
+  const supportedTabKeys = new Set(["need", "housing", "vehicle", "kmh", "interestfree", "kobi"]);
   return supportedTabKeys.has(normalizedTabKey)
     ? `${LOAN_ROUTE_PREFIX}${normalizedTabKey}`
     : ROUTE_HASH.loan;
@@ -5738,7 +6230,9 @@ function applyRouteFromHash() {
 }
 
 async function loadTefasFundTable() {
-  if (tefasFundTableLoaded || !ui.tefasFundBody) {
+  const shouldReuseLoadedTefas =
+    tefasFundTableLoaded && tefasFundSourceLabel !== "local-fallback";
+  if (shouldReuseLoadedTefas || !ui.tefasFundBody) {
     return;
   }
 
@@ -5798,19 +6292,8 @@ async function loadTefasFundTable() {
       tefasFundTableLoaded = true;
     } catch (error) {
       console.error(error);
-      tefasFundRows = [];
-      tefasFundSourceLabel = "bilinmiyor";
-      tefasFundFetchedAtUnix = 0;
-      ui.tefasFundBody.replaceChildren(createEmptyRow("TEFAS verisi yüklenemedi."));
-      if (ui.tefasFundMeta) {
-        ui.tefasFundMeta.textContent = "Veri şu an erişilemiyor";
-      }
-      if (ui.tefasFundSearchInfo) {
-        ui.tefasFundSearchInfo.textContent = "Arama şu an kullanılamıyor.";
-      }
-      if (ui.tefasFundSearchClear) {
-        ui.tefasFundSearchClear.disabled = true;
-      }
+      renderTefasFundTable(EMBEDDED_TEFAS_FALLBACK_ROWS, "local-fallback", 0);
+      tefasFundTableLoaded = true;
     }
   }
 }
@@ -5835,12 +6318,7 @@ async function loadFxPriceTable(options = {}) {
   } catch (error) {
     console.error(error);
     if (!silent) {
-      ui.investmentFxBody.replaceChildren(
-        createEmptyRow("Döviz verisi yüklenemedi. Önce script çalıştır.", 7),
-      );
-      if (ui.investmentFxMeta) {
-        ui.investmentFxMeta.textContent = "Kaynak dosya bulunamadı";
-      }
+      renderFxPriceTable(EMBEDDED_FX_FALLBACK_PAYLOAD.rows, EMBEDDED_FX_FALLBACK_PAYLOAD);
     }
   }
 }
@@ -6001,12 +6479,10 @@ async function loadGoldPriceTable(options = {}) {
   } catch (error) {
     console.error(error);
     if (!silent) {
-      ui.investmentGoldBody.replaceChildren(
-        createEmptyRow("Altın verisi yüklenemedi. Önce script çalıştır.", 7),
+      renderGoldPriceTable(
+        EMBEDDED_GOLD_FALLBACK_PAYLOAD.rows,
+        EMBEDDED_GOLD_FALLBACK_PAYLOAD,
       );
-      if (ui.investmentGoldMeta) {
-        ui.investmentGoldMeta.textContent = "Kaynak dosya bulunamadı";
-      }
     }
   }
 }
@@ -6775,6 +7251,10 @@ function setupNeedLoanCalculator() {
       formatter: formatAmountInput,
     },
     {
+      element: ui.investmentDepositComparePrincipal,
+      formatter: formatAmountInput,
+    },
+    {
       element: ui.compoundPrincipal,
       formatter: formatAmountInput,
     },
@@ -6840,6 +7320,22 @@ function setupNeedLoanCalculator() {
     ui.investmentDepositForm.addEventListener("submit", (event) => {
       event.preventDefault();
       renderInvestmentDepositOffers(true);
+    });
+  }
+
+  if (ui.investmentDepositComparePrincipal && ui.investmentDepositCompareTermDays) {
+    ui.investmentDepositComparePrincipal.addEventListener("input", () => {
+      if (ui.investmentDepositPrincipal) {
+        ui.investmentDepositPrincipal.value = ui.investmentDepositComparePrincipal.value;
+      }
+      renderInvestmentDepositOffers(false);
+    });
+
+    ui.investmentDepositCompareTermDays.addEventListener("change", () => {
+      if (ui.investmentDepositTermDays) {
+        ui.investmentDepositTermDays.value = ui.investmentDepositCompareTermDays.value;
+      }
+      renderInvestmentDepositOffers(false);
     });
   }
 
@@ -7200,8 +7696,8 @@ function renderNeedLoanTable(updateOffers = true) {
   const totalInterest = totalPayment - principal;
 
   ui.needCalcMonthly.textContent = formatTryWithCents(monthlyPayment);
-  ui.needCalcTotal.textContent = formatTry(totalPayment);
-  ui.needCalcInterest.textContent = formatTry(totalInterest);
+  ui.needCalcTotal.textContent = formatTryWithCents(totalPayment);
+  ui.needCalcInterest.textContent = formatTryWithCents(totalInterest);
   if (ui.needCalcNote) {
     ui.needCalcNote.textContent = buildLoanTaxNote(getCurrentLoanType());
   }
@@ -7267,9 +7763,9 @@ function renderNeedLoanByInstallment(updateOffers = true) {
   const totalPayment = installmentAmount * termMonths;
   const totalInterest = totalPayment - estimatedPrincipal;
 
-  ui.needInstallmentPrincipal.textContent = formatTry(estimatedPrincipal);
-  ui.needInstallmentTotal.textContent = formatTry(totalPayment);
-  ui.needInstallmentInterest.textContent = formatTry(totalInterest);
+  ui.needInstallmentPrincipal.textContent = formatTryWithCents(estimatedPrincipal);
+  ui.needInstallmentTotal.textContent = formatTryWithCents(totalPayment);
+  ui.needInstallmentInterest.textContent = formatTryWithCents(totalInterest);
   if (ui.needInstallmentNote) {
     ui.needInstallmentNote.textContent = buildLoanTaxNote(getCurrentLoanType());
   }
@@ -7336,16 +7832,17 @@ function renderDepositCalculator() {
 
 function renderInvestmentDepositOffers(showAlert = false) {
   if (
-    !ui.investmentDepositPrincipal ||
-    !ui.investmentDepositTermDays ||
-    !ui.investmentDepositOffersList ||
-    !ui.investmentDepositOfferTitle
+    !(ui.investmentDepositComparePrincipal || ui.investmentDepositPrincipal) ||
+    !(ui.investmentDepositCompareTermDays || ui.investmentDepositTermDays) ||
+    !ui.investmentDepositOffersList
   ) {
     return;
   }
 
-  const principal = parseAmountInput(ui.investmentDepositPrincipal.value);
-  const termDays = Number.parseInt(ui.investmentDepositTermDays.value, 10);
+  const principalInput = ui.investmentDepositComparePrincipal || ui.investmentDepositPrincipal;
+  const termSelect = ui.investmentDepositCompareTermDays || ui.investmentDepositTermDays;
+  const principal = parseAmountInput(principalInput?.value || "");
+  const termDays = Number.parseInt(termSelect?.value || "", 10);
   if (!Number.isFinite(principal) || principal <= 0 || !Number.isFinite(termDays) || termDays <= 0) {
     if (showAlert) {
       alert("Lütfen geçerli bir mevduat tutarı ve vade gir.");
@@ -7364,8 +7861,17 @@ function renderInvestmentDepositOffers(showAlert = false) {
     }))
     .sort((leftOffer, rightOffer) => rightOffer.outcome.netReturn - leftOffer.outcome.netReturn);
 
-  ui.investmentDepositOfferTitle.textContent =
-    `${formatTry(principal)} TL için ${termDays} gün vadeli mevduat karşılaştırması`;
+  if (ui.investmentDepositOfferTitle) {
+    ui.investmentDepositOfferTitle.textContent =
+      `${formatTry(principal)} TL için ${termDays} gün vadeli mevduat karşılaştırması`;
+  }
+
+  if (ui.investmentDepositComparePrincipal) {
+    ui.investmentDepositComparePrincipal.value = formatAmountInput(String(principalInput?.value || principal));
+  }
+  if (ui.investmentDepositCompareTermDays) {
+    ui.investmentDepositCompareTermDays.value = String(termDays);
+  }
 
   if (ui.investmentSilverMeta) {
     ui.investmentSilverMeta.textContent = `Güncelleme: ${formatCurrentDate()}`;
@@ -7373,6 +7879,7 @@ function renderInvestmentDepositOffers(showAlert = false) {
 
   if (matchingOffers.length === 0) {
     ui.investmentDepositOffersList.replaceChildren(createDepositOfferEmptyState());
+    renderInvestmentDepositComparisonTable(principal, termDays);
     return;
   }
 
@@ -7381,6 +7888,120 @@ function renderInvestmentDepositOffers(showAlert = false) {
     fragment.append(createDepositOfferCard(offer, index === 0));
   });
   ui.investmentDepositOffersList.replaceChildren(fragment);
+  renderInvestmentDepositComparisonTable(principal, termDays);
+}
+
+function renderInvestmentDepositComparisonTable(principal, termDays) {
+  if (!(ui.investmentDepositComparisonBody instanceof HTMLElement)) {
+    return;
+  }
+
+  if (!Number.isFinite(principal) || principal <= 0 || !Number.isFinite(termDays) || termDays <= 0) {
+    ui.investmentDepositComparisonBody.replaceChildren(
+      createEmptyRow("Geçerli bir mevduat tutarı ve vade gir.", 5),
+    );
+    return;
+  }
+
+  const rows = getInvestmentDepositComparisonRows(principal, termDays);
+  if (rows.length === 0) {
+    ui.investmentDepositComparisonBody.replaceChildren(
+      createEmptyRow("Bu vade için gösterilecek banka kartı verisi bulunamadı.", 5),
+    );
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+  rows.forEach((rowData) => {
+    fragment.append(createInvestmentDepositComparisonRow(rowData));
+  });
+  ui.investmentDepositComparisonBody.replaceChildren(fragment);
+}
+
+function getInvestmentDepositComparisonRows(principal, termDays) {
+  return HOME_BANK_WALL_BANKS.reduce((accumulator, bankName) => {
+    const comparableDeposit = getComparableDepositProduct(bankName, principal, termDays);
+    if (!comparableDeposit) {
+      return accumulator;
+    }
+
+    const rate = Number(comparableDeposit.rateMap?.[String(termDays)]);
+    if (!Number.isFinite(rate)) {
+      return accumulator;
+    }
+
+    const outcome = calculateDepositOutcome(principal, rate, termDays);
+    accumulator.push({
+      bank: bankName,
+      productTitle: comparableDeposit.product.title,
+      rate,
+      netReturn: outcome.netReturn,
+      maturityAmount: outcome.maturityAmount,
+      detailHref: comparableDeposit.product.detailHref || "",
+      applyHref: comparableDeposit.product.applyHref || comparableDeposit.product.detailHref || "",
+    });
+    return accumulator;
+  }, []).sort((leftRow, rightRow) => rightRow.netReturn - leftRow.netReturn);
+}
+
+function getComparableDepositProduct(bankName, principal, selectedTerm) {
+  const profile = buildBankProfileData(bankName);
+  const products = [...profile.primaryProducts, ...profile.secondaryProducts];
+
+  for (const product of products) {
+    if (product.kind !== "deposit") {
+      continue;
+    }
+
+    const resolvedRateMap = resolveAmountTierRateMap(product.amountRateTiers, principal) || product.rateMap || {};
+    const availableTerms = getTermsFromRateMap(resolvedRateMap);
+    if (!availableTerms.includes(Number(selectedTerm))) {
+      continue;
+    }
+
+    return {
+      product,
+      rateMap: resolvedRateMap,
+    };
+  }
+
+  return null;
+}
+
+function createInvestmentDepositComparisonRow(rowData) {
+  const tr = document.createElement("tr");
+
+  const bankCell = document.createElement("td");
+  const bankWrap = document.createElement("div");
+  bankWrap.className = "bank-logo-cell";
+  const logoElement = createBankLogoElement(rowData.bank, "bank-logo-image");
+  if (logoElement) {
+    bankWrap.append(logoElement);
+  }
+  bankCell.append(bankWrap);
+
+  const rateCell = document.createElement("td");
+  rateCell.textContent = `% ${formatPercentNumber(rowData.rate)}`;
+
+  const netReturnCell = document.createElement("td");
+  netReturnCell.textContent = formatTryWithCents(rowData.netReturn);
+
+  const maturityCell = document.createElement("td");
+  maturityCell.textContent = formatTryWithCents(rowData.maturityAmount);
+
+  const actionCell = document.createElement("td");
+  const actionButton = document.createElement("button");
+  actionButton.type = "button";
+  actionButton.className = "loan-apply-btn";
+  actionButton.textContent = "Başvur";
+  actionButton.dataset.bankApplyButton = "";
+  actionButton.dataset.bankName = rowData.bank;
+  actionButton.dataset.productTitle = rowData.productTitle || "";
+  actionButton.dataset.applyHref = rowData.applyHref || rowData.detailHref || "";
+  actionCell.append(actionButton);
+
+  tr.append(bankCell, rateCell, netReturnCell, maturityCell, actionCell);
+  return tr;
 }
 
 function renderLoanOffersFromPrincipal() {
@@ -7527,11 +8148,11 @@ function renderLoanPaymentSchedule({
     [
       String(row.installmentIndex),
       `${formatTryWithCents(row.paymentAmount)} TL`,
-      `${formatTry(row.principalAmount)} TL`,
-      `${formatTry(row.interestAmount)} TL`,
-      `${formatTry(row.kkdfAmount)} TL`,
-      `${formatTry(row.bsmvAmount)} TL`,
-      `${formatTry(row.remainingPrincipal)} TL`,
+      `${formatTryWithCents(row.principalAmount)} TL`,
+      `${formatTryWithCents(row.interestAmount)} TL`,
+      `${formatTryWithCents(row.kkdfAmount)} TL`,
+      `${formatTryWithCents(row.bsmvAmount)} TL`,
+      `${formatTryWithCents(row.remainingPrincipal)} TL`,
     ].forEach((value) => {
       const td = document.createElement("td");
       td.textContent = value;
@@ -7584,9 +8205,9 @@ function renderLoanOffers({
           ...offer,
           scoreValue: estimatedPrincipal,
           metrics: [
-            ["Tahmini Kredi", `${formatTry(estimatedPrincipal)} TL`],
-            ["Toplam Ödeme", `${formatTry(totalPayment)} TL`],
-            ["Toplam Faiz", `${formatTry(totalInterest)} TL`],
+            ["Tahmini Kredi", `${formatTryWithCents(estimatedPrincipal)} TL`],
+            ["Toplam Ödeme", `${formatTryWithCents(totalPayment)} TL`],
+            ["Toplam Faiz", `${formatTryWithCents(totalInterest)} TL`],
           ],
         };
       }
@@ -7599,8 +8220,8 @@ function renderLoanOffers({
         scoreValue: -monthlyPayment,
         metrics: [
           ["Aylık Taksit", `${formatTryWithCents(monthlyPayment)} TL`],
-          ["Toplam Ödeme", `${formatTry(totalPayment)} TL`],
-          ["Toplam Faiz", `${formatTry(totalInterest)} TL`],
+          ["Toplam Ödeme", `${formatTryWithCents(totalPayment)} TL`],
+          ["Toplam Faiz", `${formatTryWithCents(totalInterest)} TL`],
         ],
       };
     })
