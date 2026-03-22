@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FinansalRehber</title>
-    <link rel="icon" type="image/png" sizes="740x740" href="./assets/ok-favicon.png" />
-    <link rel="apple-touch-icon" href="./assets/ok-favicon.png" />
+    <link rel="icon" type="image/png" sizes="740x740" href="./assets/hedef-red-fav.png" />
+    <link rel="apple-touch-icon" href="./assets/hedef-red-fav.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -21,8 +21,8 @@
     <header class="site-header">
       <div class="container header-inner">
         <a id="brandHome" class="brand" href="#anasayfa">
-          <img class="brand-mark" src="./assets/ok.avif" alt="" aria-hidden="true" />
-          <span class="brand-text">FinansalRehber</span>
+          <img class="brand-mark" src="./assets/hedef-red.png" alt="" aria-hidden="true" />
+          <span class="brand-text"><span class="brand-text-accent">finans</span>rehber</span>
         </a>
 
         <nav class="header-nav" aria-label="Ana menü">
@@ -33,9 +33,11 @@
           <div class="header-nav-item">
             <a id="openLoanPage" class="header-nav-trigger" href="#kredi">Kredi</a>
             <div class="header-mega-menu" aria-label="Kredi hızlı menü">
-              <div class="header-mega-grid">
+              <div class="header-mega-grid header-mega-grid-five">
                 <button class="header-mega-card" type="button" data-nav-action="loan-rates" data-loan-rates-tab="need">
-                  <span class="calc-icon calc-icon-a" aria-hidden="true">₺</span>
+                  <span class="calc-icon calc-icon-a" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/cuzdan.png" alt="" />
+                  </span>
                   <p>İhtiyaç Kredisi</p>
                 </button>
                 <button class="header-mega-card" type="button" data-nav-action="loan-rates" data-loan-rates-tab="housing">
@@ -50,19 +52,13 @@
                   </span>
                   <p>Taşıt Kredisi</p>
                 </button>
-                <button class="header-mega-card" type="button" data-nav-action="loan-rates" data-loan-rates-tab="interestfree">
-                  <span class="calc-icon calc-icon-d" aria-hidden="true">
-                    <img class="calc-icon-image" src="./assets/sifir.png" alt="" />
-                  </span>
-                  <p>Faizsiz Kredi</p>
-                </button>
                 <button class="header-mega-card" type="button" data-nav-action="loan-rates" data-loan-rates-tab="kmh">
                   <span class="calc-icon calc-icon-h" aria-hidden="true">
                     <img class="calc-icon-image" src="./assets/mevduat.svg" alt="" />
                   </span>
                   <p>Kredili Mevduat Hesabı</p>
                 </button>
-                <button class="header-mega-card" type="button" data-nav-action="calculator" data-loan-type="compound">
+                <button class="header-mega-card" type="button" data-nav-action="loan-rates" data-loan-rates-tab="creditcard">
                   <span class="calc-icon calc-icon-e" aria-hidden="true">
                     <img class="calc-icon-image" src="./assets/yuzde.png" alt="" />
                   </span>
@@ -75,7 +71,7 @@
           <div class="header-nav-item">
             <a id="openInvestmentPage" class="header-nav-trigger" href="#yatirim">Yatırım</a>
             <div class="header-mega-menu" aria-label="Yatırım hızlı menü">
-              <div class="header-mega-grid">
+              <div class="header-mega-grid header-mega-grid-five">
                 <button class="header-mega-card" type="button" data-nav-action="investment-section" data-section-key="silver">
                   <span class="calc-icon calc-icon-h" aria-hidden="true">
                     <img class="calc-icon-image" src="./assets/mevduat.svg" alt="" />
@@ -106,12 +102,6 @@
                   </span>
                   <p>Yatırım Fonu</p>
                 </button>
-                <button class="header-mega-card" type="button" data-nav-action="investment-page">
-                  <span class="calc-icon calc-icon-m" aria-hidden="true">
-                    <img class="calc-icon-image" src="./assets/bono.svg" alt="" />
-                  </span>
-                  <p>Bono Tahvil Eurobond</p>
-                </button>
               </div>
             </div>
           </div>
@@ -121,7 +111,9 @@
             <div class="header-mega-menu" aria-label="Hesaplama hızlı menü">
               <div class="header-mega-grid">
                 <button class="header-mega-card" type="button" data-nav-action="calculator" data-loan-type="need">
-                  <span class="calc-icon calc-icon-a" aria-hidden="true">₺</span>
+                  <span class="calc-icon calc-icon-a" aria-hidden="true">
+                    <img class="calc-icon-image" src="./assets/cuzdan.png" alt="" />
+                  </span>
                   <p>İhtiyaç Kredisi<br />Hesaplama</p>
                 </button>
                 <button class="header-mega-card" type="button" data-nav-action="calculator" data-loan-type="housing">
@@ -470,7 +462,7 @@
         <p id="loanRatesDate" class="tefas-meta loan-rates-meta">Güncelleme: 13 Mart 2026</p>
         <article class="investment-gold-table-panel loan-rates-table-panel">
 
-          <div class="loan-rates-filters" aria-label="Kredi karşılaştırma filtreleri">
+          <div id="loanRatesFilters" class="loan-rates-filters" aria-label="Kredi karşılaştırma filtreleri">
             <label class="loan-rates-filter-field" for="loanRatesAmountInput">
               <span>Kredi Tutarı</span>
               <div class="loan-rates-filter-shell">
@@ -486,6 +478,53 @@
               </div>
             </label>
           </div>
+
+          <div id="creditCardRatesFilters" class="credit-card-rates-filters hidden" aria-label="Kredi kartı filtreleri">
+            <div class="tefas-search-row credit-card-search-row">
+              <label class="tefas-search-label" for="creditCardSearchInput">Arama Yap</label>
+              <div class="tefas-search-input-wrap">
+                <input
+                  id="creditCardSearchInput"
+                  type="search"
+                  inputmode="search"
+                  autocomplete="off"
+                  placeholder="Banka veya kart adı ile ara"
+                />
+                <button id="creditCardSearchClear" class="tefas-search-clear" type="button" disabled>Temizle</button>
+              </div>
+            </div>
+
+            <div class="credit-card-select-grid">
+              <label class="loan-rates-filter-field" for="creditCardTypeSelect">
+                <span>Kart Tipi</span>
+                <div class="loan-rates-filter-shell loan-rates-filter-shell-select">
+                  <select id="creditCardTypeSelect">
+                    <option value="all" selected>Tümü</option>
+                    <option value="rewards">Puan / Ödül</option>
+                    <option value="cashback">Nakit İade</option>
+                    <option value="miles">Mil</option>
+                    <option value="student">Öğrenci</option>
+                    <option value="free">Aidatsız</option>
+                  </select>
+                </div>
+              </label>
+
+              <label class="loan-rates-filter-field" for="creditCardFeeSelect">
+                <span>Yıllık Ücret</span>
+                <div class="loan-rates-filter-shell loan-rates-filter-shell-select">
+                  <select id="creditCardFeeSelect">
+                    <option value="all" selected>Tümü</option>
+                    <option value="free">Aidatsız</option>
+                    <option value="low">0 - 500 TL</option>
+                    <option value="mid">500 - 1.000 TL</option>
+                    <option value="high">1.000 TL üzeri</option>
+                  </select>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div id="creditCardSpotlight" class="hidden" aria-hidden="true"></div>
 
           <div class="investment-gold-table-wrap loan-rates-table-wrap">
             <table class="investment-gold-table loan-rates-table">
@@ -711,13 +750,6 @@
         <h2 id="depositCalculatorTitle" class="need-calc-page-heading hidden">Mevduat Faizi Hesaplama</h2>
         <section id="depositCalculator" class="need-calc-wrap hidden" aria-live="polite">
           <article class="deposit-calc-panel">
-            <div class="deposit-calc-tabs" role="tablist" aria-label="Mevduat hesaplama tipi">
-              <button class="deposit-tab active" type="button" role="tab" aria-selected="true">Vadeye göre</button>
-              <button class="deposit-tab" type="button" role="tab" aria-selected="false" disabled>
-                Tarihe göre
-              </button>
-            </div>
-
             <form id="depositCalcForm" class="deposit-calc-form" novalidate>
               <label class="need-calc-field" for="depositPrincipal">
                 <span>Mevduat Tutarı</span>
@@ -1365,12 +1397,13 @@
                     <th>Oran</th>
                     <th>Net Getiri</th>
                     <th>Vade Sonu</th>
+                    <th>Yıllık Bileşik Faiz Oranı</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody id="investmentDepositComparisonBody">
                   <tr>
-                    <td colspan="5" class="table-empty">Banka kartlarından mevduat verileri hazırlanıyor...</td>
+                    <td colspan="6" class="table-empty">Banka kartlarından mevduat verileri hazırlanıyor...</td>
                   </tr>
                 </tbody>
               </table>
@@ -1380,10 +1413,74 @@
       </div>
     </section>
 
+    <div class="home-footer-band">
+      <div class="container home-footer-band-inner">
+        <p class="home-footer-band-quote">
+          Gençken hayattaki en önemli şeyin para olduğunu düşünürdüm. Şimdi yaşlandım ve öyle olduğunu biliyorum.
+        </p>
+        <p class="home-footer-band-author">Oscar Wilde</p>
+      </div>
+    </div>
+
     <footer class="site-footer">
-      <div class="container footer-inner">
-          <p>FinansalRehber</p>
-        <p>Bu çıktı bilgi amaçlıdır, yatırım tavsiyesi değildir.</p>
+      <div class="container footer-shell">
+        <div class="footer-top">
+          <a class="footer-brand" href="#anasayfa">
+            <img class="footer-brand-mark" src="./assets/hedef-red.png" alt="" aria-hidden="true" />
+            <span class="footer-brand-text"><span class="brand-text-accent">finans</span>rehber</span>
+          </a>
+
+          <div class="footer-top-note">
+          </div>
+        </div>
+
+        <div class="footer-grid">
+          <nav class="footer-column" aria-label="Kredi bağlantıları">
+            <h3>Kredi</h3>
+            <a href="#kredi-need">İhtiyaç Kredisi</a>
+            <a href="#kredi-housing">Konut Kredisi</a>
+            <a href="#kredi-vehicle">Taşıt Kredisi</a>
+            <a href="#kredi-kmh">Kredili Mevduat Hesabı</a>
+            <a href="#kredi-creditcard">Kredi Kartı</a>
+          </nav>
+
+          <nav class="footer-column" aria-label="Yatırım bağlantıları">
+            <h3>Yatırım</h3>
+            <a href="#yatirim-mevduat">Mevduat</a>
+            <a href="#yatirim-fx">Döviz</a>
+            <a href="#yatirim-altin">Altın</a>
+            <a href="#yatirim-stock">Borsa</a>
+            <a href="#yatirim-fund">Yatırım Fonu</a>
+          </nav>
+
+          <nav class="footer-column" aria-label="Hesaplama bağlantıları">
+            <h3>Hesaplama</h3>
+            <a href="#hesaplama-need">İhtiyaç Kredisi Hesaplama</a>
+            <a href="#hesaplama-housing">Konut Kredisi Hesaplama</a>
+            <a href="#hesaplama-vehicle">Taşıt Kredisi Hesaplama</a>
+            <a href="#hesaplama-deposit">Mevduat Faizi Hesaplama</a>
+            <a href="#hesaplama-compound">Bileşik Faiz Hesaplama</a>
+            <a href="#hesaplama-real">Reel Faiz Hesaplama</a>
+          </nav>
+
+          <section class="footer-column footer-store-column" aria-label="Mobil uygulama görselleri">
+            <h3>FinansRehber uygulamasını indir</h3>
+            <div class="store-badge" role="img" aria-label="App Store">
+              <span class="store-badge-top">Hemen indirin</span>
+              <span class="store-badge-name">App Store</span>
+            </div>
+            <div class="store-badge" role="img" aria-label="Google Play">
+              <span class="store-badge-top">Hemen indirin</span>
+              <span class="store-badge-name">Google Play</span>
+            </div>
+          </section>
+        </div>
+
+        <p class="footer-copyright">© 2026 FinansRehber. Tüm hakları saklıdır.</p>
+
+        <div class="footer-bottom">
+          <p>Bu sitedeki verilerin doğruluğu ve güncelliği konusunda herhangi bir garanti verilmez. FinansRehber, ürünleri karşılaştırıp başvurunuzu bankaya iletmenize ilişkin size yol gösterir. Faiz oranları ve koşullar bankalarca değiştirilebilir.</p>
+        </div>
       </div>
     </footer>
 

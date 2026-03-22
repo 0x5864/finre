@@ -1,5 +1,3 @@
-import { normalizeInvestmentSectionKey } from "./investment-route.mjs";
-
 const FALLBACK_QUESTIONS = [
   {
     id: "q07",
@@ -678,19 +676,19 @@ const LOAN_RATES_PAGE_DATA = Object.freeze({
     title: "Taşıt Kredisi Banka Karşılaştırması",
     dateLabel: "Güncelleme: 13 Mart 2026",
   },
-  interestfree: {
-    title: "Faizsiz Kredi Banka Karşılaştırması",
-    dateLabel: "Güncelleme: 18 Mart 2026",
-    rateHeading: "Oran",
-    secondaryHeading: "Tahmini Faiz",
-    tertiaryHeading: "Toplam Geri Ödeme",
-  },
   kmh: {
     title: "Kredili Mevduat Hesabı Banka Karşılaştırması",
     dateLabel: "Güncelleme: 18 Mart 2026",
     rateHeading: "Oran",
     secondaryHeading: "Tahmini Faiz",
     tertiaryHeading: "Toplam Geri Ödeme",
+  },
+  creditcard: {
+    title: "Kredi Kartı Karşılaştırma",
+    dateLabel: "Güncelleme: 19 Mart 2026",
+    rateHeading: "Kart Adı",
+    secondaryHeading: "Öne Çıkan Özellik",
+    tertiaryHeading: "Yıllık Ücret",
   },
   kobi: {
     title: "KOBİ Kredisi Banka Karşılaştırması",
@@ -752,11 +750,8 @@ const LOAN_RATES_FILTER_CONFIG = Object.freeze({
     termUnit: "day",
     loanType: "kmh",
   },
-  interestfree: {
-    defaultAmount: 50000,
-    defaultTerm: 6,
-    terms: [3, 6, 12],
-    loanType: "interestfree",
+  creditcard: {
+    filterMode: "creditcard",
   },
   kobi: {
     defaultAmount: 100000,
@@ -770,7 +765,7 @@ const loanRatesFilterState = {
   housing: { amount: 1000000, term: 120 },
   vehicle: { amount: 100000, term: 24 },
   kmh: { amount: 50000, term: 1 },
-  interestfree: { amount: 50000, term: 6 },
+  creditcard: { search: "", cardType: "all", annualFee: "all" },
   kobi: { amount: 100000, term: 24 },
 };
 const BANK_PRODUCT_TYPE_CONFIG = Object.freeze({
@@ -971,15 +966,26 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       {
         kind: "deposit",
         title: "Renkli Hesap",
-        descriptionLines: ["Online başvuru ile %43'e varan hoş geldin faizi sunar."],
+        descriptionLines: [
+          "Tutar Kademeleri: 0 - 100.000 TL",
+          "100.000 - 1.000.000 TL",
+          "1.000.000 TL üzeri",
+        ],
         amountLabel: "Mevduat Tutarı",
         defaultAmount: 250000,
-        rateMap: { 32: 43.0, 92: 43.0, 181: 43.0 },
+        rateMap: { 32: 37.0, 92: 32.0, 181: 30.0 },
+        amountRateTiers: [
+          { min: 0, max: 100000, rateMap: { 32: 37.0, 92: 32.0, 181: 30.0 } },
+          { min: 100001, max: 500000, rateMap: { 32: 37.0, 92: 32.0, 181: 30.0 } },
+          { min: 500001, max: 1000000, rateMap: { 32: 37.0, 92: 32.0, 181: 30.0 } },
+          { min: 1000001, max: 2000000, rateMap: { 32: 37.0, 92: 32.0, 181: 30.0 } },
+          { min: 2000001, max: 999999999999, rateMap: { 32: 37.0, 92: 32.0, 181: 30.0 } },
+        ],
         selectedTerm: 32,
         secondaryLabel: "Net Getiri",
         tertiaryLabel: "Vade Sonu Tutar",
-        detailHref: "https://www.anadolubank.com.tr/sizin-icin/birikim-ve-mevduat/renkli-hesap",
-        applyHref: "https://www.anadolubank.com.tr/sizin-icin/birikim-ve-mevduat/renkli-hesap",
+        detailHref: "https://isube.anadolubank.com.tr/ibanking/open.html?firstPage=INT_INTEREST_RATES_S.js&loginPage=WEB_PAGE_LOGIN.guiml&language=tr",
+        applyHref: "https://isube.anadolubank.com.tr/ibanking/open.html?firstPage=INT_INTEREST_RATES_S.js&loginPage=WEB_PAGE_LOGIN.guiml&language=tr",
       },
     ],
   },
@@ -1270,8 +1276,8 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         selectedTerm: 32,
         secondaryLabel: "Net Getiri",
         tertiaryLabel: "Vade Sonu Tutar",
-        detailHref: "https://www.halkbank.com.tr/tr/bireysel/mevduat/vadeli-hesaplar/e-mevduat.html",
-        applyHref: "https://www.halkbank.com.tr/tr/bireysel/mevduat/vadeli-hesaplar/e-mevduat.html",
+        detailHref: "https://www.halkbank.com.tr/tr/bireysel/mevduat/mevduat-faiz-oranlari/vadeli-tl-mevduat-faiz-oranlari",
+        applyHref: "https://www.halkbank.com.tr/tr/bireysel/mevduat/mevduat-faiz-oranlari/vadeli-tl-mevduat-faiz-oranlari",
       },
     ],
   },
@@ -1322,11 +1328,24 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       },
       {
         kind: "deposit",
-        title: "ARI Hesabı",
-        descriptionLines: ["VakıfBank mobil ve internet bankacılığında günlük faizli hesap."],
+        title: "ARI Hesabı (Standart)",
+        descriptionLines: ["VakıfBank standart mevduat oranları."],
         amountLabel: "Mevduat Tutarı",
         defaultAmount: 250000,
-        rateMap: { 32: 41.0, 92: 23.0, 181: 23.0 },
+        rateMap: { 32: 34.5, 92: 34.0, 181: 27.0 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.vakifbank.com.tr/tr/bireysel/hesaplar/vadeli-hesaplar/ari-hesabi",
+        applyHref: "https://www.vakifbank.com.tr/tr/bireysel/hesaplar/vadeli-hesaplar/ari-hesabi",
+      },
+      {
+        kind: "deposit",
+        title: "ARI Hesabı (Tanışma)",
+        descriptionLines: ["VakıfBank hoş geldin mevduat oranı."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 40.5, 92: 40.5, 181: 40.5 },
         selectedTerm: 32,
         secondaryLabel: "Net Getiri",
         tertiaryLabel: "Vade Sonu Tutar",
@@ -1720,6 +1739,32 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         detailHref: "https://www.garantibbva.com.tr/mevduat-ve-yatirim/vadesiz-mevduat/avans-hesap",
         applyHref: "https://www.garantibbva.com.tr/mevduat-ve-yatirim/vadesiz-mevduat/avans-hesap",
       },
+      {
+        kind: "deposit",
+        title: "Vadeli TL Hesabı",
+        descriptionLines: [
+          "Tutar Kademeleri: 0 - 100.000 TL",
+          "100.000 - 1.000.000 TL",
+          "1.000.000 TL üzeri",
+        ],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 38.5, 92: 37.5, 181: 33.0 },
+        amountRateTiers: [
+          { min: 25000, max: 99999, rateMap: { 32: 38.5, 92: 37.5, 181: 32.5 } },
+          { min: 100000, max: 299999, rateMap: { 32: 38.5, 92: 37.5, 181: 33.0 } },
+          { min: 300000, max: 499999, rateMap: { 32: 38.5, 92: 37.5, 181: 33.5 } },
+          { min: 500000, max: 999999, rateMap: { 32: 38.5, 92: 38.0, 181: 33.5 } },
+          { min: 1000000, max: 2999999, rateMap: { 32: 38.5, 92: 38.0, 181: 34.5 } },
+          { min: 3000000, max: 4999999, rateMap: { 32: 38.5, 92: 38.0, 181: 34.5 } },
+          { min: 5000000, max: 10000000, rateMap: { 32: 38.5, 92: 38.0, 181: 35.5 } },
+        ],
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.garantibbva.com.tr/mevduat/vadeli-tl-hesabi",
+        applyHref: "https://www.garantibbva.com.tr/mevduat/vadeli-tl-hesabi",
+      },
     ],
   },
   qnb: {
@@ -1728,6 +1773,8 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         kind: "loan",
         title: "İhtiyaç Kredisi",
         descriptionLines: ["Tutar: 1.000 - 500.000 TL", "Vade: 3 - 36 Ay"],
+        showcaseTitle: "Krediler",
+        spotlightLayout: "horizontal",
         amountLabel: "Kredi Tutarı",
         defaultAmount: 100000,
         rateMap: { 12: 1.99, 24: 2.54, 36: 3.04 },
@@ -1739,6 +1786,8 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         kind: "loan",
         title: "Konut Kredisi",
         descriptionLines: ["Tutar: Ekspertiz değeri değişimli", "Vade: 12 - 120 Ay"],
+        showcaseTitle: "Krediler",
+        spotlightLayout: "horizontal",
         amountLabel: "Kredi Tutarı",
         defaultAmount: 1000000,
         rateMap: { 24: 2.49, 60: 2.49, 120: 2.49, 180: 3.62 },
@@ -1750,6 +1799,8 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         kind: "loan",
         title: "Taşıt Kredisi",
         descriptionLines: ["Tutar: 50.000 - 400.000 TL", "Vade: 12 - 48 Ay"],
+        showcaseTitle: "Krediler",
+        spotlightLayout: "horizontal",
         amountLabel: "Kredi Tutarı",
         defaultAmount: 250000,
         rateMap: { 12: 4.72, 24: 4.72, 36: 4.72, 48: 4.72 },
@@ -1765,12 +1816,12 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         detailHref: "https://www.qnb.com.tr/krediler/tasit-kredisi",
         applyHref: "https://www.qnb.com.tr/krediler/tasit-kredisi",
       },
-    ],
-    secondaryProducts: [
       {
         kind: "kmh",
         title: "Ek Hesap",
         descriptionLines: ["QNB resmi KMH ürün sayfasındaki güncel oranla örnek hesaplama sunar."],
+        showcaseTitle: "Krediler",
+        spotlightLayout: "horizontal",
         amountLabel: "Tutar",
         defaultAmount: 50000,
         rateMap: { 1: 4.25, 30: 4.25 },
@@ -1781,13 +1832,28 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         detailHref: "https://www.qnb.com.tr/kendim-icin/krediler/nakit-ihtiyaclariniz-icin/ek-hesap",
         applyHref: "https://www.qnb.com.tr/kendim-icin/krediler/nakit-ihtiyaclariniz-icin/ek-hesap",
       },
+    ],
+    secondaryProducts: [
       {
         kind: "deposit",
         title: "E-Vadeli Hesap",
-        descriptionLines: ["QNB Mobil ve internet şubeden açılan vadeli mevduat hesabı."],
+        descriptionLines: [
+          "Tutar Kademeleri: 0 - 100.000 TL",
+          "100.000 - 1.000.000 TL",
+          "1.000.000 TL üzeri",
+        ],
         amountLabel: "Mevduat Tutarı",
         defaultAmount: 250000,
-        rateMap: { 32: 40.75, 92: 40.75, 181: 40.75 },
+        rateMap: { 32: 2.0, 92: 2.0, 181: 2.0 },
+        amountRateTiers: [
+          { min: 10000, max: 249999, rateMap: { 32: 2.0, 92: 2.0, 181: 2.0 } },
+          { min: 250000, max: 499999, rateMap: { 32: 2.0, 92: 2.0, 181: 2.0 } },
+          { min: 500000, max: 999999, rateMap: { 32: 2.0, 92: 2.0, 181: 2.0 } },
+          { min: 1000000, max: 4999999, rateMap: { 32: 2.0, 92: 2.0, 181: 2.0 } },
+          { min: 5000000, max: 9999999, rateMap: { 32: 2.0, 92: 2.0, 181: 2.0 } },
+          { min: 10000000, max: 24999999, rateMap: { 32: 2.0, 92: 2.0, 181: 2.0 } },
+          { min: 25000000, max: 99999999, rateMap: { 32: 2.0, 92: 2.0, 181: 2.0 } },
+        ],
         selectedTerm: 32,
         secondaryLabel: "Net Getiri",
         tertiaryLabel: "Vade Sonu Tutar",
@@ -1911,16 +1977,29 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     secondaryProducts: [
       {
         kind: "deposit",
-        title: "Turuncu Hesap",
-        descriptionLines: ["Hoş geldin faizli birikim hesabı."],
+        title: "Turuncu Hesap (Hoş Geldin)",
+        descriptionLines: ["Tüm vadelerde hoş geldin oranı uygulanır."],
         amountLabel: "Mevduat Tutarı",
         defaultAmount: 250000,
-        rateMap: { 32: 46.0, 92: 46.0, 181: 23.0 },
+        rateMap: { 32: 40.0, 92: 40.0, 181: 40.0 },
         selectedTerm: 32,
         secondaryLabel: "Net Getiri",
         tertiaryLabel: "Vade Sonu Tutar",
-        detailHref: "https://www.ing.com.tr/tr/bireysel/mevduat/turuncu-hesap",
-        applyHref: "https://www.ing.com.tr/tr/bireysel/mevduat/turuncu-hesap",
+        detailHref: "https://www.ing.com.tr/tr/sizin-icin/mevduat/ing-turuncu-hesap",
+        applyHref: "https://www.ing.com.tr/tr/sizin-icin/mevduat/ing-turuncu-hesap",
+      },
+      {
+        kind: "deposit",
+        title: "Turuncu Hesap (Standart)",
+        descriptionLines: ["Tüm vadelerde standart oran uygulanır."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 23.0, 92: 23.0, 181: 23.0 },
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.ing.com.tr/tr/sizin-icin/mevduat/ing-turuncu-hesap",
+        applyHref: "https://www.ing.com.tr/tr/sizin-icin/mevduat/ing-turuncu-hesap",
       },
     ],
   },
@@ -1984,6 +2063,7 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
     ],
   },
   akbank: {
+    disableGenericSecondaryProducts: true,
     primaryProducts: [
       {
         kind: "loan",
@@ -2074,16 +2154,34 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       },
       {
         kind: "deposit",
-        title: "Vadeli Mevduat Hesabı",
-        descriptionLines: ["Akbank resmi vadeli mevduat sayfasında duyurulan oran."],
+        title: "Vadeli Mevduat Hesabı (Tanışma)",
+        descriptionLines: ["Akbank resmi vadeli TL mevduat ürün sayfası."],
         amountLabel: "Mevduat Tutarı",
         defaultAmount: 250000,
         rateMap: { 32: 40.5, 92: 40.5, 181: 40.5 },
         selectedTerm: 32,
         secondaryLabel: "Net Getiri",
         tertiaryLabel: "Vade Sonu Tutar",
-        detailHref: "https://www.akbank.com/tr-tr/urunler/Sayfalar/Vadeli-Mevduat-Hesabi.aspx",
-        applyHref: "https://www.akbank.com/tr-tr/urunler/Sayfalar/Vadeli-Mevduat-Hesabi.aspx",
+        detailHref: "https://www.akbank.com/mevduat-yatirim/mevduat/vadeli-mevduat-hesaplari/vadeli-mevduat-hesabi",
+        applyHref: "https://www.akbank.com/mevduat-yatirim/mevduat/vadeli-mevduat-hesaplari/vadeli-mevduat-hesabi",
+      },
+      {
+        kind: "deposit",
+        title: "Vadeli Mevduat Hesabı (Standart)",
+        descriptionLines: ["Akbank resmi vadeli TL mevduat ürün sayfası."],
+        amountLabel: "Mevduat Tutarı",
+        defaultAmount: 250000,
+        rateMap: { 32: 32.0, 92: 31.0, 181: 30.0 },
+        amountRateTiers: [
+          { min: 0, max: 249999, rateMap: { 32: 31.0, 92: 30.0, 181: 29.0 } },
+          { min: 250000, max: 999999, rateMap: { 32: 32.0, 92: 31.0, 181: 30.0 } },
+          { min: 1000000, max: 999999999999, rateMap: { 32: 32.0, 92: 31.0, 181: 30.0 } },
+        ],
+        selectedTerm: 32,
+        secondaryLabel: "Net Getiri",
+        tertiaryLabel: "Vade Sonu Tutar",
+        detailHref: "https://www.akbank.com/mevduat-yatirim/mevduat/vadeli-mevduat-hesaplari/vadeli-mevduat-hesabi",
+        applyHref: "https://www.akbank.com/mevduat-yatirim/mevduat/vadeli-mevduat-hesaplari/vadeli-mevduat-hesabi",
       },
     ],
   },
@@ -2142,15 +2240,28 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       {
         kind: "deposit",
         title: "E-Vadeli Hesap",
-        descriptionLines: ["Yapı Kredi e-mevduat sayfasında duyurulan oran."],
+        descriptionLines: [
+          "Tutar Kademeleri: 0 - 100.000 TL",
+          "100.000 - 1.000.000 TL",
+          "1.000.000 TL üzeri",
+        ],
         amountLabel: "Mevduat Tutarı",
         defaultAmount: 250000,
-        rateMap: { 32: 43.0, 92: 43.0, 181: 43.0 },
+        rateMap: { 32: 31.5, 92: 31.75, 181: 31.0 },
+        amountRateTiers: [
+          { min: 1000, max: 49999, rateMap: { 32: 30.5, 92: 30.75, 181: 30.0 } },
+          { min: 50000, max: 249999, rateMap: { 32: 30.5, 92: 30.75, 181: 30.0 } },
+          { min: 250000, max: 499999, rateMap: { 32: 31.5, 92: 31.75, 181: 31.0 } },
+          { min: 500000, max: 999999, rateMap: { 32: 32.0, 92: 32.25, 181: 31.5 } },
+          { min: 1000000, max: 1999999, rateMap: { 32: 32.5, 92: 32.75, 181: 32.0 } },
+          { min: 2000000, max: 4999999, rateMap: { 32: 33.0, 92: 33.25, 181: 32.5 } },
+          { min: 5000000, max: 15000000, rateMap: { 32: 33.5, 92: 33.75, 181: 33.0 } },
+        ],
         selectedTerm: 32,
         secondaryLabel: "Net Getiri",
         tertiaryLabel: "Vade Sonu Tutar",
-        detailHref: "https://www.yapikredi.com.tr/mevduat/e-vadeli-hesap",
-        applyHref: "https://www.yapikredi.com.tr/mevduat/e-vadeli-hesap",
+        detailHref: "https://www.yapikredi.com.tr/bireysel-bankacilik/hesaplama-araclari/e-mevduat-faizi-hesaplama",
+        applyHref: "https://www.yapikredi.com.tr/bireysel-bankacilik/hesaplama-araclari/e-mevduat-faizi-hesaplama",
       },
     ],
   },
@@ -2195,15 +2306,28 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       {
         kind: "deposit",
         title: "E-Vadeli Hesap",
-        descriptionLines: ["Yapı Kredi e-mevduat sayfasında duyurulan oran."],
+        descriptionLines: [
+          "Tutar Kademeleri: 0 - 100.000 TL",
+          "100.000 - 1.000.000 TL",
+          "1.000.000 TL üzeri",
+        ],
         amountLabel: "Mevduat Tutarı",
         defaultAmount: 250000,
-        rateMap: { 32: 43.0, 92: 43.0, 181: 43.0 },
+        rateMap: { 32: 31.5, 92: 31.75, 181: 31.0 },
+        amountRateTiers: [
+          { min: 1000, max: 49999, rateMap: { 32: 30.5, 92: 30.75, 181: 30.0 } },
+          { min: 50000, max: 249999, rateMap: { 32: 30.5, 92: 30.75, 181: 30.0 } },
+          { min: 250000, max: 499999, rateMap: { 32: 31.5, 92: 31.75, 181: 31.0 } },
+          { min: 500000, max: 999999, rateMap: { 32: 32.0, 92: 32.25, 181: 31.5 } },
+          { min: 1000000, max: 1999999, rateMap: { 32: 32.5, 92: 32.75, 181: 32.0 } },
+          { min: 2000000, max: 4999999, rateMap: { 32: 33.0, 92: 33.25, 181: 32.5 } },
+          { min: 5000000, max: 15000000, rateMap: { 32: 33.5, 92: 33.75, 181: 33.0 } },
+        ],
         selectedTerm: 32,
         secondaryLabel: "Net Getiri",
         tertiaryLabel: "Vade Sonu Tutar",
-        detailHref: "https://www.yapikredi.com.tr/mevduat/e-vadeli-hesap",
-        applyHref: "https://www.yapikredi.com.tr/mevduat/e-vadeli-hesap",
+        detailHref: "https://www.yapikredi.com.tr/bireysel-bankacilik/hesaplama-araclari/e-mevduat-faizi-hesaplama",
+        applyHref: "https://www.yapikredi.com.tr/bireysel-bankacilik/hesaplama-araclari/e-mevduat-faizi-hesaplama",
       },
     ],
   },
@@ -2226,15 +2350,28 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       {
         kind: "deposit",
         title: "ON Plus Hesap",
-        descriptionLines: ["Mobil kanal üzerinden yüksek faizli birikim hesabı."],
+        descriptionLines: [
+          "Tutar Kademeleri: 499 - 250.000 TL",
+          "250.000 - 1.000.000 TL",
+          "1.000.000 - 2.500.000 TL",
+          "2.500.000 - 5.000.000 TL",
+          "5.000.000 - 10.000.000 TL",
+        ],
         amountLabel: "Mevduat Tutarı",
         defaultAmount: 250000,
-        rateMap: { 32: 47.5, 92: 47.5, 181: 42.5 },
+        rateMap: { 32: 40.5, 92: 39.0, 181: 33.0 },
+        amountRateTiers: [
+          { min: 499, max: 249999, rateMap: { 32: 40.5, 92: 39.0, 181: 34.0 } },
+          { min: 250000, max: 999999, rateMap: { 32: 40.5, 92: 39.0, 181: 33.0 } },
+          { min: 1000000, max: 2499999, rateMap: { 32: 40.5, 92: 39.0, 181: 32.0 } },
+          { min: 2500000, max: 4999999, rateMap: { 32: 40.5, 92: 39.0, 181: 31.0 } },
+          { min: 5000000, max: 10000000, rateMap: { 32: 39.5, 92: 38.0, 181: 30.0 } },
+        ],
         selectedTerm: 32,
         secondaryLabel: "Net Getiri",
         tertiaryLabel: "Vade Sonu Tutar",
-        detailHref: "https://www.on.com.tr/mevduat",
-        applyHref: "https://www.on.com.tr/mevduat",
+        detailHref: "https://on.com.tr/mevduat/musteri-basvuru",
+        applyHref: "https://on.com.tr/mevduat/musteri-basvuru",
       },
     ],
   },
@@ -2257,15 +2394,28 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       {
         kind: "deposit",
         title: "ON Plus Hesap",
-        descriptionLines: ["Mobil kanal üzerinden yüksek faizli birikim hesabı."],
+        descriptionLines: [
+          "Tutar Kademeleri: 499 - 250.000 TL",
+          "250.000 - 1.000.000 TL",
+          "1.000.000 - 2.500.000 TL",
+          "2.500.000 - 5.000.000 TL",
+          "5.000.000 - 10.000.000 TL",
+        ],
         amountLabel: "Mevduat Tutarı",
         defaultAmount: 250000,
-        rateMap: { 32: 47.5, 92: 47.5, 181: 42.5 },
+        rateMap: { 32: 40.5, 92: 39.0, 181: 33.0 },
+        amountRateTiers: [
+          { min: 499, max: 249999, rateMap: { 32: 40.5, 92: 39.0, 181: 34.0 } },
+          { min: 250000, max: 999999, rateMap: { 32: 40.5, 92: 39.0, 181: 33.0 } },
+          { min: 1000000, max: 2499999, rateMap: { 32: 40.5, 92: 39.0, 181: 32.0 } },
+          { min: 2500000, max: 4999999, rateMap: { 32: 40.5, 92: 39.0, 181: 31.0 } },
+          { min: 5000000, max: 10000000, rateMap: { 32: 39.5, 92: 38.0, 181: 30.0 } },
+        ],
         selectedTerm: 32,
         secondaryLabel: "Net Getiri",
         tertiaryLabel: "Vade Sonu Tutar",
-        detailHref: "https://www.on.com.tr/mevduat",
-        applyHref: "https://www.on.com.tr/mevduat",
+        detailHref: "https://on.com.tr/mevduat/musteri-basvuru",
+        applyHref: "https://on.com.tr/mevduat/musteri-basvuru",
       },
     ],
   },
@@ -2288,15 +2438,28 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       {
         kind: "deposit",
         title: "ON Plus Hesap",
-        descriptionLines: ["Mobil kanal üzerinden yüksek faizli birikim hesabı."],
+        descriptionLines: [
+          "Tutar Kademeleri: 499 - 250.000 TL",
+          "250.000 - 1.000.000 TL",
+          "1.000.000 - 2.500.000 TL",
+          "2.500.000 - 5.000.000 TL",
+          "5.000.000 - 10.000.000 TL",
+        ],
         amountLabel: "Mevduat Tutarı",
         defaultAmount: 250000,
-        rateMap: { 32: 47.5, 92: 47.5, 181: 42.5 },
+        rateMap: { 32: 40.5, 92: 39.0, 181: 33.0 },
+        amountRateTiers: [
+          { min: 499, max: 249999, rateMap: { 32: 40.5, 92: 39.0, 181: 34.0 } },
+          { min: 250000, max: 999999, rateMap: { 32: 40.5, 92: 39.0, 181: 33.0 } },
+          { min: 1000000, max: 2499999, rateMap: { 32: 40.5, 92: 39.0, 181: 32.0 } },
+          { min: 2500000, max: 4999999, rateMap: { 32: 40.5, 92: 39.0, 181: 31.0 } },
+          { min: 5000000, max: 10000000, rateMap: { 32: 39.5, 92: 38.0, 181: 30.0 } },
+        ],
         selectedTerm: 32,
         secondaryLabel: "Net Getiri",
         tertiaryLabel: "Vade Sonu Tutar",
-        detailHref: "https://www.on.com.tr/mevduat",
-        applyHref: "https://www.on.com.tr/mevduat",
+        detailHref: "https://on.com.tr/mevduat/musteri-basvuru",
+        applyHref: "https://on.com.tr/mevduat/musteri-basvuru",
       },
     ],
   },
@@ -2382,15 +2545,25 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
       {
         kind: "deposit",
         title: "Birikim Hesabı",
-        descriptionLines: ["Enpara.com birikim hesabı için duyurulan yıllık faiz oranı."],
+        descriptionLines: [
+          "Tutar Kademeleri: 0 - 100.000 TL",
+          "100.000 - 1.000.000 TL",
+          "1.000.000 TL üzeri",
+        ],
         amountLabel: "Mevduat Tutarı",
         defaultAmount: 250000,
-        rateMap: { 32: 39.5, 92: 39.5, 181: 39.5 },
+        rateMap: { 32: 37.0, 92: 33.5, 181: 30.5 },
+        amountRateTiers: [
+          { min: 0, max: 150000, rateMap: { 32: 31.5, 92: 28.0, 181: 25.0 } },
+          { min: 150001, max: 750000, rateMap: { 32: 37.0, 92: 33.5, 181: 30.5 } },
+          { min: 750001, max: 1500000, rateMap: { 32: 38.5, 92: 35.0, 181: 32.0 } },
+          { min: 1500001, max: 999999999999, rateMap: { 32: 39.5, 92: 36.0, 181: 33.0 } },
+        ],
         selectedTerm: 32,
         secondaryLabel: "Net Getiri",
         tertiaryLabel: "Vade Sonu Tutar",
-        detailHref: "https://www.enpara.com/birikim-hesabi",
-        applyHref: "https://www.enpara.com/birikim-hesabi",
+        detailHref: "https://www.enpara.com/hesaplar/birikim-hesabi",
+        applyHref: "https://www.enpara.com/hesaplar/birikim-hesabi",
       },
     ],
   },
@@ -2423,7 +2596,7 @@ const BANK_PROFILE_OVERRIDES = Object.freeze({
         descriptionLines: ["GetirFinans uygulamasında sunulan yüksek faizli birikim ürünü."],
         amountLabel: "Mevduat Tutarı",
         defaultAmount: 250000,
-        rateMap: { 32: 41.0, 92: 41.0, 181: 41.0 },
+        rateMap: { 32: 37.5, 92: 34.5, 181: 31.5 },
         selectedTerm: 32,
         secondaryLabel: "Net Getiri",
         tertiaryLabel: "Vade Sonu Tutar",
@@ -2886,6 +3059,1820 @@ const BANK_LOGO_MAP = Object.freeze({
   "ziraat katılım": "./assets/banks/zk.svg",
   "ziraat katilim": "./assets/banks/zk.svg",
 });
+
+const TURKIYE_FINANS_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "Türkiye Finans Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "Türkiye Finans",
+          title: "Happy Kart Silver",
+          detailHref: "https://www.happycard.com.tr/happy-dunyasi/happy-kart-cesitleri/Sayfalar/happy-kart-silver.aspx",
+          applyHref: "https://basvuru.turkiyefinans.com.tr/kart-basvuru/happy",
+          campaignHref: "https://www.turkiyefinans.com.tr/tr-tr/kampanyalar/Sayfalar/kart-kampanyalari.aspx",
+          imageSrc: "assets/turkiye-finans-cards/happy-kart-silver.png",
+          imageAlt: "Happy Kart Silver",
+        }),
+        Object.freeze({
+          bankLabel: "Türkiye Finans",
+          title: "Happy Kart Gold",
+          detailHref: "https://www.happycard.com.tr/happy-dunyasi/happy-kart-cesitleri/Sayfalar/happy-kart-gold.aspx",
+          applyHref: "https://basvuru.turkiyefinans.com.tr/kart-basvuru/happy",
+          campaignHref: "https://www.turkiyefinans.com.tr/tr-tr/kampanyalar/Sayfalar/kart-kampanyalari.aspx",
+          imageSrc: "assets/turkiye-finans-cards/happy-kart-gold.png",
+          imageAlt: "Happy Kart Gold",
+        }),
+        Object.freeze({
+          bankLabel: "Türkiye Finans",
+          title: "Happy Kart Platinum",
+          detailHref: "https://www.happycard.com.tr/happy-dunyasi/happy-kart-cesitleri/Sayfalar/happy-kart-platinum.aspx",
+          applyHref: "https://basvuru.turkiyefinans.com.tr/kart-basvuru/happy",
+          campaignHref: "https://www.turkiyefinans.com.tr/tr-tr/kampanyalar/Sayfalar/kart-kampanyalari.aspx",
+          imageSrc: "assets/turkiye-finans-cards/happy-kart-platinum.png",
+          imageAlt: "Happy Kart Platinum",
+        }),
+        Object.freeze({
+          bankLabel: "Türkiye Finans",
+          title: "Happy Zero Kart",
+          detailHref: "https://www.happycard.com.tr/happy-dunyasi/happy-kart-cesitleri/Sayfalar/happy-zero-kart.aspx",
+          applyHref: "https://basvuru.turkiyefinans.com.tr/kart-basvuru/happy",
+          campaignHref: "https://www.turkiyefinans.com.tr/tr-tr/kampanyalar/Sayfalar/kart-kampanyalari.aspx",
+          imageSrc: "assets/turkiye-finans-cards/happy-zero-kart.png",
+          imageAlt: "Happy Zero Kart",
+        }),
+        Object.freeze({
+          bankLabel: "Türkiye Finans",
+          title: "Happy Sanal Kart",
+          detailHref: "https://www.happycard.com.tr/happy-dunyasi/happy-kart-cesitleri/Sayfalar/happy-sanal-kart.aspx",
+          applyHref: "https://www.happycard.com.tr/happy-dunyasi/happy-kart-cesitleri/Sayfalar/happy-sanal-kart.aspx",
+          campaignHref: "https://www.turkiyefinans.com.tr/tr-tr/kampanyalar/Sayfalar/kart-kampanyalari.aspx",
+          imageSrc: "assets/turkiye-finans-cards/happy-kart-silver.png",
+          imageAlt: "Happy Sanal Kart",
+        }),
+        Object.freeze({
+          bankLabel: "Türkiye Finans",
+          title: "Happy Ek Kart",
+          detailHref: "https://www.happycard.com.tr/happy-dunyasi/happy-kart-cesitleri/Sayfalar/happy-ek-kart.aspx",
+          applyHref: "https://basvuru.turkiyefinans.com.tr/kart-basvuru/happy",
+          campaignHref: "https://www.turkiyefinans.com.tr/tr-tr/kampanyalar/Sayfalar/kart-kampanyalari.aspx",
+          imageSrc: "assets/turkiye-finans-cards/happy-kart-platinum.png",
+          imageAlt: "Happy Ek Kart",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const KUVEYT_TURK_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "Kuveyt Türk Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "Kuveyt Türk",
+          title: "Sağlam Kart",
+          detailHref: "https://www.kuveytturk.com.tr/kendim-icin/kartlar/kredi-karti/saglam-kart",
+          applyHref: "https://www.kuveytturk.com.tr/kendim-icin/kartlar/kredi-karti/saglam-kart",
+          campaignHref: "https://www.kuveytturk.com.tr/kampanyalar/kendim-icin/kart-kampanyalari",
+          imageSrc: "assets/kuveyt-turk-cards/saglam-kart.jpg",
+          imageAlt: "Sağlam Kart",
+        }),
+        Object.freeze({
+          bankLabel: "Kuveyt Türk",
+          title: "Sağlam Kart Kampüs",
+          detailHref: "https://www.kuveytturk.com.tr/kendim-icin/kartlar/kredi-karti/saglam-kart-kampus",
+          applyHref: "https://www.kuveytturk.com.tr/kendim-icin/kartlar/kredi-karti/saglam-kart-kampus",
+          campaignHref: "https://www.kuveytturk.com.tr/kampanyalar/kendim-icin/kart-kampanyalari",
+          imageSrc: "assets/kuveyt-turk-cards/saglam-kart-kampus.jpg",
+          imageAlt: "Sağlam Kart Kampüs",
+        }),
+        Object.freeze({
+          bankLabel: "Kuveyt Türk",
+          title: "Miles&Smiles Kuveyt Türk Kart",
+          detailHref: "https://www.kuveytturk.com.tr/kendim-icin/kartlar/kredi-karti/milesandsmiles-kuveyt-turk-kart",
+          applyHref: "https://www.kuveytturk.com.tr/kendim-icin/kartlar/kredi-karti/milesandsmiles-kuveyt-turk-kart",
+          campaignHref: "https://www.kuveytturk.com.tr/kampanyalar/kendim-icin/kart-kampanyalari",
+          imageSrc: "assets/kuveyt-turk-cards/miles-smiles-kuveyt-turk-kart.jpg",
+          imageAlt: "Miles&Smiles Kuveyt Türk Kart",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const ALBARAKA_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "Albaraka Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "Albaraka Türk",
+          title: "World Platinum Kart",
+          detailHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/world-platinum-kart",
+          applyHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/kart-basvuru",
+          campaignHref: "https://www.albaraka.com.tr/tr/kampanyalar",
+          imageSrc: "assets/albaraka-cards/world-platinum-kart.jpg",
+          imageAlt: "World Platinum Kart",
+        }),
+        Object.freeze({
+          bankLabel: "Albaraka Türk",
+          title: "World Gold Kart",
+          detailHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/world-gold-kart",
+          applyHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/kart-basvuru",
+          campaignHref: "https://www.albaraka.com.tr/tr/kampanyalar",
+          imageSrc: "assets/albaraka-cards/world-gold-kart.jpg",
+          imageAlt: "World Gold Kart",
+        }),
+        Object.freeze({
+          bankLabel: "Albaraka Türk",
+          title: "World Klasik Kart",
+          detailHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/world-klasik-kart",
+          applyHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/kart-basvuru",
+          campaignHref: "https://www.albaraka.com.tr/tr/kampanyalar",
+          imageSrc: "assets/albaraka-cards/troy-kredi-karti.png",
+          imageAlt: "World Klasik Kart",
+        }),
+        Object.freeze({
+          bankLabel: "Albaraka Türk",
+          title: "Troy Kredi Kartı",
+          detailHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/troy-kredi-karti",
+          applyHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/kart-basvuru",
+          campaignHref: "https://www.albaraka.com.tr/tr/kampanyalar",
+          imageSrc: "assets/albaraka-cards/troy-kredi-karti.png",
+          imageAlt: "Troy Kredi Kartı",
+        }),
+        Object.freeze({
+          bankLabel: "Albaraka Türk",
+          title: "Trend Kredi Kartı",
+          detailHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/trend-kredi-karti",
+          applyHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/kart-basvuru",
+          campaignHref: "https://www.albaraka.com.tr/tr/kampanyalar",
+          imageSrc: "assets/albaraka-cards/trend-kredi-karti.jpg",
+          imageAlt: "Trend Kredi Kartı",
+        }),
+        Object.freeze({
+          bankLabel: "Albaraka Türk",
+          title: "Eflatun Kredi Kartı",
+          detailHref: "https://www.albaraka.com.tr/tr/bireysel/eflatun-bankacilik/eflatun-kartlar/eflatun-kredi-karti",
+          applyHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/kart-basvuru",
+          campaignHref: "https://www.albaraka.com.tr/tr/kampanyalar",
+          imageSrc: "assets/albaraka-cards/eflatun-kredi-karti.jpg",
+          imageAlt: "Eflatun Kredi Kartı",
+        }),
+        Object.freeze({
+          bankLabel: "Albaraka Türk",
+          title: "Özel Kredi Kartı",
+          detailHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/ozel-kredi-karti",
+          applyHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/kart-basvuru",
+          campaignHref: "https://www.albaraka.com.tr/tr/kampanyalar",
+          imageSrc: "assets/albaraka-cards/ozel-kredi-karti.jpg",
+          imageAlt: "Özel Kredi Kartı",
+        }),
+        Object.freeze({
+          bankLabel: "Albaraka Türk",
+          title: "Sanal Kart",
+          detailHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/sanal-kart",
+          applyHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/sanal-kart",
+          campaignHref: "https://www.albaraka.com.tr/tr/kampanyalar",
+          imageSrc: "assets/albaraka-cards/sanal-kart.png",
+          imageAlt: "Sanal Kart",
+        }),
+        Object.freeze({
+          bankLabel: "Albaraka Türk",
+          title: "Ek Kart",
+          detailHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/ek-kart",
+          applyHref: "https://www.albaraka.com.tr/tr/bireysel/kartlar/kredi-kartlari/ek-kart",
+          campaignHref: "https://www.albaraka.com.tr/tr/kampanyalar",
+          imageSrc: "assets/albaraka-cards/ek-kart.jpg",
+          imageAlt: "Ek Kart",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const VAKIF_KATILIM_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "Vakıf Katılım Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "Vakıf Katılım",
+          title: "TROY Dijital Kredi Kartı",
+          detailHref: "https://www.vakifkatilim.com.tr/tr/kendim-icin/kartlar/kredi-karti/troy-dijital-kredi-karti",
+          applyHref: "https://www.vakifkatilim.com.tr/tr/kendim-icin/kartlar/kredi-karti/troy-dijital-kredi-karti",
+          campaignHref: "https://www.vakifkatilim.com.tr/tr/kampanyalar",
+          imageSrc: "assets/vakif-katilim-cards/troy-dijital-kredi-karti.jpg",
+          imageAlt: "TROY Dijital Kredi Kartı",
+        }),
+        Object.freeze({
+          bankLabel: "Vakıf Katılım",
+          title: "VKart Mastercard",
+          detailHref: "https://www.vakifkatilim.com.tr/tr/kendim-icin/kartlar/kredi-karti/vkart-mastercard",
+          applyHref: "https://www.vakifkatilim.com.tr/tr/kendim-icin/kartlar/kredi-karti/vkart-mastercard",
+          campaignHref: "https://www.vakifkatilim.com.tr/tr/kampanyalar",
+          imageSrc: "assets/vakif-katilim-cards/vkart-mastercard.jpg",
+          imageAlt: "VKart Mastercard",
+        }),
+        Object.freeze({
+          bankLabel: "Vakıf Katılım",
+          title: "VKart TROY",
+          detailHref: "https://www.vakifkatilim.com.tr/tr/kendim-icin/kartlar/kredi-karti/vkart-troy",
+          applyHref: "https://www.vakifkatilim.com.tr/tr/kendim-icin/kartlar/kredi-karti/vkart-troy",
+          campaignHref: "https://www.vakifkatilim.com.tr/tr/kampanyalar",
+          imageSrc: "assets/vakif-katilim-cards/vkart-troy.png",
+          imageAlt: "VKart TROY",
+        }),
+        Object.freeze({
+          bankLabel: "Vakıf Katılım",
+          title: "Sanal Kart",
+          detailHref: "https://www.vakifkatilim.com.tr/tr/kendim-icin/kartlar/kredi-karti/sanal-kart",
+          applyHref: "https://www.vakifkatilim.com.tr/tr/kendim-icin/kartlar/kredi-karti/sanal-kart",
+          campaignHref: "https://www.vakifkatilim.com.tr/tr/kampanyalar",
+          imageSrc: "assets/vakif-katilim-cards/sanal-kart.jpg",
+          imageAlt: "Sanal Kart",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const SEKERBANK_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "Şekerbank Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "Şekerbank",
+          title: "Şeker Bonus",
+          detailHref: "https://www.sekerbank.com.tr/bireysel/kart-urunleri/kredi-kartlari/seker-bonus-kart",
+          applyHref: "https://www.sekerbank.com.tr/bireysel/kart-urunleri/kredi-kartlari/seker-bonus-kart",
+          campaignHref: "https://www.sekerbank.com.tr/bireysel/kampanyalar/kart-kampanyalari",
+          imageSrc: "assets/sekerbank-cards/seker-bonus.png",
+          imageAlt: "Şeker Bonus",
+        }),
+        Object.freeze({
+          bankLabel: "Şekerbank",
+          title: "Şeker Bonus Sanal Kart",
+          detailHref: "https://www.sekerbank.com.tr/bireysel/kart-urunleri/kredi-kartlari/seker-bonus-sanal-kart",
+          applyHref: "https://www.sekerbank.com.tr/bireysel/kart-urunleri/kredi-kartlari/seker-bonus-sanal-kart",
+          campaignHref: "https://www.sekerbank.com.tr/bireysel/kampanyalar/kart-kampanyalari",
+          imageSrc: "assets/sekerbank-cards/seker-bonus-sanal-kart.png",
+          imageAlt: "Şeker Bonus Sanal Kart",
+        }),
+        Object.freeze({
+          bankLabel: "Şekerbank",
+          title: "Şekerbank Diamond Visa Signature",
+          detailHref: "https://www.sekerbank.com.tr/bireysel/kart-urunleri/kredi-kartlari/sekerbank-diamond-visa-signature-kart",
+          applyHref: "https://www.sekerbank.com.tr/bireysel/kart-urunleri/kredi-kartlari/sekerbank-diamond-visa-signature-kart",
+          campaignHref: "https://www.sekerbank.com.tr/bireysel/kampanyalar/diamond-kart-kampanyalari",
+          imageSrc: "assets/sekerbank-cards/sekerbank-diamond-visa-signature.png",
+          imageAlt: "Şekerbank Diamond Visa Signature",
+        }),
+        Object.freeze({
+          bankLabel: "Şekerbank",
+          title: "Şeker Kart",
+          detailHref: "https://www.sekerbank.com.tr/bireysel/kart-urunleri/kredi-kartlari/seker-kart",
+          applyHref: "https://www.sekerbank.com.tr/bireysel/kart-urunleri/kredi-kartlari/seker-kart",
+          campaignHref: "https://www.sekerbank.com.tr/bireysel/kampanyalar/kart-kampanyalari",
+          imageSrc: "assets/sekerbank-cards/seker-kart.png",
+          imageAlt: "Şeker Kart",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const ZIRAAT_KATILIM_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "Ziraat Katılım Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "Ziraat Katılım",
+          title: "Bankkart (Kredi Kartı)",
+          detailHref: "https://www.ziraatkatilim.com.tr/bireysel/kartlar/kredi-karti",
+          applyHref: "https://www.ziraatkatilim.com.tr/bireysel/kartlar/kredi-karti",
+          campaignHref: "https://www.ziraatkatilim.com.tr/kart-kampanyalari",
+          imageSrc: "assets/ziraat-katilim-cards/bankkart-kredi-karti.jpg",
+          imageAlt: "Bankkart Kredi Kartı",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const ODEABANK_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "Odeabank Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "Odeabank",
+          title: "Odea Private Card",
+          detailHref: "https://www.odeabank.com.tr/bireysel/kartlar/odea-private-card",
+          applyHref: "https://www.odeabank.com.tr/bireysel/kartlar/odea-private-card",
+          campaignHref: "https://www.odeabank.com.tr/kampanyalar",
+          imageSrc: "assets/odeabank-cards/odea-private-card.jpg",
+          imageAlt: "Odea Private Card",
+        }),
+        Object.freeze({
+          bankLabel: "Odeabank",
+          title: "Odea Ayrıcalıklı Kart",
+          detailHref: "https://www.odeabank.com.tr/bireysel/kartlar/odeabank-ayricalikli-kart",
+          applyHref: "https://www.odeabank.com.tr/bireysel/kartlar/odeabank-ayricalikli-kart",
+          campaignHref: "https://www.odeabank.com.tr/kampanyalar",
+          imageSrc: "assets/odeabank-cards/odea-ayricalikli-kart.jpg",
+          imageAlt: "Odea Ayrıcalıklı Kart",
+        }),
+        Object.freeze({
+          bankLabel: "Odeabank",
+          title: "Odea Axess Card",
+          detailHref: "https://www.odeabank.com.tr/bireysel/kartlar/banko-card-axess",
+          applyHref: "https://www.odeabank.com.tr/bireysel/kartlar/banko-card-axess",
+          campaignHref: "https://www.odeabank.com.tr/kampanyalar",
+          imageSrc: "assets/odeabank-cards/odea-axess-card.jpg",
+          imageAlt: "Odea Axess Card",
+        }),
+        Object.freeze({
+          bankLabel: "Odeabank",
+          title: "Odea Masrafsız Kart",
+          detailHref: "https://www.odeabank.com.tr/bireysel/kartlar/banko-card",
+          applyHref: "https://www.odeabank.com.tr/bireysel/kartlar/banko-card",
+          campaignHref: "https://www.odeabank.com.tr/kampanyalar",
+          imageSrc: "assets/odeabank-cards/odea-masrafsiz-kart.jpg",
+          imageAlt: "Odea Masrafsız Kart",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const ANADOLUBANK_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "Anadolubank Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "Anadolubank",
+          title: "Anadolubank Worldcard",
+          detailHref: "https://www.anadolubank.com.tr/sizin-icin/kartlar/worldcard",
+          applyHref: "https://www.anadolubank.com.tr/sizin-icin/kartlar/worldcard",
+          campaignHref: "https://www.anadolubank.com.tr/kampanyalar",
+          imageSrc: "assets/anadolubank-cards/anadolubank-worldcard.webp",
+          imageAlt: "Anadolubank Worldcard",
+        }),
+        Object.freeze({
+          bankLabel: "Anadolubank",
+          title: "Anadolubank Kredi Kartı",
+          detailHref: "https://www.anadolubank.com.tr/sizin-icin/kartlar/kredi-karti",
+          applyHref: "https://www.anadolubank.com.tr/sizin-icin/kartlar/kredi-karti",
+          campaignHref: "https://www.anadolubank.com.tr/kampanyalar",
+          imageSrc: "assets/anadolubank-cards/anadolubank-kredi-karti.jpg",
+          imageAlt: "Anadolubank Kredi Kartı",
+        }),
+        Object.freeze({
+          bankLabel: "Anadolubank",
+          title: "Anadolubank Sanal Worldcard",
+          detailHref: "https://www.anadolubank.com.tr/sizin-icin/kartlar/sanal-worldcard",
+          applyHref: "https://www.anadolubank.com.tr/sizin-icin/kartlar/sanal-worldcard",
+          campaignHref: "https://www.anadolubank.com.tr/kampanyalar",
+          imageSrc: "assets/anadolubank-cards/anadolubank-sanal-worldcard.jpg",
+          imageAlt: "Anadolubank Sanal Worldcard",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const ALTERNATIF_BANK_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "Alternatif Bank Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "Alternatif Bank",
+          title: "Alternatif Bank Bonus",
+          detailHref: "https://www.alternatifbank.com.tr/bireysel/bireysel-kartlar/alternatif-bank-bonus",
+          applyHref: "https://www.alternatifbank.com.tr/bireysel/bireysel-kartlar/alternatif-bank-bonus",
+          campaignHref: "https://www.alternatifbank.com.tr/kampanyalar",
+          imageSrc: "assets/alternatifbank-cards/alternatif-bank-bonus.png",
+          imageAlt: "Alternatif Bank Bonus",
+        }),
+        Object.freeze({
+          bankLabel: "Alternatif Bank",
+          title: "UygunKart",
+          detailHref: "https://www.alternatifbank.com.tr/bireysel/bireysel-kartlar/uygunkart",
+          applyHref: "https://www.alternatifbank.com.tr/bireysel/bireysel-kartlar/uygunkart",
+          campaignHref: "https://www.alternatifbank.com.tr/kampanyalar",
+          imageSrc: "assets/alternatifbank-cards/uygunkart.jpg",
+          imageAlt: "UygunKart",
+        }),
+        Object.freeze({
+          bankLabel: "Alternatif Bank",
+          title: "Sanal Kart",
+          detailHref: "https://www.alternatifbank.com.tr/bireysel/bireysel-kartlar/sanal-kart",
+          applyHref: "https://www.alternatifbank.com.tr/bireysel/bireysel-kartlar/sanal-kart",
+          campaignHref: "https://www.alternatifbank.com.tr/kampanyalar",
+          imageSrc: "assets/alternatifbank-cards/sanal-kart.png",
+          imageAlt: "Sanal Kart",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const ING_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "ING Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "ING",
+          title: "ING Bonus Card",
+          detailHref: "https://www.ing.com.tr/tr/sizin-icin/kartlar/kredi-karti",
+          applyHref: "https://basvuru.ing.com.tr/tr/sizin-icin/urun-basvuru-formu/kart",
+          campaignHref: "https://www.ing.com.tr/tr/sizin-icin/kampanyalar/ing-kredi-kartlari-teklifleri",
+          imageSrc: "assets/ing-cards/ing-bonus-card.png",
+          imageAlt: "ING Bonus Card",
+        }),
+        Object.freeze({
+          bankLabel: "ING",
+          title: "Dijital Kredi Kartları",
+          detailHref: "https://www.ing.com.tr/tr/sizin-icin/kartlar/dijital-kart",
+          applyHref: "https://basvuru.ing.com.tr/tr/sizin-icin/urun-basvuru-formu/dijital-kart",
+          campaignHref: "https://www.ing.com.tr/tr/sizin-icin/kampanyalar/ing-kredi-kartlari-teklifleri",
+          imageSrc: "assets/ing-cards/dijital-kredi-karti.png",
+          imageAlt: "Dijital Kredi Kartları",
+        }),
+        Object.freeze({
+          bankLabel: "ING",
+          title: "ING Light Kart",
+          detailHref: "https://www.ing.com.tr/tr/sizin-icin/kartlar/kredi-karti",
+          applyHref: "https://basvuru.ing.com.tr/tr/sizin-icin/urun-basvuru-formu/kart",
+          campaignHref: "https://www.ing.com.tr/tr/sizin-icin/kampanyalar/ing-kredi-kartlari-teklifleri",
+          imageSrc: "assets/ing-cards/ing-light-kart.png",
+          imageAlt: "ING Light Kart",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const FIBABANKA_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "Fibabanka Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "Fibabanka",
+          title: "Fibabanka Kredi Kartı",
+          detailHref: "https://www.fibabanka.com.tr/bireysel/kartlar/kredi-kartlari",
+          applyHref: "https://www.fibabanka.com.tr/bireysel/kartlar/kredi-kartlari",
+          campaignHref: "https://www.fibabanka.com.tr/kampanyalar",
+          imageSrc: "assets/fibabanka-cards/fibabanka-kredi-karti.png",
+          imageAlt: "Fibabanka Kredi Kartı",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const HSBC_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "HSBC Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "HSBC",
+          title: "HSBC Premier / Premier Miles Kredi Kartı",
+          detailHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kredi-kartlari/hsbc-premier-kredi-karti",
+          applyHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kredi-kartlari/hsbc-premier-kredi-karti",
+          campaignHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kampanyalar/guncel-kampanyalar",
+          imageSrc: "assets/hsbc-cards/hsbc-premier-kredi-karti.jpg",
+          imageAlt: "HSBC Premier / Premier Miles Kredi Kartı",
+        }),
+        Object.freeze({
+          bankLabel: "HSBC",
+          title: "HSBC Advantage Kredi Kartları",
+          detailHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kredi-kartlari/hsbc-advantage-kredi-kartlari",
+          applyHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kredi-kartlari/hsbc-advantage-kredi-kartlari",
+          campaignHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kampanyalar/guncel-kampanyalar",
+          imageSrc: "assets/hsbc-cards/hsbc-advantage-kredi-kartlari.jpg",
+          imageAlt: "HSBC Advantage Kredi Kartları",
+        }),
+        Object.freeze({
+          bankLabel: "HSBC",
+          title: "HSBC Concept Kart",
+          detailHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kredi-kartlari/hsbc-concept-kart",
+          applyHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kredi-kartlari/hsbc-concept-kart",
+          campaignHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kampanyalar/guncel-kampanyalar",
+          imageSrc: "assets/hsbc-cards/hsbc-concept-kart.jpg",
+          imageAlt: "HSBC Concept Kart",
+        }),
+        Object.freeze({
+          bankLabel: "HSBC",
+          title: "HSBC Banka Kartı",
+          detailHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kredi-kartlari/hsbc-banka-karti",
+          applyHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kredi-kartlari/hsbc-banka-karti",
+          campaignHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kampanyalar/guncel-kampanyalar",
+          imageSrc: "assets/hsbc-cards/hsbc-banka-karti.jpg",
+          imageAlt: "HSBC Banka Kartı",
+        }),
+        Object.freeze({
+          bankLabel: "HSBC",
+          title: "Sanal Kart",
+          detailHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kredi-kartlari/sanal-kart",
+          applyHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kredi-kartlari/sanal-kart",
+          campaignHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kampanyalar/guncel-kampanyalar",
+          imageSrc: "assets/hsbc-cards/sanal-kart.jpg",
+          imageAlt: "Sanal Kart",
+        }),
+        Object.freeze({
+          bankLabel: "HSBC",
+          title: "Ek Kart",
+          detailHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kredi-kartlari/ek-kart",
+          applyHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kredi-kartlari/ek-kart",
+          campaignHref: "https://www.hsbc.com.tr/kartlar-ve-krediler/kampanyalar/guncel-kampanyalar",
+          imageSrc: "assets/hsbc-cards/ek-kart.jpg",
+          imageAlt: "Ek Kart",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const TEB_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "TEB Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "TEB",
+          title: "TEB Classic Card",
+          detailHref: "https://www.teb.com.tr/teb-bonus-kredi-karti/",
+          applyHref: "https://www.teb.com.tr/teb-bonus-kredi-karti/",
+          campaignHref: "https://www.teb.com.tr/kart-dunyasi/",
+          imageSrc: "assets/teb-cards/teb-bonus-kredi-karti.jpg",
+          imageAlt: "TEB Classic Card",
+        }),
+        Object.freeze({
+          bankLabel: "TEB",
+          title: "TEB She Card",
+          detailHref: "https://www.teb.com.tr/teb-she-card/",
+          applyHref: "https://www.teb.com.tr/teb-she-card/",
+          campaignHref: "https://www.teb.com.tr/kart-dunyasi/",
+          imageSrc: "assets/teb-cards/teb-she-card.jpg",
+          imageAlt: "TEB She Card",
+        }),
+        Object.freeze({
+          bankLabel: "TEB",
+          title: "CEPTETEB Dijital Kredi Kartı",
+          detailHref: "https://www.cepteteb.com.tr/cepteteb-dijital-kredi-karti",
+          applyHref: "https://www.cepteteb.com.tr/cepteteb-dijital-kredi-karti",
+          campaignHref: "https://www.teb.com.tr/kart-dunyasi/",
+          imageSrc: "assets/teb-cards/cepteteb-dijital-kredi-karti.jpg",
+          imageAlt: "CEPTETEB Dijital Kredi Kartı",
+        }),
+        Object.freeze({
+          bankLabel: "TEB",
+          title: "TEB Platinum Card",
+          detailHref: "https://www.teb.com.tr/teb-platinum-card/",
+          applyHref: "https://www.teb.com.tr/teb-platinum-card/",
+          campaignHref: "https://www.teb.com.tr/kart-dunyasi/",
+          imageSrc: "assets/teb-cards/teb-platinum-card.jpg",
+          imageAlt: "TEB Platinum Card",
+        }),
+        Object.freeze({
+          bankLabel: "TEB",
+          title: "TEB Infinite Card",
+          detailHref: "https://www.teb.com.tr/infinite-card/",
+          applyHref: "https://www.teb.com.tr/infinite-card/",
+          campaignHref: "https://www.teb.com.tr/kart-dunyasi/",
+          imageSrc: "assets/teb-cards/infinite-card.jpg",
+          imageAlt: "TEB Infinite Card",
+        }),
+        Object.freeze({
+          bankLabel: "TEB",
+          title: "TEB Emekli Card",
+          detailHref: "https://www.teb.com.tr/emekli-kart/",
+          applyHref: "https://www.teb.com.tr/emekli-kart/",
+          campaignHref: "https://www.teb.com.tr/kart-dunyasi/",
+          imageSrc: "assets/teb-cards/emekli-kart.jpg",
+          imageAlt: "TEB Emekli Card",
+        }),
+        Object.freeze({
+          bankLabel: "TEB",
+          title: "TEB Sade Kart",
+          detailHref: "https://www.teb.com.tr/sade-kart/",
+          applyHref: "https://www.teb.com.tr/sade-kart/",
+          campaignHref: "https://www.teb.com.tr/kart-dunyasi/",
+          imageSrc: "assets/teb-cards/sade-kart.jpg",
+          imageAlt: "TEB Sade Kart",
+        }),
+        Object.freeze({
+          bankLabel: "TEB",
+          title: "TEB Signature Card",
+          detailHref: "https://www.teb.com.tr/yildiz-signature-card/",
+          applyHref: "https://www.teb.com.tr/yildiz-signature-card/",
+          campaignHref: "https://www.teb.com.tr/kart-dunyasi/",
+          imageSrc: "assets/teb-cards/yildiz-signature-card.jpg",
+          imageAlt: "TEB Signature Card",
+        }),
+        Object.freeze({
+          bankLabel: "TEB",
+          title: "TEB Yıldız Priority Card",
+          detailHref: "https://www.teb.com.tr/teb-yildiz-priority-card/",
+          applyHref: "https://www.teb.com.tr/teb-yildiz-priority-card/",
+          campaignHref: "https://www.teb.com.tr/kart-dunyasi/",
+          imageSrc: "assets/teb-cards/teb-yildiz-priority-card.jpg",
+          imageAlt: "TEB Yıldız Priority Card",
+        }),
+        Object.freeze({
+          bankLabel: "TEB",
+          title: "TEB Özel World Elite Card",
+          detailHref: "https://www.teb.com.tr/teb-ozel-world-elite-card/",
+          applyHref: "https://www.teb.com.tr/teb-ozel-world-elite-card/",
+          campaignHref: "https://www.teb.com.tr/kart-dunyasi/",
+          imageSrc: "assets/teb-cards/teb-ozel-world-elite-card.jpg",
+          imageAlt: "TEB Özel World Elite Card",
+        }),
+        Object.freeze({
+          bankLabel: "TEB",
+          title: "TEB Sanal Kart",
+          detailHref: "https://www.teb.com.tr/sanal-kart/",
+          applyHref: "https://www.teb.com.tr/sanal-kart/",
+          campaignHref: "https://www.teb.com.tr/kart-dunyasi/",
+          imageSrc: "assets/teb-cards/sanal-kart.jpg",
+          imageAlt: "TEB Sanal Kart",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const HALKBANK_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "Halkbank Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf Ailem",
+          detailHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-ailem",
+          applyHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-ailem",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-ailem.png",
+          imageAlt: "Paraf Ailem",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf Troy",
+          detailHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-troy",
+          applyHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-troy",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-troy.png",
+          imageAlt: "Paraf Troy",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf",
+          detailHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf",
+          applyHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf.png",
+          imageAlt: "Paraf",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf Platinum",
+          detailHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-platinum",
+          applyHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-platinum",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-platinum.png",
+          imageAlt: "Paraf Platinum",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Parafly",
+          detailHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/parafly",
+          applyHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/parafly",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/parafly.png",
+          imageAlt: "Parafly",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Parafly Platinum",
+          detailHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/parafly-platinum",
+          applyHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/parafly-platinum",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/parafly-platinum.png",
+          imageAlt: "Parafly Platinum",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf Genç",
+          detailHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-genc",
+          applyHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-genc",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-genc.png",
+          imageAlt: "Paraf Genç",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Halkcard",
+          detailHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/halkcard",
+          applyHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/halkcard",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/halkcard.png",
+          imageAlt: "Halkcard",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf Kadın",
+          detailHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-kadin",
+          applyHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-kadin",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-kadin.png",
+          imageAlt: "Paraf Kadın",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf Doğal",
+          detailHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-dogal",
+          applyHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-dogal",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-dogal.png",
+          imageAlt: "Paraf Doğal",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf Değerlimiz",
+          detailHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-degerlimiz",
+          applyHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-degerlimiz",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-degerlimiz.png",
+          imageAlt: "Paraf Değerlimiz",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf Ringpay",
+          detailHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-ringpay",
+          applyHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-ringpay",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-ringpay.png",
+          imageAlt: "Paraf Ringpay",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf Emekli",
+          detailHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-emekli",
+          applyHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-emekli",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-emekli.png",
+          imageAlt: "Paraf Emekli",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf Sanal",
+          detailHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-sanal",
+          applyHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/bireysel/paraf-sanal",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-sanal.png",
+          imageAlt: "Paraf Sanal",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf Business",
+          detailHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ticari/paraf-business",
+          applyHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ticari/paraf-business",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-business.png",
+          imageAlt: "Paraf Business",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf Esnaf",
+          detailHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ticari/paraf-esnaf",
+          applyHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ticari/paraf-esnaf",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-esnaf.png",
+          imageAlt: "Paraf Esnaf",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf KOBİ",
+          detailHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ticari/paraf-kobi",
+          applyHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ticari/paraf-kobi",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-kobi.png",
+          imageAlt: "Paraf KOBİ",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Eczacı Paraf KOBİ",
+          detailHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ticari/eczaci-paraf-kobi",
+          applyHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ticari/eczaci-paraf-kobi",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/eczaci-paraf-kobi.png",
+          imageAlt: "Eczacı Paraf KOBİ",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Halkcard Business",
+          detailHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ticari/halkcard-business",
+          applyHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ticari/halkcard-business",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/halkcard-business.png",
+          imageAlt: "Halkcard Business",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf KOBİ TOBB",
+          detailHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ticari/paraf-kobi-tobb",
+          applyHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ticari/paraf-kobi-tobb",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-kobi-tobb.png",
+          imageAlt: "Paraf KOBİ TOBB",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf Üreten Kadın",
+          detailHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ticari/paraf-ureten-kadin",
+          applyHref:
+            "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ticari/paraf-ureten-kadin",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-ureten-kadin.png",
+          imageAlt: "Paraf Üreten Kadın",
+        }),
+        Object.freeze({
+          bankLabel: "Halkbank",
+          title: "Paraf Premium",
+          detailHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ozel/paraf-premium",
+          applyHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ozel/paraf-premium",
+          campaignHref: "https://www.halkbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/halkbank-cards/paraf-premium.png",
+          imageAlt: "Paraf Premium",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const VAKIFBANK_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "VakıfBank Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Recycle Card",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/recycle-card",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/recycle-card",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/recycle-card.png",
+          imageAlt: "Recycle Card",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Emekli Kart",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/emekli-kart",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/emekli-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/emekli-kart.png",
+          imageAlt: "Emekli Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Platinum Plus Metal Kart",
+          detailHref:
+            "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/platinum-plus-metal-kart",
+          applyHref:
+            "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/platinum-plus-metal-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/platinum-plus-metal-kart.png",
+          imageAlt: "Platinum Plus Metal Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Platinum Plus Kart",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/platinum-plus-kart",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/platinum-plus-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/platinum-plus-kart.png",
+          imageAlt: "Platinum Plus Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "MilPlus Platinum Kart",
+          detailHref:
+            "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/milplus-platinum-kart",
+          applyHref:
+            "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/milplus-platinum-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/milplus-platinum-kart.png",
+          imageAlt: "MilPlus Platinum Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Platinum One",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/platinum-one",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/platinum-one",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/platinum-one.png",
+          imageAlt: "Platinum One",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Platinum",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/platinum",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/platinum",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/platinum.png",
+          imageAlt: "Platinum",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Gold Kart",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/gold-kart",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/gold-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/gold-kart.png",
+          imageAlt: "Gold Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "VakıfBank Worldcard",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/vakifbank-worldcard",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/vakifbank-worldcard",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/vakifbank-worldcard.png",
+          imageAlt: "VakıfBank Worldcard",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Rail&Miles",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/railandmiles",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/railandmiles",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/railandmiles.png",
+          imageAlt: "Rail&Miles",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Click Kart",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/click-kart",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/click-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/click-kart.png",
+          imageAlt: "Click Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Ace Card",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ace-card",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ace-card",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/ace-card.png",
+          imageAlt: "Ace Card",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Beşiktaş Kart",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/besiktas-kart",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/besiktas-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/besiktas-kart.png",
+          imageAlt: "Beşiktaş Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Fenerbahçe Kart",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/fenerbahce-kart",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/fenerbahce-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/fenerbahce-kart.png",
+          imageAlt: "Fenerbahçe Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Galatasaray Kart",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/galatasaray-kart",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/galatasaray-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/galatasaray-kart.png",
+          imageAlt: "Galatasaray Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Trabzonspor Kart",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/trabzonspor-kart",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/trabzonspor-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/trabzonspor-kart.png",
+          imageAlt: "Trabzonspor Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Like Card",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/like-card",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/like-card",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/like-card.png",
+          imageAlt: "Like Card",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Kampüs Kart",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/kampus-kart",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/kampus-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/kampus-kart.png",
+          imageAlt: "Kampüs Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Express Card",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/express-card",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/express-card",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/express-card.png",
+          imageAlt: "Express Card",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Öğretmenim Kart",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ogretmenim-kart",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ogretmenim-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/ogretmenim-kart.png",
+          imageAlt: "Öğretmenim Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "ASES Kart",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ases-kart",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/ases-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/ases-kart.png",
+          imageAlt: "ASES Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Kamusen Kart",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/kamusen-kart",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/kamusen-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/kamusen-kart.png",
+          imageAlt: "Kamusen Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Sanal Kart",
+          detailHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/sanal-kart",
+          applyHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/sanal-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/sanal-kart.png",
+          imageAlt: "Sanal Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Fenerbahçe Klasik Kart",
+          detailHref:
+            "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/fenerbahce-klasik-kart",
+          applyHref:
+            "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/fenerbahce-klasik-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/fenerbahce-klasik-kart.png",
+          imageAlt: "Fenerbahçe Klasik Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Fenerbahçe Platinum Kart",
+          detailHref:
+            "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/fenerbahce-platinum-kart",
+          applyHref:
+            "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/fenerbahce-platinum-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/fenerbahce-platinum-kart.png",
+          imageAlt: "Fenerbahçe Platinum Kart",
+        }),
+        Object.freeze({
+          bankLabel: "VakıfBank",
+          title: "Fenerbahçe Gold Kart",
+          detailHref:
+            "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/fenerbahce-gold-kart",
+          applyHref:
+            "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari/fenerbahce-gold-kart",
+          campaignHref: "https://www.vakifbank.com.tr/tr/bireysel/kartlar/kredi-kartlari",
+          imageSrc: "assets/vakifbank-cards/fenerbahce-gold-kart.png",
+          imageAlt: "Fenerbahçe Gold Kart",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const ICBC_TURKEY_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "ICBC Turkey Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "ICBC Turkey",
+          title: "ICBC Turkey Bonus Kredi Kartı",
+          detailHref:
+            "https://www.icbc.com.tr/tr/sizin-icin/detay/ICBC-Turkey-Bonus-Kredi-Karti/44/1120/0",
+          applyHref:
+            "https://www.icbc.com.tr/tr/basvuru/kredi-karti-tipleri/Kredi-Karti-Basvuru/398/1102/0",
+          campaignHref:
+            "https://www.icbc.com.tr/tr/sizin-icin/bonus-kampanyalar/Kredi-Kartlari/389/0/0",
+          imageSrc:
+            "assets/icbc-turkey-cards/icbc-turkey-bonus-kredi-karti.jpg",
+          imageAlt: "ICBC Turkey Bonus Kredi Kartı",
+        }),
+        Object.freeze({
+          bankLabel: "ICBC Turkey",
+          title: "ICBC Turkey UnionPay Kredi Kartı",
+          detailHref:
+            "https://www.icbc.com.tr/tr/sizin-icin/detay/ICBC-Turkey-UnionPay-Kredi-Karti/1913/5284/0",
+          applyHref:
+            "https://www.icbc.com.tr/tr/sizin-icin/detay/ICBC-Turkey-UnionPay-Kredi-Karti/1913/5284/0",
+          campaignHref:
+            "https://www.icbc.com.tr/tr/sizin-icin/bonus-kampanyalar/Kredi-Kartlari/389/0/0",
+          imageSrc:
+            "assets/icbc-turkey-cards/icbc-turkey-unionpay-kredi-karti.jpg",
+          imageAlt: "ICBC Turkey UnionPay Kredi Kartı",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const ENPARA_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "Enpara.com Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "Enpara.com",
+          title: "Enpara.com Kredi Kartı",
+          detailHref: "https://www.enpara.com/kartlar/enparacom-kredi-karti",
+          applyHref: "https://www.enpara.com/kartlar/enparacom-kredi-karti",
+          campaignHref: "https://www.enpara.com/kampanyalar",
+          imageSrc: "assets/enpara-cards/enparacom-kredi-karti.png",
+          imageAlt: "Enpara.com Kredi Kartı",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const ON_CARD_FAMILY_SHOWCASE = Object.freeze({
+  title: "Kredi Kartları",
+  groups: Object.freeze([
+    Object.freeze({
+      title: "ON Kredi Kartları",
+      cards: Object.freeze([
+        Object.freeze({
+          bankLabel: "ON",
+          title: "ON Kredi Kartı",
+          detailHref: "https://on.com.tr/kart/kredi-karti",
+          applyHref: "https://on.com.tr/kart/kredi-karti",
+          campaignHref: "https://on.com.tr/kampanyalar",
+          imageSrc: "assets/on-cards/on-kredi-karti.jpg",
+          imageAlt: "ON Kredi Kartı",
+        }),
+      ]),
+    }),
+  ]),
+});
+
+const BANK_CARD_FAMILY_SHOWCASE_DATA = Object.freeze({
+  enpara: ENPARA_CARD_FAMILY_SHOWCASE,
+  "enpara.com": ENPARA_CARD_FAMILY_SHOWCASE,
+  "on dijital": ON_CARD_FAMILY_SHOWCASE,
+  "on dijital bankacılık": ON_CARD_FAMILY_SHOWCASE,
+  "on dijital bankacilik": ON_CARD_FAMILY_SHOWCASE,
+  "türkiye finans": TURKIYE_FINANS_CARD_FAMILY_SHOWCASE,
+  "turkiye finans": TURKIYE_FINANS_CARD_FAMILY_SHOWCASE,
+  "türkiye finans katılım bankası": TURKIYE_FINANS_CARD_FAMILY_SHOWCASE,
+  "turkiye finans katilim bankasi": TURKIYE_FINANS_CARD_FAMILY_SHOWCASE,
+  "kuveyt türk": KUVEYT_TURK_CARD_FAMILY_SHOWCASE,
+  "kuveyt turk": KUVEYT_TURK_CARD_FAMILY_SHOWCASE,
+  "kuveyt türk katılım bankası": KUVEYT_TURK_CARD_FAMILY_SHOWCASE,
+  "kuveyt turk katilim bankasi": KUVEYT_TURK_CARD_FAMILY_SHOWCASE,
+  "albaraka türk": ALBARAKA_CARD_FAMILY_SHOWCASE,
+  "albaraka turk": ALBARAKA_CARD_FAMILY_SHOWCASE,
+  "albaraka türk katılım bankası": ALBARAKA_CARD_FAMILY_SHOWCASE,
+  "albaraka turk katilim bankasi": ALBARAKA_CARD_FAMILY_SHOWCASE,
+  "vakıf katılım": VAKIF_KATILIM_CARD_FAMILY_SHOWCASE,
+  "vakif katilim": VAKIF_KATILIM_CARD_FAMILY_SHOWCASE,
+  "vakıf katılım bankası": VAKIF_KATILIM_CARD_FAMILY_SHOWCASE,
+  "vakif katilim bankasi": VAKIF_KATILIM_CARD_FAMILY_SHOWCASE,
+  sekerbank: SEKERBANK_CARD_FAMILY_SHOWCASE,
+  "şekerbank": SEKERBANK_CARD_FAMILY_SHOWCASE,
+  "ziraat katılım": ZIRAAT_KATILIM_CARD_FAMILY_SHOWCASE,
+  "ziraat katilim": ZIRAAT_KATILIM_CARD_FAMILY_SHOWCASE,
+  odea: ODEABANK_CARD_FAMILY_SHOWCASE,
+  odeabank: ODEABANK_CARD_FAMILY_SHOWCASE,
+  anadolubank: ANADOLUBANK_CARD_FAMILY_SHOWCASE,
+  "anadolu bank": ANADOLUBANK_CARD_FAMILY_SHOWCASE,
+  "alternatif bank": ALTERNATIF_BANK_CARD_FAMILY_SHOWCASE,
+  ing: ING_CARD_FAMILY_SHOWCASE,
+  ıng: ING_CARD_FAMILY_SHOWCASE,
+  "ing bank": ING_CARD_FAMILY_SHOWCASE,
+  "ıng bank": ING_CARD_FAMILY_SHOWCASE,
+  "ing bank a.ş.": ING_CARD_FAMILY_SHOWCASE,
+  "ing bank a.s.": ING_CARD_FAMILY_SHOWCASE,
+  "ıng bank a.ş.": ING_CARD_FAMILY_SHOWCASE,
+  "ıng bank a.s.": ING_CARD_FAMILY_SHOWCASE,
+  fibabanka: FIBABANKA_CARD_FAMILY_SHOWCASE,
+  hsbc: HSBC_CARD_FAMILY_SHOWCASE,
+  teb: TEB_CARD_FAMILY_SHOWCASE,
+  "türk ekonomi bankası": TEB_CARD_FAMILY_SHOWCASE,
+  "turk ekonomi bankasi": TEB_CARD_FAMILY_SHOWCASE,
+  halkbank: HALKBANK_CARD_FAMILY_SHOWCASE,
+  "halk bankası": HALKBANK_CARD_FAMILY_SHOWCASE,
+  "halk bankasi": HALKBANK_CARD_FAMILY_SHOWCASE,
+  "icbc turkey": ICBC_TURKEY_CARD_FAMILY_SHOWCASE,
+  "ıcbc turkey": ICBC_TURKEY_CARD_FAMILY_SHOWCASE,
+  "iş bankası": Object.freeze({
+    title: "Kredi Kartları",
+    groups: Object.freeze([
+      Object.freeze({
+        title: "Maximum Kartlar",
+        cards: Object.freeze([
+          Object.freeze({
+            bankLabel: "Türkiye İş Bankası",
+            title: "Maximum",
+            detailHref: "https://www.isbank.com.tr/maximum-kart",
+            applyHref: "https://www.isbank.com.tr/maximum-kart",
+            campaignHref: "https://www.isbank.com.tr/kampanyalar/maximum-kart-kampanyalari",
+            imageSrc: "assets/isbank-cards/maximum.png",
+            imageAlt: "Maximum Kart",
+          }),
+          Object.freeze({
+            bankLabel: "Türkiye İş Bankası",
+            title: "Maximum Gold",
+            detailHref: "https://www.isbank.com.tr/maximum-gold-kart",
+            applyHref: "https://www.isbank.com.tr/maximum-gold-kart",
+            campaignHref: "https://www.isbank.com.tr/kampanyalar/maximum-kart-kampanyalari",
+            imageSrc: "assets/isbank-cards/maximum-gold.png",
+            imageAlt: "Maximum Gold Kart",
+          }),
+          Object.freeze({
+            bankLabel: "Türkiye İş Bankası",
+            title: "Maximum Platinum",
+            detailHref: "https://www.isbank.com.tr/maximum-platinum-kart",
+            applyHref: "https://www.isbank.com.tr/maximum-platinum-kart",
+            campaignHref: "https://www.isbank.com.tr/kampanyalar/maximum-kart-kampanyalari",
+            imageSrc: "assets/isbank-cards/maximum-platinum.png",
+            imageAlt: "Maximum Platinum Kart",
+          }),
+          Object.freeze({
+            bankLabel: "Türkiye İş Bankası",
+            title: "Maximum Aidatsız",
+            detailHref: "https://www.isbank.com.tr/maximum-aidatsiz-kart",
+            applyHref: "https://www.isbank.com.tr/maximum-aidatsiz-kart",
+            campaignHref: "https://www.isbank.com.tr/kampanyalar/maximum-kart-kampanyalari",
+            imageSrc: "assets/isbank-cards/maximum-aidatsiz.png",
+            imageAlt: "Maximum Aidatsız Kart",
+          }),
+          Object.freeze({
+            bankLabel: "Türkiye İş Bankası",
+            title: "Maximum TEMA",
+            detailHref: "https://www.isbank.com.tr/maximum-tema-kart",
+            applyHref: "https://www.isbank.com.tr/maximum-tema-kart",
+            campaignHref: "https://www.isbank.com.tr/kampanyalar/maximum-kart-kampanyalari",
+            imageSrc: "assets/isbank-cards/maximum-tema.png",
+            imageAlt: "Maximum TEMA Kart",
+          }),
+          Object.freeze({
+            bankLabel: "Türkiye İş Bankası",
+            title: "Maximum Genç",
+            detailHref: "https://www.isbank.com.tr/maximum-genc",
+            applyHref: "https://www.isbank.com.tr/maximum-genc",
+            campaignHref: "https://www.isbank.com.tr/kampanyalar/maximum-kart-kampanyalari",
+            imageSrc: "assets/isbank-cards/maximum-genc.png",
+            imageAlt: "Maximum Genç",
+            portrait: true,
+          }),
+          Object.freeze({
+            bankLabel: "Türkiye İş Bankası",
+            title: "Maximum Genç Kredi",
+            detailHref: "https://www.isbank.com.tr/maximum-genc-kredi-karti",
+            applyHref: "https://www.isbank.com.tr/maximum-genc-kredi-karti",
+            campaignHref: "https://www.isbank.com.tr/kampanyalar/maximum-kart-kampanyalari",
+            imageSrc: "assets/isbank-cards/maximum-genc-kredi.png",
+            imageAlt: "Maximum Genç Kredi Kartı",
+            portrait: true,
+          }),
+          Object.freeze({
+            bankLabel: "Türkiye İş Bankası",
+            title: "Maximum Genç Bankamatik",
+            detailHref: "https://www.isbank.com.tr/maximum-genc-bankamatik-karti",
+            applyHref: "https://www.isbank.com.tr/maximum-genc-bankamatik-karti",
+            campaignHref: "https://www.isbank.com.tr/kampanyalar/maximum-kart-kampanyalari",
+            imageSrc: "assets/isbank-cards/maximum-genc-bankamatik.png",
+            imageAlt: "Maximum Genç Bankamatik Kartı",
+            portrait: true,
+          }),
+          Object.freeze({
+            bankLabel: "Türkiye İş Bankası",
+            title: "Maximum Pati",
+            detailHref: "https://www.isbank.com.tr/maximum-pati-kart",
+            applyHref: "https://www.isbank.com.tr/maximum-pati-kart",
+            campaignHref: "https://www.isbank.com.tr/kampanyalar/maximum-kart-kampanyalari",
+            imageSrc: "assets/isbank-cards/maximum-pati.png",
+            imageAlt: "Maximum Pati Kart",
+          }),
+        ]),
+      }),
+      Object.freeze({
+        title: "Maximiles Kartlar",
+        cards: Object.freeze([
+          Object.freeze({
+            bankLabel: "Türkiye İş Bankası",
+            title: "Maximiles",
+            detailHref: "https://www.isbank.com.tr/maximiles-kredi-karti",
+            applyHref: "https://www.isbank.com.tr/maximiles-kredi-karti",
+            campaignHref: "https://www.isbank.com.tr/maximiles-kredi-karti",
+            imageSrc: "assets/isbank-maximiles-cards/maximiles.png",
+            imageAlt: "Maximiles",
+          }),
+          Object.freeze({
+            bankLabel: "Türkiye İş Bankası",
+            title: "Maximiles Select",
+            detailHref: "https://www.isbank.com.tr/maximiles-select-kredi-karti",
+            applyHref: "https://www.isbank.com.tr/maximiles-select-kredi-karti",
+            campaignHref: "https://www.isbank.com.tr/maximiles-select-kredi-karti",
+            imageSrc: "assets/isbank-maximiles-cards/maximiles-select.png",
+            imageAlt: "Maximiles Select",
+          }),
+          Object.freeze({
+            bankLabel: "Türkiye İş Bankası",
+            title: "MercedesCard",
+            detailHref: "https://www.isbank.com.tr/mercedescard-kredi-karti",
+            applyHref: "https://www.isbank.com.tr/mercedescard-kredi-karti",
+            campaignHref: "https://www.isbank.com.tr/mercedescard-kredi-karti",
+            imageSrc: "assets/isbank-maximiles-cards/mercedescard.png",
+            imageAlt: "MercedesCard",
+          }),
+          Object.freeze({
+            bankLabel: "Türkiye İş Bankası",
+            title: "Maximiles Black",
+            detailHref: "https://www.isbank.com.tr/maximiles-black",
+            applyHref: "https://www.isbank.com.tr/maximiles-black",
+            campaignHref: "https://www.isbank.com.tr/maximiles-black",
+            imageSrc: "assets/isbank-maximiles-cards/maximiles-black.png",
+            imageAlt: "Maximiles Black Kredi Kartı",
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  "garanti bbva": Object.freeze({
+    title: "Kredi Kartları",
+    groups: Object.freeze([
+      Object.freeze({
+        title: "Garanti BBVA Kredi Kartları",
+        cards: Object.freeze([
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Bonus Platinum", detailHref: "https://www.garantibbva.com.tr/kartlar/bonus-platinum", applyHref: "https://www.garantibbva.com.tr/kartlar/bonus-platinum-basvuru-formu", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bonus-platinum.jpeg", imageAlt: "Bonus Platinum" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Bonus Platinum Biyometrik", detailHref: "https://www.garantibbva.com.tr/kartlar/bonus-platinum-biyometrik", applyHref: "https://www.garantibbva.com.tr/kartlar/bonus-platinum-biyometrik", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bonus-platinum-biyometrik.png", imageAlt: "Bonus Platinum Biyometrik" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Bonus Platinum Dinamik", detailHref: "https://www.garantibbva.com.tr/kartlar/bonus-platinum-dinamik", applyHref: "https://www.garantibbva.com.tr/kartlar/bonus-platinum-dinamik", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bonus-platinum-dinamik.jpeg", imageAlt: "Bonus Platinum Dinamik" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Miles&Smiles", detailHref: "https://www.garantibbva.com.tr/kartlar/miles-and-smiles", applyHref: "https://www.garantibbva.com.tr/kartlar/kredi-karti-basvurusu?selectedTab=4", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/miles-and-smiles.jpeg", imageAlt: "Miles&Smiles" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "American Express", detailHref: "https://www.garantibbva.com.tr/kartlar/american-express", applyHref: "https://www.garantibbva.com.tr/kartlar/kredi-karti-basvurusu?selectedTab=3", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/american-express.jpeg", imageAlt: "American Express Card" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Shop&Fly", detailHref: "https://www.garantibbva.com.tr/kartlar/shop-and-fly", applyHref: "https://www.garantibbva.com.tr/kartlar/kredi-karti-basvurusu?selectedTab=2", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/shop-and-fly.jpeg", imageAlt: "Shop&Fly" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Bonus Diji", detailHref: "https://www.garantibbva.com.tr/kartlar/bonus-diji", applyHref: "https://www.garantibbva.com.tr/kartlar/bonus-diji", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bonus-diji.jpeg", imageAlt: "Bonus Diji" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Bonus Gold", detailHref: "https://www.garantibbva.com.tr/kartlar/bonus-gold", applyHref: "https://www.garantibbva.com.tr/kartlar/bonus-gold-basvuru-formu", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bonus-gold.jpeg", imageAlt: "Bonus Gold" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Bonus Gold Troy", detailHref: "https://www.garantibbva.com.tr/kartlar/bonus-gold-troy", applyHref: "https://www.garantibbva.com.tr/kartlar/bonus-gold-troy", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bonus-gold-troy.jpeg", imageAlt: "Bonus Gold Troy" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Bonus Card", detailHref: "https://www.garantibbva.com.tr/kartlar/bonus-card", applyHref: "https://www.garantibbva.com.tr/kartlar/kredi-karti-basvurusu", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bonus-card.jpeg", imageAlt: "Bonus Card" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Bonus Platinum Troy", detailHref: "https://www.garantibbva.com.tr/kartlar/bonus-platinum-troy", applyHref: "https://www.garantibbva.com.tr/kartlar/bonus-platinum-troy", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bonus-platinum-troy.jpeg", imageAlt: "Bonus Platinum Troy" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Bonus Troy", detailHref: "https://www.garantibbva.com.tr/kartlar/bonus-troy", applyHref: "https://www.garantibbva.com.tr/kartlar/bonus-troy", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bonus-troy.jpeg", imageAlt: "Bonus Troy" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Bonus Genç", detailHref: "https://www.garantibbva.com.tr/kartlar/bonus-genc", applyHref: "https://www.garantibbva.com.tr/kartlar/bonus-genc-basvuru-formu", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bonus-genc.jpeg", imageAlt: "Bonus Genç" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Bonus Cool", detailHref: "https://www.garantibbva.com.tr/kartlar/bonus-cool", applyHref: "https://www.garantibbva.com.tr/kartlar/bonus-cool", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bonus-cool.png", imageAlt: "Bonus Cool" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Emeklilere Bonus", detailHref: "https://www.garantibbva.com.tr/kartlar/emeklilere-bonus", applyHref: "https://www.garantibbva.com.tr/kartlar/emeklilere-bonus", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/emeklilere-bonus.jpeg", imageAlt: "Emeklilere Bonus" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "BJK Bonus", detailHref: "https://www.garantibbva.com.tr/kartlar/bjk-bonus", applyHref: "https://www.garantibbva.com.tr/kartlar/bjk-bonus", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bjk-bonus.jpeg", imageAlt: "BJK Bonus" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Fenerbahçe Bonus", detailHref: "https://www.garantibbva.com.tr/kartlar/fenerbahce-bonus", applyHref: "https://www.garantibbva.com.tr/kartlar/fenerbahce-bonus", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/fenerbahce-bonus.jpeg", imageAlt: "Fenerbahçe Bonus" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Trabzonspor Bonus", detailHref: "https://www.garantibbva.com.tr/kartlar/trabzonspor-bonus", applyHref: "https://www.garantibbva.com.tr/kartlar/trabzonspor-bonus", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/trabzonspor-bonus.jpeg", imageAlt: "Trabzonspor Bonus" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Çevreci Bonus", detailHref: "https://www.garantibbva.com.tr/kartlar/cevreci-bonus", applyHref: "https://www.garantibbva.com.tr/kartlar/cevreci-bonus", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/cevreci-bonus.jpeg", imageAlt: "Çevreci Bonus" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Bonus Flexi", detailHref: "https://www.garantibbva.com.tr/kartlar/bonus-flexi", applyHref: "https://www.garantibbva.com.tr/kartlar/bonus-flexi-basvuru-formu", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bonus-flexi.jpeg", imageAlt: "Bonus Flexi" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Bonus Flexi Troy", detailHref: "https://www.garantibbva.com.tr/kartlar/bonus-flexi-troy", applyHref: "https://www.garantibbva.com.tr/kartlar/bonus-flexi-troy", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bonus-flexi-troy.jpeg", imageAlt: "Bonus Flexi Troy" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Money Bonus", detailHref: "https://www.garantibbva.com.tr/kartlar/money-bonus", applyHref: "https://www.garantibbva.com.tr/kartlar/money-bonus", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/money-bonus.jpeg", imageAlt: "Money Bonus" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Bonus American Express", detailHref: "https://www.garantibbva.com.tr/kartlar/bonus-american-express", applyHref: "https://www.garantibbva.com.tr/kartlar/bonus-american-express", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bonus-american-express.jpeg", imageAlt: "Bonus American Express" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Şeffaf Bonus", detailHref: "https://www.garantibbva.com.tr/kartlar/seffaf-bonus", applyHref: "https://www.garantibbva.com.tr/kartlar/seffaf-bonus", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/seffaf-bonus.jpeg", imageAlt: "Şeffaf Bonus" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Aynalı Bonus", detailHref: "https://www.garantibbva.com.tr/kartlar/aynali-bonus", applyHref: "https://www.garantibbva.com.tr/kartlar/aynali-bonus", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/aynali-bonus.jpeg", imageAlt: "Aynalı Bonus" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Bonus Sanal Kart", detailHref: "https://www.garantibbva.com.tr/kartlar/bonus-sanal-kart", applyHref: "https://www.garantibbva.com.tr/kartlar/bonus-sanal-kart", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/bonus-sanal-kart.jpeg", imageAlt: "Bonus Sanal Kart" }),
+          Object.freeze({ bankLabel: "Garanti BBVA", title: "Altın Bonus", detailHref: "https://www.garantibbva.com.tr/kartlar/altin-bonus", applyHref: "https://www.garantibbva.com.tr/kartlar/altin-bonus-basvuru-formu", campaignHref: "https://www.garantibbva.com.tr/kampanyalar", imageSrc: "assets/garanti-cards/altin-bonus.jpeg", imageAlt: "Altın Bonus" }),
+        ]),
+      }),
+    ]),
+  }),
+  akbank: Object.freeze({
+    title: "Kredi Kartları",
+    groups: Object.freeze([
+      Object.freeze({
+        title: "Akbank Kredi Kartları",
+        cards: Object.freeze([
+          Object.freeze({
+            bankLabel: "Akbank",
+            title: "Axess",
+            detailHref: "https://www.akbank.com/kartlar/kredi-kartlari/axess",
+            applyHref: "https://www.akbank.com/basvuru/bireysel-kredi-karti/",
+            campaignHref: "https://www.akbank.com/kampanyalar",
+            imageSrc: "assets/akbank-cards/axess.png",
+            imageAlt: "Axess",
+            wide: true,
+          }),
+          Object.freeze({
+            bankLabel: "Akbank",
+            title: "Wings",
+            detailHref: "https://www.akbank.com/kartlar/kredi-kartlari/wings",
+            applyHref: "https://www.akbank.com/basvuru/bireysel-kredi-karti/",
+            campaignHref: "https://www.akbank.com/kampanyalar",
+            imageSrc: "assets/akbank-cards/wings.png",
+            imageAlt: "Wings",
+            wide: true,
+          }),
+          Object.freeze({
+            bankLabel: "Akbank",
+            title: "Free",
+            detailHref: "https://www.akbank.com/kartlar/kredi-kartlari/free-kart",
+            applyHref: "https://www.kartfree.com/free/hemen-basvur",
+            campaignHref: "https://www.akbank.com/kampanyalar",
+            imageSrc: "assets/akbank-cards/free.png",
+            imageAlt: "Free Kart",
+            wide: true,
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  "yapı kredi": Object.freeze({
+    title: "Kredi Kartları",
+    groups: Object.freeze([
+      Object.freeze({
+        title: "Yapı Kredi Kredi Kartları",
+        cards: Object.freeze([
+          Object.freeze({
+            bankLabel: "Yapı Kredi",
+            title: "Worldcard",
+            detailHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/worldcard",
+            applyHref: "https://www.yapikredi.com.tr/basvuru-merkezi/kredi-karti-basvurusu/?utm_source=YapiKredi&utm_medium=Web&utm_campaign=KrediKartlari&utm_term=Worldcard",
+            campaignHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/kart-kampanyalari/",
+            imageSrc: "assets/yapikredi-cards/worldcard.png",
+            imageAlt: "Yapı Kredi Worldcard",
+          }),
+          Object.freeze({
+            bankLabel: "Yapı Kredi",
+            title: "World Gold",
+            detailHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/world-gold",
+            applyHref: "https://www.yapikredi.com.tr/basvuru-merkezi/kredi-karti-basvurusu/?utm_source=YapiKredi&utm_medium=Web&utm_campaign=KrediKartlari&utm_term=WorldcardGold",
+            campaignHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/kart-kampanyalari/",
+            imageSrc: "assets/yapikredi-cards/world-gold.png",
+            imageAlt: "Yapı Kredi World Gold",
+          }),
+          Object.freeze({
+            bankLabel: "Yapı Kredi",
+            title: "World Platinum",
+            detailHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/world-platinum",
+            applyHref: "https://www.yapikredi.com.tr/basvuru-merkezi/kredi-karti-basvurusu/?utm_source=YapiKredi&utm_medium=Web&utm_campaign=KrediKartlari&utm_term=WorldcardPlatinum",
+            campaignHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/kart-kampanyalari/",
+            imageSrc: "assets/yapikredi-cards/world-platinum.png",
+            imageAlt: "Yapı Kredi World Platinum",
+          }),
+          Object.freeze({
+            bankLabel: "Yapı Kredi",
+            title: "adios",
+            detailHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/adios",
+            applyHref: "https://www.yapikredi.com.tr/basvuru-merkezi/kredi-karti-basvurusu/?utm_source=YapiKredi&utm_medium=Web&utm_campaign=KrediKartlari&utm_term=AdiosCard",
+            campaignHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/kart-kampanyalari/",
+            imageSrc: "assets/yapikredi-cards/adios.png",
+            imageAlt: "Yapı Kredi adios",
+          }),
+          Object.freeze({
+            bankLabel: "Yapı Kredi",
+            title: "adios Premium",
+            detailHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/adios-premium",
+            applyHref: "https://www.yapikredi.com.tr/basvuru-merkezi/kredi-karti-basvurusu/?utm_source=YapiKredi&utm_medium=Web&utm_campaign=KrediKartlari&utm_term=AdiosPremium",
+            campaignHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/kart-kampanyalari/",
+            imageSrc: "assets/yapikredi-cards/adios-premium.png",
+            imageAlt: "Yapı Kredi adios Premium",
+          }),
+          Object.freeze({
+            bankLabel: "Yapı Kredi",
+            title: "Crystal",
+            detailHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/crystal",
+            applyHref: "https://www.yapikredi.com.tr/basvuru-merkezi/kredi-karti-basvurusu/?utm_source=YapiKredi&utm_medium=Web&utm_campaign=KrediKartlari&utm_term=Crystalcard",
+            campaignHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/kart-kampanyalari/",
+            imageSrc: "assets/yapikredi-cards/crystal.png",
+            imageAlt: "Yapı Kredi Crystal",
+          }),
+          Object.freeze({
+            bankLabel: "Yapı Kredi",
+            title: "Hepsiburada Premium Worldcard",
+            detailHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/hepsiburada-premium-worldcard",
+            applyHref: "https://www.yapikredi.com.tr/basvuru-merkezi/kredi-karti-basvurusu/?utm_source=hepsiburada&utm_medium=YKWebsite&utm_campaign=kartlarlistesayfa",
+            campaignHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/kart-kampanyalari/",
+            imageSrc: "assets/yapikredi-cards/hepsiburada-premium-worldcard.png",
+            imageAlt: "Hepsiburada Premium Worldcard",
+          }),
+          Object.freeze({
+            bankLabel: "Yapı Kredi",
+            title: "Play",
+            detailHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/yapi-kredi-play",
+            applyHref: "https://www.yapikredi.com.tr/basvuru-merkezi/kredi-karti-basvurusu/?utm_source=YapiKredi&utm_medium=Web&utm_campaign=KrediKartlari&utm_term=Playcard",
+            campaignHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/kart-kampanyalari/",
+            imageSrc: "assets/yapikredi-cards/play.png",
+            imageAlt: "Yapı Kredi Play",
+          }),
+          Object.freeze({
+            bankLabel: "Yapı Kredi",
+            title: "Opet Worldcard",
+            detailHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/opet-worldcard",
+            applyHref: "https://www.yapikredi.com.tr/basvuru-merkezi/kredi-karti-basvurusu/?utm_source=YapiKredi&utm_medium=Web&utm_campaign=KrediKartlari&utm_term=OpetWorldcard",
+            campaignHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/kart-kampanyalari/",
+            imageSrc: "assets/yapikredi-cards/opet-worldcard.png",
+            imageAlt: "Yapı Kredi Opet Worldcard",
+          }),
+          Object.freeze({
+            bankLabel: "Yapı Kredi",
+            title: "KoçAilem",
+            detailHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/kocailem",
+            applyHref: "https://www.yapikredi.com.tr/basvuru-merkezi/kredi-karti-basvurusu/?utm_source=YapiKredi&utm_medium=Web&utm_campaign=KrediKartlari&utm_term=KocAilem",
+            campaignHref: "https://www.yapikredi.com.tr/kartlar/kredi-kartlari/kart-kampanyalari/",
+            imageSrc: "assets/yapikredi-cards/kocailem.png",
+            imageAlt: "Yapı Kredi KoçAilem",
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  denizbank: Object.freeze({
+    title: "Kredi Kartları",
+    groups: Object.freeze([
+      Object.freeze({
+        title: "DenizBank Kredi Kartları",
+        cards: Object.freeze([
+          Object.freeze({
+            bankLabel: "DenizBank",
+            title: "DenizBank Gold",
+            detailHref: "https://www.denizbank.com/kredi-karti/bireysel-bankacilik/denizbank-gold",
+            applyHref: "https://www.denizbank.com/kredi-karti-basvurusu/",
+            campaignHref: "https://www.denizbonus.com",
+            imageSrc: "assets/denizbank-cards/denizbank-gold.png",
+            imageAlt: "DenizBank Gold",
+          }),
+          Object.freeze({
+            bankLabel: "DenizBank",
+            title: "DenizBank Sanal Kart",
+            detailHref: "https://www.denizbank.com/kredi-karti/bireysel-bankacilik/sanal-kart",
+            applyHref: "https://www.denizbank.com/kredi-karti-basvurusu/",
+            campaignHref: "https://www.denizbonus.com",
+            imageSrc: "assets/denizbank-cards/denizbank-sanal-kart.png",
+            imageAlt: "DenizBank Sanal Kart",
+          }),
+          Object.freeze({
+            bankLabel: "DenizBank",
+            title: "DenizBank Ek Kart",
+            detailHref: "https://www.denizbank.com/kredi-karti/bireysel-bankacilik/denizbank-ek-kart",
+            applyHref: "https://www.denizbank.com/kredi-karti-basvurusu/",
+            campaignHref: "https://www.denizbonus.com",
+            imageSrc: "assets/denizbank-cards/denizbank-ek-kart.png",
+            imageAlt: "DenizBank Ek Kart",
+          }),
+          Object.freeze({
+            bankLabel: "DenizBank",
+            title: "DenizBank Black",
+            detailHref: "https://www.denizbank.com/kredi-karti/bireysel-bankacilik/denizbank-black",
+            applyHref: "https://www.denizbank.com/kredi-karti-basvurusu/",
+            campaignHref: "https://www.denizbonus.com",
+            imageSrc: "assets/denizbank-cards/denizbank-black.png",
+            imageAlt: "DenizBank Black",
+          }),
+          Object.freeze({
+            bankLabel: "DenizBank",
+            title: "DenizBank Platinum",
+            detailHref: "https://www.denizbank.com/kredi-karti/bireysel-bankacilik/denizbank-platinum",
+            applyHref: "https://www.denizbank.com/kredi-karti-basvurusu/",
+            campaignHref: "https://www.denizbonus.com",
+            imageSrc: "assets/denizbank-cards/denizbank-platinum.png",
+            imageAlt: "DenizBank Platinum",
+          }),
+          Object.freeze({
+            bankLabel: "DenizBank",
+            title: "Emekli Bonus",
+            detailHref: "https://www.denizbank.com/kredi-karti/emekli-bankacilik/emekli-bonus",
+            applyHref: "https://www.denizbank.com/kredi-karti-basvurusu/",
+            campaignHref: "https://www.denizbonus.com",
+            imageSrc: "assets/denizbank-cards/emekli-bonus.png",
+            imageAlt: "Emekli Bonus",
+          }),
+          Object.freeze({
+            bankLabel: "DenizBank",
+            title: "D-Şarj Bonus",
+            detailHref: "https://www.denizbank.com/kredi-karti/bireysel-bankacilik/d-sarj-bonus",
+            applyHref: "https://www.denizbank.com/kredi-karti-basvurusu/",
+            campaignHref: "https://www.denizbonus.com",
+            imageSrc: "assets/denizbank-cards/d-sarj-bonus.png",
+            imageAlt: "D-Şarj Bonus",
+          }),
+          Object.freeze({
+            bankLabel: "DenizBank",
+            title: "Taraftar Kartlar",
+            detailHref: "https://www.denizbank.com/kredi-karti/bireysel-bankacilik/taraftar-kartlar",
+            applyHref: "https://www.denizbank.com/kredi-karti-basvurusu/",
+            campaignHref: "https://www.denizbonus.com",
+            imageSrc: "assets/denizbank-cards/taraftar-kartlar.png",
+            imageAlt: "Taraftar Kartlar",
+          }),
+          Object.freeze({
+            bankLabel: "DenizBank",
+            title: "Net Kart",
+            detailHref: "https://www.denizbank.com/kredi-karti/bireysel-bankacilik/net-kart-bonus",
+            applyHref: "https://www.denizbank.com/kredi-karti-basvurusu/",
+            campaignHref: "https://www.denizbonus.com",
+            imageSrc: "assets/denizbank-cards/net-kart.png",
+            imageAlt: "Net Kart",
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  qnb: Object.freeze({
+    title: "Kredi Kartları",
+    groups: Object.freeze([
+      Object.freeze({
+        title: "QNB Kredi Kartları",
+        cards: Object.freeze([
+          Object.freeze({
+            bankLabel: "QNB",
+            title: "QNB Kredi Kartı",
+            hideBankLabel: true,
+            detailHref: "https://www.qnb.com.tr/qnb-kredi-karti",
+            applyHref: "https://www.qnb.com.tr/qnb-kredi-karti",
+            campaignHref: "https://www.qnb.com.tr/qnb-kartlar",
+            imageSrc: "assets/qnb-cards/qnb-kredi-karti.jpg",
+            imageAlt: "QNB Kredi Kartı",
+          }),
+          Object.freeze({
+            bankLabel: "QNB",
+            title: "QNB Xtra",
+            hideBankLabel: true,
+            detailHref: "https://www.qnb.com.tr/qnb-xtra-kredi-karti",
+            applyHref: "https://www.qnb.com.tr/qnb-xtra-kredi-karti",
+            campaignHref: "https://www.qnb.com.tr/qnb-kartlar",
+            imageSrc: "assets/qnb-cards/qnb-xtra.jpg",
+            imageAlt: "QNB Xtra",
+          }),
+          Object.freeze({
+            bankLabel: "QNB",
+            title: "QNB Fix",
+            hideBankLabel: true,
+            detailHref: "https://www.qnb.com.tr/qnb-fix-aidatsiz-kredi-karti",
+            applyHref: "https://www.qnb.com.tr/qnb-fix-aidatsiz-kredi-karti",
+            campaignHref: "https://www.qnb.com.tr/qnb-kartlar",
+            imageSrc: "assets/qnb-cards/qnb-fix.jpg",
+            imageAlt: "QNB Fix",
+          }),
+          Object.freeze({
+            bankLabel: "QNB",
+            title: "QNB Emekli",
+            hideBankLabel: true,
+            detailHref: "https://www.qnb.com.tr/qnb-emekli-kredi-karti",
+            applyHref: "https://www.qnb.com.tr/qnb-emekli-kredi-karti",
+            campaignHref: "https://www.qnb.com.tr/qnb-kartlar",
+            imageSrc: "assets/qnb-cards/qnb-emekli.jpg",
+            imageAlt: "QNB Emekli",
+          }),
+          Object.freeze({
+            bankLabel: "QNB",
+            title: "QNB Hemşire",
+            hideBankLabel: true,
+            detailHref: "https://www.qnb.com.tr/qnb-hemsirelere-ozel-kredi-karti",
+            applyHref: "https://www.qnb.com.tr/qnb-hemsirelere-ozel-kredi-karti",
+            campaignHref: "https://www.qnb.com.tr/qnb-kartlar",
+            imageSrc: "assets/qnb-cards/qnb-hemsire.jpg",
+            imageAlt: "QNB Hemşire",
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  vakıfbank: VAKIFBANK_CARD_FAMILY_SHOWCASE,
+  vakifbank: VAKIFBANK_CARD_FAMILY_SHOWCASE,
+  "ziraat bankası": Object.freeze({
+    title: "Kredi Kartları",
+    groups: Object.freeze([
+      Object.freeze({
+        title: "Ziraat Kredi Kartları",
+        cards: Object.freeze([
+          Object.freeze({
+            bankLabel: "Ziraat Bankası",
+            title: "Bankkart",
+            detailHref: "https://www.ziraatbank.com.tr/tr/kartlar/kredi-kartlari/bankkart",
+            applyHref: "https://www.ziraatbank.com.tr/tr/kartlar/kredi-kartlari/bankkart",
+            campaignHref: "https://www.bankkart.com.tr/kampanyalar",
+            imageSrc: "assets/ziraat-cards/bankkart.jpg",
+            imageAlt: "Bankkart",
+          }),
+          Object.freeze({
+            bankLabel: "Ziraat Bankası",
+            title: "Bankkart Gold",
+            detailHref: "https://www.ziraatbank.com.tr/tr/kartlar/kredi-kartlari/bankkart-gold",
+            applyHref: "https://www.ziraatbank.com.tr/tr/kartlar/kredi-kartlari/bankkart-gold",
+            campaignHref: "https://www.bankkart.com.tr/kampanyalar",
+            imageSrc: "assets/ziraat-cards/bankkart-gold.jpg",
+            imageAlt: "Bankkart Gold",
+          }),
+          Object.freeze({
+            bankLabel: "Ziraat Bankası",
+            title: "Bankkart Platinum",
+            detailHref: "https://www.ziraatbank.com.tr/tr/kartlar/kredi-kartlari/bankkart-platinum",
+            applyHref: "https://www.ziraatbank.com.tr/tr/kartlar/kredi-kartlari/bankkart-platinum",
+            campaignHref: "https://www.bankkart.com.tr/kampanyalar",
+            imageSrc: "assets/ziraat-cards/bankkart-platinum.jpg",
+            imageAlt: "Bankkart Platinum",
+          }),
+        ]),
+      }),
+    ]),
+  }),
+  "ziraat bankasi": Object.freeze({
+    title: "Kredi Kartları",
+    groups: Object.freeze([
+      Object.freeze({
+        title: "Ziraat Kredi Kartları",
+        cards: Object.freeze([
+          Object.freeze({
+            bankLabel: "Ziraat Bankası",
+            title: "Bankkart",
+            detailHref: "https://www.ziraatbank.com.tr/tr/kartlar/kredi-kartlari/bankkart",
+            applyHref: "https://www.ziraatbank.com.tr/tr/kartlar/kredi-kartlari/bankkart",
+            campaignHref: "https://www.bankkart.com.tr/kampanyalar",
+            imageSrc: "assets/ziraat-cards/bankkart.jpg",
+            imageAlt: "Bankkart",
+          }),
+          Object.freeze({
+            bankLabel: "Ziraat Bankası",
+            title: "Bankkart Gold",
+            detailHref: "https://www.ziraatbank.com.tr/tr/kartlar/kredi-kartlari/bankkart-gold",
+            applyHref: "https://www.ziraatbank.com.tr/tr/kartlar/kredi-kartlari/bankkart-gold",
+            campaignHref: "https://www.bankkart.com.tr/kampanyalar",
+            imageSrc: "assets/ziraat-cards/bankkart-gold.jpg",
+            imageAlt: "Bankkart Gold",
+          }),
+          Object.freeze({
+            bankLabel: "Ziraat Bankası",
+            title: "Bankkart Platinum",
+            detailHref: "https://www.ziraatbank.com.tr/tr/kartlar/kredi-kartlari/bankkart-platinum",
+            applyHref: "https://www.ziraatbank.com.tr/tr/kartlar/kredi-kartlari/bankkart-platinum",
+            campaignHref: "https://www.bankkart.com.tr/kampanyalar",
+            imageSrc: "assets/ziraat-cards/bankkart-platinum.jpg",
+            imageAlt: "Bankkart Platinum",
+          }),
+        ]),
+      }),
+    ]),
+  }),
+});
 let layoutHeightLocked = false;
 let panelHeightsLocked = false;
 let suppressHashRouteSync = false;
@@ -2961,6 +4948,7 @@ const ui = {
   openCalculationPage: document.getElementById("openCalculationPage"),
   loanRatesPage: document.getElementById("loanRatesPage"),
   bankDetailPage: document.getElementById("bankDetailPage"),
+  siteFooter: document.querySelector(".site-footer"),
   bankDetailBrand: document.getElementById("bankDetailBrand"),
   bankDetailSections: document.getElementById("bankDetailSections"),
   loanRatesTitle: document.getElementById("loanRatesTitle"),
@@ -2968,8 +4956,15 @@ const ui = {
   loanRatesRateHeading: document.getElementById("loanRatesRateHeading"),
   loanRatesSecondaryHeading: document.getElementById("loanRatesSecondaryHeading"),
   loanRatesTertiaryHeading: document.getElementById("loanRatesTertiaryHeading"),
+  loanRatesFilters: document.getElementById("loanRatesFilters"),
   loanRatesAmountInput: document.getElementById("loanRatesAmountInput"),
   loanRatesTermSelect: document.getElementById("loanRatesTermSelect"),
+  creditCardRatesFilters: document.getElementById("creditCardRatesFilters"),
+  creditCardSpotlight: document.getElementById("creditCardSpotlight"),
+  creditCardSearchInput: document.getElementById("creditCardSearchInput"),
+  creditCardSearchClear: document.getElementById("creditCardSearchClear"),
+  creditCardTypeSelect: document.getElementById("creditCardTypeSelect"),
+  creditCardFeeSelect: document.getElementById("creditCardFeeSelect"),
   loanRatesTableBody: document.getElementById("loanRatesTableBody"),
   loanRateCards: document.getElementById("loanRateCards"),
   loanBreadcrumbHome: document.getElementById("loanBreadcrumbHome"),
@@ -3099,6 +5094,9 @@ const ui = {
   plans: document.getElementById("plans"),
   resultDisclaimer: document.getElementById("resultDisclaimer"),
 };
+
+const footerHomeParent = ui.siteFooter?.parentElement ?? null;
+const footerHomeNextSibling = ui.siteFooter?.nextSibling ?? null;
 
 ui.prevButton.addEventListener("click", onPrev);
 ui.nextButton.addEventListener("click", onNext);
@@ -3997,6 +5995,37 @@ function setupLoanRatesUi() {
     });
   }
 
+  if (ui.creditCardSearchInput) {
+    ui.creditCardSearchInput.addEventListener("input", () => {
+      syncCreditCardFilterStateFromUi();
+      renderLoanRatesPage(String(ui.loanRatesPage?.dataset.loanRatesTab || "creditcard"));
+    });
+  }
+
+  if (ui.creditCardSearchClear) {
+    ui.creditCardSearchClear.addEventListener("click", () => {
+      if (ui.creditCardSearchInput) {
+        ui.creditCardSearchInput.value = "";
+      }
+      syncCreditCardFilterStateFromUi();
+      renderLoanRatesPage(String(ui.loanRatesPage?.dataset.loanRatesTab || "creditcard"));
+    });
+  }
+
+  if (ui.creditCardTypeSelect) {
+    ui.creditCardTypeSelect.addEventListener("change", () => {
+      syncCreditCardFilterStateFromUi();
+      renderLoanRatesPage(String(ui.loanRatesPage?.dataset.loanRatesTab || "creditcard"));
+    });
+  }
+
+  if (ui.creditCardFeeSelect) {
+    ui.creditCardFeeSelect.addEventListener("change", () => {
+      syncCreditCardFilterStateFromUi();
+      renderLoanRatesPage(String(ui.loanRatesPage?.dataset.loanRatesTab || "creditcard"));
+    });
+  }
+
   ui.loanRatesTabs?.forEach((tabElement) => {
     tabElement.addEventListener("click", () => {
       const tabKey = String(tabElement.dataset.loanRatesTab || "need");
@@ -4424,26 +6453,7 @@ function setupBankProductCards() {
     renderCardOutcome();
   });
 
-  document.querySelectorAll("[data-bank-apply-button]").forEach((buttonElement) => {
-    if (!(buttonElement instanceof HTMLButtonElement)) {
-      return;
-    }
-
-    buttonElement.onclick = null;
-    buttonElement.addEventListener("click", () => {
-      const bankName = String(buttonElement.dataset.bankName || currentBankProfileName || "").trim();
-      const productTitle = String(buttonElement.dataset.productTitle || "").trim();
-      const applyHref = String(buttonElement.dataset.applyHref || "").trim();
-      const isTouchLikeDevice = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 760;
-
-      if (isTouchLikeDevice && applyHref) {
-        window.open(applyHref, "_blank", "noopener,noreferrer");
-        return;
-      }
-
-      openBankAppQrModal(bankName, productTitle);
-    });
-  });
+  bindBankApplyButtons();
 
   document.querySelectorAll("[data-bank-fee-button]").forEach((buttonElement) => {
     if (!(buttonElement instanceof HTMLButtonElement)) {
@@ -4560,7 +6570,9 @@ function buildBankProfileData(bankName) {
     const genericPrimaryProducts = profileOverride.disableGenericPrimaryProducts
       ? []
       : buildGenericBankLoanProducts(bankName);
-    const genericSecondaryProducts = buildGenericBankDepositProducts(bankName);
+    const genericSecondaryProducts = profileOverride.disableGenericSecondaryProducts
+      ? []
+      : buildGenericBankDepositProducts(bankName);
     const mergedPrimaryProducts = mergeBankProfileProducts(
       profileOverride.primaryProducts,
       genericPrimaryProducts,
@@ -4643,6 +6655,17 @@ function normalizeBankProfileProducts(products, bankName, website) {
       insuranceOptions: normalizeInsuranceOptions(product.insuranceOptions),
     };
 
+    if (normalizedProduct.kind === "deposit") {
+      return {
+        ...normalizedProduct,
+        descriptionLines: getStandardDepositTierDescriptionLines(),
+        amountRateTiers:
+          Array.isArray(normalizedProduct.amountRateTiers) && normalizedProduct.amountRateTiers.length > 0
+            ? normalizedProduct.amountRateTiers
+            : createDefaultDepositAmountRateTiers(normalizedProduct.rateMap || {}),
+      };
+    }
+
     if (!isParticipationBank || normalizedProduct.kind !== "loan") {
       return normalizedProduct;
     }
@@ -4682,6 +6705,22 @@ function normalizeInsuranceOptions(insuranceOptions) {
     }
     return option;
   });
+}
+
+function getStandardDepositTierDescriptionLines() {
+  return [
+    "Tutar Kademeleri: 0 - 100.000 TL",
+    "100.000 - 1.000.000 TL",
+    "1.000.000 TL üzeri",
+  ];
+}
+
+function createDefaultDepositAmountRateTiers(rateMap) {
+  return [
+    { min: 0, max: 100000, rateMap },
+    { min: 100001, max: 1000000, rateMap },
+    { min: 1000001, max: 999999999999, rateMap },
+  ];
 }
 
 function compareBankProfileProducts(leftProduct, rightProduct) {
@@ -4807,21 +6846,146 @@ function renderBankDetailPage(bankName) {
   ui.bankDetailBrand.replaceChildren(createBankDetailBrand(profile));
 
   const fragment = document.createDocumentFragment();
-
-  if (profile.primaryProducts.length > 0) {
-    fragment.append(createBankProductShowcase(profile.primaryProducts, profile.bankName));
+  const cardFamilyShowcase = getBankCardFamilyShowcaseData(profile.bankName);
+  if (cardFamilyShowcase) {
+    fragment.append(createBankCardFamilyShowcase(cardFamilyShowcase));
   }
 
-  if (profile.secondaryProducts.length > 0) {
-    fragment.append(createBankProductShowcase(profile.secondaryProducts, profile.bankName));
+  const spotlightLoanProducts = [
+    ...profile.primaryProducts.filter((product) => ["loan", "kmh"].includes(product.kind || "")),
+    ...profile.secondaryProducts.filter((product) => (product.kind || "") === "kmh"),
+  ].map((product) => ({
+    ...product,
+    showcaseTitle: product.showcaseTitle || "Krediler",
+    spotlightLayout: product.spotlightLayout || "horizontal",
+  }));
+
+  const remainingPrimaryProducts = profile.primaryProducts.filter(
+    (product) => !["loan", "kmh"].includes(product.kind || ""),
+  );
+  const remainingSecondaryProducts = profile.secondaryProducts.filter(
+    (product) => (product.kind || "") !== "kmh",
+  );
+
+  if (spotlightLoanProducts.length > 0) {
+    fragment.append(
+      createBankProductShowcase(spotlightLoanProducts, profile.bankName, {
+        title: "Krediler",
+        spotlightLayout: true,
+      }),
+    );
   }
 
-  if (profile.primaryProducts.length === 0 && profile.secondaryProducts.length === 0) {
+  if (remainingPrimaryProducts.length > 0) {
+    fragment.append(createBankProductShowcase(remainingPrimaryProducts, profile.bankName));
+  }
+
+  if (remainingSecondaryProducts.length > 0) {
+    fragment.append(createBankProductShowcase(remainingSecondaryProducts, profile.bankName));
+  }
+
+  if (
+    spotlightLoanProducts.length === 0 &&
+    remainingPrimaryProducts.length === 0 &&
+    remainingSecondaryProducts.length === 0
+  ) {
     fragment.append(createBankDetailEmptyState(profile.bankName));
   }
 
   ui.bankDetailSections.replaceChildren(fragment);
   setupBankProductCards();
+  bindBankApplyButtons(ui.bankDetailSections || document);
+}
+
+function getBankCardFamilyShowcaseData(bankName) {
+  const normalizedBankName = normalizeTefasSearchText(bankName);
+  return BANK_CARD_FAMILY_SHOWCASE_DATA[normalizedBankName] || null;
+}
+
+function createBankCardFamilyShowcase(showcaseData) {
+  const section = document.createElement("section");
+  section.className = "bank-card-family-showcase";
+
+  const heading = document.createElement("div");
+  heading.className = "bank-card-family-head";
+
+  const title = document.createElement("h2");
+  title.textContent = showcaseData.title || "Kredi Kartları";
+
+  heading.append(title);
+  section.append(heading);
+
+  const content = document.createElement("div");
+  content.className = "credit-card-spotlight-grid";
+
+  (showcaseData.groups || []).forEach((group) => {
+    (group?.cards || []).forEach((card) => {
+      content.append(createBankCardFamilySpotlightCard(card));
+    });
+  });
+
+  section.append(content);
+  return section;
+}
+
+function createBankCardFamilySpotlightCard(cardData) {
+  const card = document.createElement("section");
+  card.className = "credit-card-spotlight";
+
+  const visual = document.createElement("div");
+  visual.className = "credit-card-spotlight-visual";
+
+  const image = document.createElement("img");
+  image.className = [
+    "credit-card-spotlight-card-image",
+    cardData.portrait ? "credit-card-spotlight-card-image-portrait" : "",
+    cardData.wide ? "credit-card-spotlight-card-image-wide" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  image.src = cardData.imageSrc;
+  image.alt = cardData.imageAlt || cardData.title || "Kredi kartı";
+  image.loading = "lazy";
+  image.decoding = "async";
+  visual.append(image);
+
+  const copy = document.createElement("div");
+  copy.className = "credit-card-spotlight-copy";
+
+  const title = document.createElement("strong");
+  title.className = "credit-card-spotlight-title";
+  title.textContent = cardData.title || "";
+
+  const info = document.createElement("a");
+  info.className = "credit-card-spotlight-info";
+  info.href = cardData.detailHref || cardData.applyHref || "#";
+  info.target = "_blank";
+  info.rel = "noreferrer";
+  info.textContent = "Detaylı Bilgi";
+  copy.append(title, info);
+
+  const actions = document.createElement("div");
+  actions.className = "credit-card-spotlight-actions";
+
+  const applyButton = document.createElement("button");
+  applyButton.className = "loan-apply-btn credit-card-spotlight-primary";
+  applyButton.type = "button";
+  applyButton.dataset.bankApplyButton = "";
+  applyButton.dataset.bankName = currentBankProfileName;
+  applyButton.dataset.productTitle = cardData.title || "";
+  applyButton.dataset.applyHref = cardData.applyHref || cardData.detailHref || "";
+  applyButton.textContent = "Başvur";
+
+  const campaignLink = document.createElement("a");
+  campaignLink.className = "credit-card-spotlight-secondary";
+  campaignLink.href = cardData.campaignHref || cardData.detailHref || cardData.applyHref || "#";
+  campaignLink.target = "_blank";
+  campaignLink.rel = "noreferrer";
+  campaignLink.textContent = "Kampanyalar";
+
+  actions.append(applyButton, campaignLink);
+  card.append(visual, copy, actions);
+  return card;
 }
 
 function createBankDetailBrand(profile) {
@@ -5031,15 +7195,37 @@ function closeBankAppRedirectPage() {
   syncSubpageBodyClasses();
 }
 
-function createBankProductShowcase(products, bankName) {
+function createBankProductShowcase(products, bankName, options = {}) {
   const section = document.createElement("section");
   section.className = "bank-product-showcase";
+  const showcaseTitle = String(
+    options.title || products.find((product) => product?.showcaseTitle)?.showcaseTitle || "",
+  ).trim();
+  const hasSpotlightLayout = Boolean(options.spotlightLayout)
+    || products.some((product) => product?.spotlightLayout === "horizontal");
+
+  if (showcaseTitle) {
+    section.classList.add("bank-product-showcase-box");
+    const header = document.createElement("div");
+    header.className = "bank-product-header";
+    const title = document.createElement("h3");
+    title.textContent = showcaseTitle;
+    header.append(title);
+    section.append(header);
+  }
 
   const grid = document.createElement("div");
-  grid.className = "bank-product-grid";
+  grid.className = `bank-product-grid${hasSpotlightLayout ? " bank-product-grid-spotlight" : ""}`;
 
   products.forEach((product) => {
-    grid.append(createBankProductCard(product, bankName));
+    grid.append(
+      createBankProductCard(
+        hasSpotlightLayout && product.spotlightLayout !== "horizontal"
+          ? { ...product, spotlightLayout: "horizontal" }
+          : product,
+        bankName,
+      ),
+    );
   });
 
   section.append(grid);
@@ -5125,8 +7311,13 @@ function inferBankProductLoanType(product) {
 }
 
 function createBankProductCard(product, bankName) {
+  if (product.kind === "creditcard") {
+    return createBankCreditCardProductCard(product, bankName);
+  }
+
+  const useSpotlightLayout = product.spotlightLayout === "horizontal";
   const article = document.createElement("article");
-  article.className = `bank-product-card${product.featured ? " bank-product-card-featured" : ""}`;
+  article.className = `bank-product-card${product.featured ? " bank-product-card-featured" : ""}${useSpotlightLayout ? " bank-product-card-spotlight" : ""}`;
   article.dataset.bankProductCard = "";
   article.dataset.bankName = bankName || currentBankProfileName;
   article.dataset.kind = product.kind || "loan";
@@ -5174,7 +7365,17 @@ function createBankProductCard(product, bankName) {
   }
 
   const header = document.createElement("header");
-  header.className = "bank-product-head";
+  header.className = `bank-product-head${useSpotlightLayout ? " bank-product-head-spotlight" : ""}`;
+
+  if (useSpotlightLayout) {
+    const brandRow = document.createElement("div");
+    brandRow.className = "bank-product-spotlight-brand";
+    const brandLogo = createBankLogoElement(bankName || currentBankProfileName, "bank-product-spotlight-logo");
+    if (brandLogo) {
+      brandRow.append(brandLogo);
+    }
+    header.append(brandRow);
+  }
 
   const title = document.createElement("h3");
   title.textContent = product.title;
@@ -5185,6 +7386,16 @@ function createBankProductCard(product, bankName) {
     line.textContent = lineText;
     header.append(line);
   });
+
+  if (useSpotlightLayout) {
+    const infoLink = document.createElement("a");
+    infoLink.className = "bank-product-spotlight-info";
+    infoLink.href = product.detailHref || product.applyHref || "#";
+    infoLink.target = "_blank";
+    infoLink.rel = "noreferrer";
+    infoLink.textContent = "Detaylı Bilgi";
+    header.append(infoLink);
+  }
 
   const formGrid = document.createElement("div");
   formGrid.className = "bank-product-form-grid";
@@ -5312,12 +7523,31 @@ function createBankProductCard(product, bankName) {
 
   const actionButton = document.createElement("button");
   actionButton.type = "button";
-  actionButton.className = "bank-product-action";
+  actionButton.className = `bank-product-action${useSpotlightLayout ? " bank-product-action-spotlight" : ""}`;
   actionButton.dataset.bankApplyButton = "";
   actionButton.dataset.bankName = bankName || currentBankProfileName;
   actionButton.dataset.productTitle = product.title;
   actionButton.dataset.applyHref = product.applyHref || product.detailHref || "";
   actionButton.textContent = "Başvur";
+
+  if (useSpotlightLayout) {
+    const contentColumn = document.createElement("div");
+    contentColumn.className = "bank-product-spotlight-content";
+    contentColumn.append(formGrid);
+    if (tableCard) {
+      contentColumn.append(tableCard);
+    }
+
+    const sideColumn = document.createElement("div");
+    sideColumn.className = "bank-product-spotlight-side";
+    sideColumn.append(actionButton);
+    if (feeCard) {
+      feeCard.classList.add("bank-product-fee-card-spotlight");
+      sideColumn.append(feeCard);
+    }
+    article.append(header, contentColumn, sideColumn);
+    return article;
+  }
 
   article.append(header, formGrid);
   if (tableCard) {
@@ -5331,6 +7561,81 @@ function createBankProductCard(product, bankName) {
   article.append(actionButton);
 
   return article;
+}
+
+function createBankCreditCardProductCard(product, bankName) {
+  const article = document.createElement("article");
+  article.className = `bank-product-card bank-product-card-footer-bottom${product.featured ? " bank-product-card-featured" : ""}`;
+  article.dataset.bankProductCard = "";
+  article.dataset.bankName = bankName || currentBankProfileName;
+  article.dataset.kind = "creditcard";
+
+  const header = document.createElement("header");
+  header.className = "bank-product-head";
+
+  const title = document.createElement("h3");
+  title.textContent = product.title;
+  header.append(title);
+
+  (product.descriptionLines || []).forEach((lineText) => {
+    const line = document.createElement("p");
+    line.textContent = lineText;
+    header.append(line);
+  });
+
+  const tableCard = document.createElement("div");
+  tableCard.className = "bank-product-table-card";
+
+  const cardTypeLabel = getCreditCardTypeLabel(product.cardType || product.cardCategory || "");
+  [
+    ["Kart Tipi", cardTypeLabel],
+    ["Yıllık Ücret", formatCreditCardAnnualFee(Number(product.annualFee), String(product.annualFeeLabel || "").trim())],
+  ].forEach(([labelText, valueText]) => {
+    const row = document.createElement("div");
+    row.className = "bank-product-table-row";
+    const label = document.createElement("span");
+    label.textContent = labelText;
+    const value = document.createElement("strong");
+    value.textContent = valueText;
+    row.append(label, value);
+    tableCard.append(row);
+  });
+
+  const highlightCard = document.createElement("div");
+  highlightCard.className = "bank-credit-card-highlight";
+  highlightCard.textContent =
+    product.highlightText ||
+    product.headlineBenefit ||
+    product.benefitText ||
+    "Kart ayrıcalıkları bankanın güncel teklifine göre değişebilir.";
+
+  const actionButton = document.createElement("button");
+  actionButton.type = "button";
+  actionButton.className = "bank-product-action";
+  actionButton.dataset.bankApplyButton = "";
+  actionButton.dataset.bankName = bankName || currentBankProfileName;
+  actionButton.dataset.productTitle = product.title;
+  actionButton.dataset.applyHref = product.applyHref || product.detailHref || "";
+  actionButton.textContent = "Başvur";
+
+  article.append(header, tableCard, highlightCard, actionButton);
+  return article;
+}
+
+function getCreditCardTypeLabel(cardType) {
+  const normalizedCardType = String(cardType || "").trim().toLowerCase();
+
+  if (normalizedCardType === "rewards") {
+    return "Puan / Ödül";
+  }
+  if (normalizedCardType === "miles") {
+    return "Mil";
+  }
+  if (normalizedCardType === "free") {
+    return "Aidatsız";
+  }
+
+  return "Kredi Kartı";
 }
 
 function createBankDetailEmptyState(bankName) {
@@ -5487,43 +7792,67 @@ function renderLoanRatesPage(tabKey = "need") {
     ui.loanRatesTertiaryHeading.textContent = tabData.tertiaryHeading || "Toplam Ödeme";
   }
 
-  renderLoanRatesFilters(resolvedTabKey);
+  const isCreditCardTab = resolvedTabKey === "creditcard";
+  ui.loanRatesFilters?.classList.toggle("hidden", isCreditCardTab);
+  ui.creditCardRatesFilters?.classList.toggle("hidden", !isCreditCardTab);
+
+  if (isCreditCardTab) {
+    renderCreditCardRatesFilters();
+  } else {
+    renderLoanRatesFilters(resolvedTabKey);
+  }
 
   if (ui.loanRatesTableBody) {
     const rowsFragment = document.createDocumentFragment();
-    const { amount, term, loanType, termUnit } = getLoanRatesFilterValues(resolvedTabKey);
-    const comparisonRows = getLoanRatesComparisonRows(resolvedTabKey, term);
-    if (comparisonRows.length === 0) {
-      const emptyRow = document.createElement("tr");
-      const emptyCell = document.createElement("td");
-      emptyCell.colSpan = 5;
-      emptyCell.className = "table-empty";
-      emptyCell.textContent =
-        resolvedTabKey === "interestfree"
-          ? "Faizsiz kredi kartları eklendikçe burada görünecek."
-          : resolvedTabKey === "kmh"
-            ? "Kredili mevduat hesabı kartları eklendikçe burada görünecek."
-          : "Bu vade için gösterilecek banka verisi bulunamadı.";
-      emptyRow.append(emptyCell);
-      rowsFragment.append(emptyRow);
+    if (isCreditCardTab) {
+      const comparisonRows = getCreditCardComparisonRows();
+      if (comparisonRows.length === 0) {
+        const emptyRow = document.createElement("tr");
+        const emptyCell = document.createElement("td");
+        emptyCell.colSpan = 5;
+        emptyCell.className = "table-empty";
+        emptyCell.textContent = "Kredi kartı ürünleri eklendikçe burada görünecek.";
+        emptyRow.append(emptyCell);
+        rowsFragment.append(emptyRow);
+      } else {
+        comparisonRows.forEach((rowData) => {
+          rowsFragment.append(createCreditCardRatesRow(rowData));
+        });
+      }
     } else {
-      comparisonRows.forEach((rowData) => {
-        rowsFragment.append(
-          createLoanRatesRow(
-            buildLoanRatesTableRow(rowData, {
-              principal: amount,
-              termMonths: term,
-              termUnit,
-              loanType,
-            }),
-          ),
-        );
-      });
+      const { amount, term, loanType, termUnit } = getLoanRatesFilterValues(resolvedTabKey);
+      const comparisonRows = getLoanRatesComparisonRows(resolvedTabKey, term);
+      if (comparisonRows.length === 0) {
+        const emptyRow = document.createElement("tr");
+        const emptyCell = document.createElement("td");
+        emptyCell.colSpan = 5;
+        emptyCell.className = "table-empty";
+        emptyCell.textContent =
+          resolvedTabKey === "kmh"
+            ? "Kredili mevduat hesabı kartları eklendikçe burada görünecek."
+            : "Bu vade için gösterilecek banka verisi bulunamadı.";
+        emptyRow.append(emptyCell);
+        rowsFragment.append(emptyRow);
+      } else {
+        comparisonRows.forEach((rowData) => {
+          rowsFragment.append(
+            createLoanRatesRow(
+              buildLoanRatesTableRow(rowData, {
+                principal: amount,
+                termMonths: term,
+                termUnit,
+                loanType,
+              }),
+            ),
+          );
+        });
+      }
     }
     ui.loanRatesTableBody.replaceChildren(rowsFragment);
   }
 
   setupBankProductCards();
+  bindBankApplyButtons(ui.loanRatesPage || document);
 }
 
 function getLoanRatesComparisonRows(tabKey, selectedTerm) {
@@ -5622,6 +7951,30 @@ function renderLoanRatesFilters(tabKey) {
   }
 }
 
+function renderCreditCardRatesFilters() {
+  const state = loanRatesFilterState.creditcard || {
+    search: "",
+    cardType: "all",
+    annualFee: "all",
+  };
+
+  if (ui.creditCardSearchInput) {
+    ui.creditCardSearchInput.value = String(state.search || "");
+  }
+
+  if (ui.creditCardTypeSelect) {
+    ui.creditCardTypeSelect.value = String(state.cardType || "all");
+  }
+
+  if (ui.creditCardFeeSelect) {
+    ui.creditCardFeeSelect.value = String(state.annualFee || "all");
+  }
+
+  if (ui.creditCardSearchClear) {
+    ui.creditCardSearchClear.disabled = !String(state.search || "").trim();
+  }
+}
+
 function syncLoanRatesFilterStateFromUi() {
   const tabKey = String(ui.loanRatesPage?.dataset.loanRatesTab || "need");
   const config = LOAN_RATES_FILTER_CONFIG[tabKey] || LOAN_RATES_FILTER_CONFIG.need;
@@ -5632,6 +7985,18 @@ function syncLoanRatesFilterStateFromUi() {
     amount: Number.isFinite(amount) && amount > 0 ? amount : config.defaultAmount,
     term: Number.isFinite(term) ? term : config.defaultTerm,
   };
+}
+
+function syncCreditCardFilterStateFromUi() {
+  loanRatesFilterState.creditcard = {
+    search: String(ui.creditCardSearchInput?.value || "").trim(),
+    cardType: String(ui.creditCardTypeSelect?.value || "all"),
+    annualFee: String(ui.creditCardFeeSelect?.value || "all"),
+  };
+
+  if (ui.creditCardSearchClear) {
+    ui.creditCardSearchClear.disabled = !loanRatesFilterState.creditcard.search;
+  }
 }
 
 function getLoanRatesFilterValues(tabKey) {
@@ -5647,6 +8012,122 @@ function getLoanRatesFilterValues(tabKey) {
     loanType: config.loanType,
     termUnit: config.termUnit || "month",
   };
+}
+
+function getCreditCardFilterValues() {
+  const state = loanRatesFilterState.creditcard || {
+    search: "",
+    cardType: "all",
+    annualFee: "all",
+  };
+
+  return {
+    search: String(state.search || ""),
+    cardType: String(state.cardType || "all"),
+    annualFee: String(state.annualFee || "all"),
+  };
+}
+
+function getCreditCardComparisonRows() {
+  const { search, cardType, annualFee } = getCreditCardFilterValues();
+  const normalizedQuery = normalizeTefasSearchText(search);
+
+  return HOME_BANK_WALL_BANKS.reduce((accumulator, bankName) => {
+    const profile = buildBankProfileData(bankName);
+    const products = [...profile.primaryProducts, ...profile.secondaryProducts];
+
+    products.forEach((product) => {
+      if (product.kind !== "creditcard") {
+        return;
+      }
+
+      const normalizedCardType = String(product.cardType || product.cardCategory || "").trim().toLowerCase();
+      const headlineText =
+        product.highlightText ||
+        product.headlineBenefit ||
+        product.benefitText ||
+        product.summaryText ||
+        String((product.descriptionLines || []).join(" · ") || "");
+      const searchableText = normalizeTefasSearchText(`${bankName} ${product.title} ${headlineText}`);
+      const annualFeeValue = Number(product.annualFee);
+      const isFeeFree = Boolean(product.isFeeFree) || annualFeeValue === 0;
+
+      if (normalizedQuery && !searchableText.includes(normalizedQuery)) {
+        return;
+      }
+
+      if (cardType !== "all") {
+        if (cardType === "free" && !isFeeFree) {
+          return;
+        }
+        if (cardType !== "free" && normalizedCardType !== cardType) {
+          return;
+        }
+      }
+
+      if (!matchesCreditCardFeeFilter(annualFee, annualFeeValue, isFeeFree)) {
+        return;
+      }
+
+      accumulator.push({
+        bank: bankName,
+        productTitle: product.title,
+        highlightText: headlineText || "Kart bilgileri eklendikçe burada görünecek.",
+        annualFee: annualFeeValue,
+        annualFeeLabel: String(product.annualFeeLabel || "").trim(),
+        applyHref: product.applyHref || product.detailHref || "",
+      });
+    });
+
+    return accumulator;
+  }, []).sort((leftRow, rightRow) => {
+    const leftFee = Number.isFinite(leftRow.annualFee) ? leftRow.annualFee : Number.POSITIVE_INFINITY;
+    const rightFee = Number.isFinite(rightRow.annualFee) ? rightRow.annualFee : Number.POSITIVE_INFINITY;
+    return leftFee - rightFee;
+  });
+}
+
+function matchesCreditCardFeeFilter(filterValue, annualFeeValue, isFeeFree) {
+  if (filterValue === "all") {
+    return true;
+  }
+
+  if (filterValue === "free") {
+    return isFeeFree;
+  }
+
+  if (!Number.isFinite(annualFeeValue)) {
+    return false;
+  }
+
+  if (filterValue === "low") {
+    return annualFeeValue > 0 && annualFeeValue <= 500;
+  }
+
+  if (filterValue === "mid") {
+    return annualFeeValue > 500 && annualFeeValue <= 1000;
+  }
+
+  if (filterValue === "high") {
+    return annualFeeValue > 1000;
+  }
+
+  return true;
+}
+
+function formatCreditCardAnnualFee(annualFeeValue, annualFeeLabel = "") {
+  if (annualFeeLabel) {
+    return annualFeeLabel;
+  }
+
+  if (Number.isFinite(annualFeeValue)) {
+    if (annualFeeValue === 0) {
+      return "Aidatsız";
+    }
+    return formatTryWithCents(annualFeeValue);
+  }
+
+  return "-";
 }
 
 function buildLoanRatesTableRow(rowData, options = {}) {
@@ -5771,6 +8252,43 @@ function createLoanRatesRow(rowData) {
   actionCell.append(actionButton);
 
   tr.append(bankCell, rateCell, installmentCell, totalCell, actionCell);
+  return tr;
+}
+
+function createCreditCardRatesRow(rowData) {
+  const tr = document.createElement("tr");
+
+  const bankCell = document.createElement("td");
+  const bankWrap = document.createElement("div");
+  bankWrap.className = "bank-logo-cell";
+  const logoElement = createBankLogoElement(rowData.bank, "bank-logo-image");
+  if (logoElement) {
+    bankWrap.append(logoElement);
+  }
+  bankCell.append(bankWrap);
+
+  const productCell = document.createElement("td");
+  productCell.textContent = rowData.productTitle;
+
+  const highlightCell = document.createElement("td");
+  highlightCell.className = "credit-card-highlight-cell";
+  highlightCell.textContent = rowData.highlightText;
+
+  const feeCell = document.createElement("td");
+  feeCell.textContent = formatCreditCardAnnualFee(rowData.annualFee, rowData.annualFeeLabel);
+
+  const actionCell = document.createElement("td");
+  const actionButton = document.createElement("button");
+  actionButton.type = "button";
+  actionButton.className = "loan-apply-btn";
+  actionButton.textContent = "Başvur";
+  actionButton.dataset.bankApplyButton = "";
+  actionButton.dataset.bankName = rowData.bank;
+  actionButton.dataset.productTitle = rowData.productTitle || "";
+  actionButton.dataset.applyHref = rowData.applyHref || "";
+  actionCell.append(actionButton);
+
+  tr.append(bankCell, productCell, highlightCell, feeCell, actionCell);
   return tr;
 }
 
@@ -6094,7 +8612,7 @@ function buildCalculationHash(loanType) {
 
 function buildLoanRatesHash(tabKey) {
   const normalizedTabKey = String(tabKey || "").trim().toLowerCase();
-  const supportedTabKeys = new Set(["need", "housing", "vehicle", "kmh", "interestfree", "kobi"]);
+  const supportedTabKeys = new Set(["need", "housing", "vehicle", "kmh", "creditcard", "kobi"]);
   return supportedTabKeys.has(normalizedTabKey)
     ? `${LOAN_ROUTE_PREFIX}${normalizedTabKey}`
     : ROUTE_HASH.loan;
@@ -6110,6 +8628,24 @@ function buildInvestmentHash(sectionKey) {
     silver: ROUTE_HASH.investmentSilver,
   };
   return sectionHashByKey[normalizedSectionKey] || ROUTE_HASH.investment;
+}
+
+function normalizeInvestmentSectionKey(sectionKey) {
+  const normalizedSectionKey = String(sectionKey || "").trim().toLowerCase();
+  const sectionKeyMap = {
+    doviz: "fx",
+    fx: "fx",
+    borsa: "stock",
+    stock: "stock",
+    fon: "fund",
+    fund: "fund",
+    altin: "gold",
+    gold: "gold",
+    mevduat: "silver",
+    gumus: "silver",
+    silver: "silver",
+  };
+  return sectionKeyMap[normalizedSectionKey] || "";
 }
 
 function shouldPrioritizeInitialRoute(hashValue) {
@@ -6305,7 +8841,10 @@ async function loadFxPriceTable(options = {}) {
   }
 
   if (!silent) {
-    renderFxPriceTable(EMBEDDED_FX_FALLBACK_PAYLOAD.rows, EMBEDDED_FX_FALLBACK_PAYLOAD);
+    ui.investmentFxBody.replaceChildren(createEmptyRow("Döviz verisi yükleniyor...", 7));
+    if (ui.investmentFxMeta) {
+      ui.investmentFxMeta.textContent = "Kaynak: güncel veri aranıyor";
+    }
   }
 
   try {
@@ -6318,7 +8857,10 @@ async function loadFxPriceTable(options = {}) {
   } catch (error) {
     console.error(error);
     if (!silent) {
-      renderFxPriceTable(EMBEDDED_FX_FALLBACK_PAYLOAD.rows, EMBEDDED_FX_FALLBACK_PAYLOAD);
+      ui.investmentFxBody.replaceChildren(createEmptyRow("Güncel döviz verisi alınamadı.", 7));
+      if (ui.investmentFxMeta) {
+        ui.investmentFxMeta.textContent = "Kaynak: güncel veri alınamadı";
+      }
     }
   }
 }
@@ -6370,7 +8912,12 @@ async function fetchFxPayload(options = {}) {
         continue;
       }
       const payload = await response.json();
-      if (payload && typeof payload === "object" && Array.isArray(payload.rows)) {
+      if (
+        payload &&
+        typeof payload === "object" &&
+        Array.isArray(payload.rows) &&
+        isMarketPayloadFresh(payload)
+      ) {
         return payload;
       }
     } catch (_error) {
@@ -6463,10 +9010,10 @@ async function loadGoldPriceTable(options = {}) {
   }
 
   if (!silent) {
-    renderGoldPriceTable(
-      EMBEDDED_GOLD_FALLBACK_PAYLOAD.rows,
-      EMBEDDED_GOLD_FALLBACK_PAYLOAD,
-    );
+    ui.investmentGoldBody.replaceChildren(createEmptyRow("Altın verisi yükleniyor...", 7));
+    if (ui.investmentGoldMeta) {
+      ui.investmentGoldMeta.textContent = "Kaynak: güncel veri aranıyor";
+    }
   }
 
   try {
@@ -6479,10 +9026,10 @@ async function loadGoldPriceTable(options = {}) {
   } catch (error) {
     console.error(error);
     if (!silent) {
-      renderGoldPriceTable(
-        EMBEDDED_GOLD_FALLBACK_PAYLOAD.rows,
-        EMBEDDED_GOLD_FALLBACK_PAYLOAD,
-      );
+      ui.investmentGoldBody.replaceChildren(createEmptyRow("Güncel altın verisi alınamadı.", 7));
+      if (ui.investmentGoldMeta) {
+        ui.investmentGoldMeta.textContent = "Kaynak: güncel veri alınamadı";
+      }
     }
   }
 }
@@ -6513,7 +9060,7 @@ async function fetchGoldPayload(options = {}) {
     // Fall back to local snapshot files.
   }
 
-  if (localFallbackPayload) {
+  if (localFallbackPayload && isMarketPayloadFresh(localFallbackPayload)) {
     return localFallbackPayload;
   }
 
@@ -6544,7 +9091,12 @@ async function loadLocalGoldPayload(options = {}) {
         continue;
       }
       const payload = await response.json();
-      if (payload && typeof payload === "object" && Array.isArray(payload.rows)) {
+      if (
+        payload &&
+        typeof payload === "object" &&
+        Array.isArray(payload.rows) &&
+        isMarketPayloadFresh(payload)
+      ) {
         return payload;
       }
     } catch (_error) {
@@ -6591,6 +9143,41 @@ function normalizeGoldRowName(value) {
     .toLowerCase()
     .replace(/[^a-z0-9çğıöşü]+/gi, " ")
     .trim();
+}
+
+function getMarketPayloadTimestamp(payload) {
+  if (!payload || typeof payload !== "object") {
+    return Number.NaN;
+  }
+
+  const fetchedAtUtc = Date.parse(String(payload.fetched_at_utc || ""));
+  if (Number.isFinite(fetchedAtUtc)) {
+    return fetchedAtUtc;
+  }
+
+  if (!Array.isArray(payload.rows)) {
+    return Number.NaN;
+  }
+
+  const rowTimestamps = payload.rows
+    .map((row) => Date.parse(String(row?.guncellenme_tarihi || "")))
+    .filter((value) => Number.isFinite(value));
+
+  if (rowTimestamps.length === 0) {
+    return Number.NaN;
+  }
+
+  return Math.max(...rowTimestamps);
+}
+
+function isMarketPayloadFresh(payload, maxAgeHours = 36) {
+  const payloadTimestamp = getMarketPayloadTimestamp(payload);
+  if (!Number.isFinite(payloadTimestamp)) {
+    return false;
+  }
+
+  const maxAgeMs = maxAgeHours * 60 * 60 * 1000;
+  return (Date.now() - payloadTimestamp) <= maxAgeMs;
 }
 
 function prepareGoldRows(rows) {
@@ -6927,7 +9514,9 @@ function renderTefasFundRows(rows, queryText = "") {
     : formatTefasDate(firstRow?.tarih_ms);
 
   if (ui.tefasFundMeta) {
-    ui.tefasFundMeta.textContent = `Güncelleme: ${referenceDate}`;
+    ui.tefasFundMeta.textContent = referenceDate !== "-"
+      ? `Güncelleme: ${referenceDate}`
+      : "Güncelleme: veri tarihi alınamadı";
   }
 
   if (ui.tefasFundSearchInfo) {
@@ -6948,6 +9537,38 @@ function normalizeTefasSearchText(value) {
     .toLocaleLowerCase("tr-TR")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function bindBankApplyButtons(root = document) {
+  if (!(root instanceof Document) && !(root instanceof HTMLElement)) {
+    return;
+  }
+
+  root.querySelectorAll("[data-bank-apply-button]").forEach((buttonElement) => {
+    if (!(buttonElement instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    if (buttonElement.dataset.bankApplyBound === "true") {
+      return;
+    }
+
+    buttonElement.onclick = null;
+    buttonElement.addEventListener("click", () => {
+      const bankName = String(buttonElement.dataset.bankName || currentBankProfileName || "").trim();
+      const productTitle = String(buttonElement.dataset.productTitle || "").trim();
+      const applyHref = String(buttonElement.dataset.applyHref || "").trim();
+      const isTouchLikeDevice = window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 760;
+
+      if (isTouchLikeDevice && applyHref) {
+        window.open(applyHref, "_blank", "noopener,noreferrer");
+        return;
+      }
+
+      openBankAppQrModal(bankName, productTitle);
+    });
+    buttonElement.dataset.bankApplyBound = "true";
+  });
 }
 
 function appendCell(rowElement, textContent, className = "") {
@@ -7115,6 +9736,60 @@ function syncSubpageBodyClasses() {
     "subpage-open",
     bankDetailOpen || loanRatesOpen || calculationOpen || investmentOpen || bankRedirectOpen,
   );
+  syncFooterPlacement({
+    bankDetailOpen,
+    loanRatesOpen,
+    calculationOpen,
+    investmentOpen,
+    bankRedirectOpen,
+  });
+}
+
+function syncFooterPlacement({
+  bankDetailOpen,
+  loanRatesOpen,
+  calculationOpen,
+  investmentOpen,
+  bankRedirectOpen,
+}) {
+  if (!(ui.siteFooter instanceof HTMLElement)) {
+    return;
+  }
+
+  let targetContainer = null;
+
+  if (bankRedirectOpen && ui.bankAppRedirectPage instanceof HTMLElement) {
+    targetContainer = ui.bankAppRedirectPage;
+  } else if (bankDetailOpen && ui.bankDetailPage instanceof HTMLElement) {
+    targetContainer = ui.bankDetailPage;
+  } else if (loanRatesOpen && ui.loanRatesPage instanceof HTMLElement) {
+    targetContainer = ui.loanRatesPage;
+  } else if (calculationOpen && ui.calculationPage instanceof HTMLElement) {
+    targetContainer = ui.calculationPage;
+  } else if (investmentOpen && ui.investmentPage instanceof HTMLElement) {
+    targetContainer = ui.investmentPage;
+  }
+
+  if (targetContainer instanceof HTMLElement) {
+    if (ui.siteFooter.parentElement !== targetContainer) {
+      targetContainer.appendChild(ui.siteFooter);
+    }
+    return;
+  }
+
+  if (!(footerHomeParent instanceof HTMLElement)) {
+    return;
+  }
+
+  if (ui.siteFooter.parentElement === footerHomeParent) {
+    return;
+  }
+
+  if (footerHomeNextSibling && footerHomeNextSibling.parentNode === footerHomeParent) {
+    footerHomeParent.insertBefore(ui.siteFooter, footerHomeNextSibling);
+  } else {
+    footerHomeParent.appendChild(ui.siteFooter);
+  }
 }
 
 function scrollHomeSectionIntoView() {
@@ -7833,8 +10508,7 @@ function renderDepositCalculator() {
 function renderInvestmentDepositOffers(showAlert = false) {
   if (
     !(ui.investmentDepositComparePrincipal || ui.investmentDepositPrincipal) ||
-    !(ui.investmentDepositCompareTermDays || ui.investmentDepositTermDays) ||
-    !ui.investmentDepositOffersList
+    !(ui.investmentDepositCompareTermDays || ui.investmentDepositTermDays)
   ) {
     return;
   }
@@ -7849,17 +10523,6 @@ function renderInvestmentDepositOffers(showAlert = false) {
     }
     return;
   }
-
-  const accountTypeFilter = ui.investmentDepositAccountTypeFilter?.value || "all";
-  const bankTypeFilter = ui.investmentDepositBankTypeFilter?.value || "all";
-  const matchingOffers = DEPOSIT_OFFER_CATALOG
-    .filter((offer) => accountTypeFilter === "all" || offer.accountType === accountTypeFilter)
-    .filter((offer) => bankTypeFilter === "all" || offer.bankType === bankTypeFilter)
-    .map((offer) => ({
-      ...offer,
-      outcome: calculateDepositOutcome(principal, offer.annualRate, termDays),
-    }))
-    .sort((leftOffer, rightOffer) => rightOffer.outcome.netReturn - leftOffer.outcome.netReturn);
 
   if (ui.investmentDepositOfferTitle) {
     ui.investmentDepositOfferTitle.textContent =
@@ -7877,17 +10540,6 @@ function renderInvestmentDepositOffers(showAlert = false) {
     ui.investmentSilverMeta.textContent = `Güncelleme: ${formatCurrentDate()}`;
   }
 
-  if (matchingOffers.length === 0) {
-    ui.investmentDepositOffersList.replaceChildren(createDepositOfferEmptyState());
-    renderInvestmentDepositComparisonTable(principal, termDays);
-    return;
-  }
-
-  const fragment = document.createDocumentFragment();
-  matchingOffers.forEach((offer, index) => {
-    fragment.append(createDepositOfferCard(offer, index === 0));
-  });
-  ui.investmentDepositOffersList.replaceChildren(fragment);
   renderInvestmentDepositComparisonTable(principal, termDays);
 }
 
@@ -7898,16 +10550,18 @@ function renderInvestmentDepositComparisonTable(principal, termDays) {
 
   if (!Number.isFinite(principal) || principal <= 0 || !Number.isFinite(termDays) || termDays <= 0) {
     ui.investmentDepositComparisonBody.replaceChildren(
-      createEmptyRow("Geçerli bir mevduat tutarı ve vade gir.", 5),
+      createEmptyRow("Geçerli bir mevduat tutarı ve vade gir.", 6),
     );
+    bindBankApplyButtons(ui.investmentDepositComparisonBody);
     return;
   }
 
   const rows = getInvestmentDepositComparisonRows(principal, termDays);
   if (rows.length === 0) {
     ui.investmentDepositComparisonBody.replaceChildren(
-      createEmptyRow("Bu vade için gösterilecek banka kartı verisi bulunamadı.", 5),
+      createEmptyRow("Bu vade için gösterilecek banka kartı verisi bulunamadı.", 6),
     );
+    bindBankApplyButtons(ui.investmentDepositComparisonBody);
     return;
   }
 
@@ -7916,6 +10570,7 @@ function renderInvestmentDepositComparisonTable(principal, termDays) {
     fragment.append(createInvestmentDepositComparisonRow(rowData));
   });
   ui.investmentDepositComparisonBody.replaceChildren(fragment);
+  bindBankApplyButtons(ui.investmentDepositComparisonBody);
 }
 
 function getInvestmentDepositComparisonRows(principal, termDays) {
@@ -7931,12 +10586,14 @@ function getInvestmentDepositComparisonRows(principal, termDays) {
     }
 
     const outcome = calculateDepositOutcome(principal, rate, termDays);
+    const compoundRate = calculateCompoundDepositAnnualRate(rate);
     accumulator.push({
       bank: bankName,
       productTitle: comparableDeposit.product.title,
       rate,
       netReturn: outcome.netReturn,
       maturityAmount: outcome.maturityAmount,
+      compoundRate,
       detailHref: comparableDeposit.product.detailHref || "",
       applyHref: comparableDeposit.product.applyHref || comparableDeposit.product.detailHref || "",
     });
@@ -7989,6 +10646,9 @@ function createInvestmentDepositComparisonRow(rowData) {
   const maturityCell = document.createElement("td");
   maturityCell.textContent = formatTryWithCents(rowData.maturityAmount);
 
+  const compoundCell = document.createElement("td");
+  compoundCell.textContent = `% ${formatPercentNumber(rowData.compoundRate)}`;
+
   const actionCell = document.createElement("td");
   const actionButton = document.createElement("button");
   actionButton.type = "button";
@@ -8000,7 +10660,7 @@ function createInvestmentDepositComparisonRow(rowData) {
   actionButton.dataset.applyHref = rowData.applyHref || rowData.detailHref || "";
   actionCell.append(actionButton);
 
-  tr.append(bankCell, rateCell, netReturnCell, maturityCell, actionCell);
+  tr.append(bankCell, rateCell, netReturnCell, maturityCell, compoundCell, actionCell);
   return tr;
 }
 
@@ -8564,6 +11224,23 @@ function calculateDepositOutcome(principal, annualRate, termDays) {
     netReturn,
     maturityAmount,
   };
+}
+
+function calculateCompoundDepositAnnualRate(annualRate, compoundingPerYear = 12) {
+  const normalizedAnnualRate = Number(annualRate);
+  const normalizedCompoundingPerYear = Number(compoundingPerYear);
+
+  if (
+    !Number.isFinite(normalizedAnnualRate) ||
+    normalizedAnnualRate < 0 ||
+    !Number.isFinite(normalizedCompoundingPerYear) ||
+    normalizedCompoundingPerYear <= 0
+  ) {
+    return 0;
+  }
+
+  const nominalAnnualRate = normalizedAnnualRate / 100;
+  return ((1 + nominalAnnualRate / normalizedCompoundingPerYear) ** normalizedCompoundingPerYear - 1) * 100;
 }
 
 function calculateInstallment(principal, monthlyRatePercent, termMonths) {
