@@ -11,6 +11,7 @@
   --accent-soft: #fff3e3;
   --wallet-blue: #198cff;
   --shadow: 0 20px 50px rgba(16, 36, 74, 0.1);
+  --province-pill-radius: 4px;
 }
 
 * {
@@ -33,6 +34,62 @@ body {
   color: var(--ink);
   background: #f2f3f5;
   overflow-x: hidden;
+}
+
+.province-pill,
+.auth-popover,
+.header-mega-menu,
+.header-mega-card,
+.home-bank-wall,
+.home-bank-wall-card,
+.intro-panel,
+.story-panel,
+.compact-panel,
+.card,
+.bank-card-family-showcase,
+.bank-product-card,
+.bank-product-card-spotlight,
+.bank-product-input-shell,
+.bank-product-table-card,
+.bank-product-fee-card,
+.bank-fee-modal,
+.bank-app-qr-modal,
+.bank-app-qr-code-card,
+.bank-app-redirect-shell,
+.investment-page-panel,
+.calculation-page-panel,
+.investment-card,
+.investment-gold-card,
+.investment-gold-table-panel,
+.investment-gold-table-wrap,
+.investment-stock-panel,
+.investment-stock-table-wrap,
+.calculation-card,
+.need-calc-wrap,
+.need-calc-schedule-wrap,
+.need-calc-summary,
+.deposit-calc-panel,
+.investment-fund-panel,
+.company-page-card,
+.fund-toolbar,
+.deposit-calc-summary,
+.deposit-offers-panel,
+.loan-offers-panel,
+.deposit-offer-card,
+.bank-wordmark-card,
+.investment-deposit-compare-panel,
+.compound-calc-panel,
+.compound-calc-summary,
+.real-calc-panel,
+.real-calc-summary,
+.loan-rates-table-panel,
+.credit-card-spotlight,
+.loan-rates-filter-shell,
+.result-shell,
+.credit-guidance-card,
+.credit-opportunity-card,
+.footer-shell {
+  border-radius: var(--province-pill-radius);
 }
 
 a {
@@ -2688,9 +2745,9 @@ body.subpage-open .header-inner {
 .need-calc-page-heading {
   margin: 0 0 0.7rem;
   color: #203048;
-  font-size: 1.55rem;
-  font-weight: 800;
-  line-height: 1.2;
+  font-size: clamp(1.22rem, 1.94vw, 1.66rem);
+  font-weight: 600;
+  line-height: 1.08;
 }
 
 .need-calc-stack {
@@ -3049,18 +3106,18 @@ body.subpage-open .header-inner {
   width: 100%;
   min-width: 0;
   gap: 0.34rem;
-  padding: 0.8rem 0.85rem 0.85rem;
-  border: 1px solid #decfd6;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #ffffff 0%, #fdf8fa 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .fund-filter-field-select::after {
   content: "";
   position: absolute;
   right: 1.18rem;
-  bottom: 1.38rem;
+  bottom: 1.02rem;
   width: 0.6rem;
   height: 0.36rem;
   background: #5a3d4a;
@@ -3117,11 +3174,11 @@ body.subpage-open .header-inner {
   align-items: center;
   gap: 0.8rem;
   flex-wrap: wrap;
-  padding: 0.9rem 1rem 0.85rem;
-  border: 1px solid #d7c5ce;
-  border-bottom: none;
-  border-radius: 12px 12px 0 0;
-  background: #ffffff;
+  margin: 0 0 0.85rem;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
 }
 
 .fund-status {
@@ -3197,6 +3254,7 @@ body.subpage-open .header-inner {
 }
 
 .fund-table-head {
+  border-top: 1px solid #d7c5ce;
   border-bottom: 1px solid #e5d8de;
   background: #f8f1f4;
 }
@@ -3624,7 +3682,8 @@ body.subpage-open .header-inner {
   width: 100%;
   box-sizing: border-box;
   margin-bottom: 0;
-  background: #f2f3f5;
+  background: #f8f1f4;
+  border: 1px solid #d7c5ce;
   border-radius: 10px;
   padding: 0.7rem 0.7rem 0.9rem;
   align-items: start;
@@ -3730,6 +3789,19 @@ body.subpage-open .header-inner {
   border-radius: 10px;
   background: #fefefe;
   padding: 0.75rem;
+}
+
+.investment-deposit-compare-panel .loan-rates-table thead th {
+  background: #f8f1f4;
+  border-bottom: 1px solid #efe5ea;
+}
+
+.investment-deposit-compare-panel .loan-rates-table td {
+  border-top-color: #efe5ea;
+}
+
+.investment-deposit-compare-panel .investment-gold-table-wrap {
+  border-color: #d7c5ce;
 }
 
 .loan-rates-table-head h3 {
@@ -3908,13 +3980,13 @@ body.subpage-open .header-inner {
 }
 
 .loan-rates-filter-field[for="investmentDepositComparePrincipal"] {
-  background: #f2f3f5;
+  background: #f8f1f4;
   border-radius: 10px;
   padding: 0.7rem;
 }
 
 .loan-rates-filter-field[for="investmentDepositCompareTermDays"] {
-  background: #f2f3f5;
+  background: #f8f1f4;
   border-radius: 10px;
   padding: 0.7rem;
 }
@@ -3924,21 +3996,21 @@ body.subpage-open .header-inner {
 }
 
 .loan-rates-filter-field[for="investmentDepositComparePrincipal"] .loan-rates-filter-shell {
-  background: #f2f3f5;
-  border-color: #d7dde6;
+  background: #ffffff;
+  border-color: #d7c5ce;
   box-shadow: none;
 }
 
 .loan-rates-filter-field[for="investmentDepositCompareTermDays"] .loan-rates-filter-shell {
-  background: #f2f3f5;
-  border-color: #d7dde6;
+  background: #ffffff;
+  border-color: #d7c5ce;
   box-shadow: none;
 }
 
 .loan-rates-filter-field[for="investmentDepositComparePrincipal"] .loan-rates-filter-shell input,
 .loan-rates-filter-field[for="investmentDepositCompareTermDays"] .loan-rates-filter-shell select,
 .loan-rates-filter-field[for="investmentDepositComparePrincipal"] .loan-rates-filter-shell em {
-  background: #f2f3f5;
+  background: #ffffff;
 }
 
 #investmentDepositComparePrincipal,
@@ -3947,7 +4019,7 @@ body.subpage-open .header-inner {
 .loan-rates-filter-field[for="investmentDepositCompareTermDays"] .loan-rates-filter-shell,
 .loan-rates-filter-field[for="investmentDepositComparePrincipal"] .loan-rates-filter-shell em,
 .loan-rates-filter-field[for="investmentDepositCompareTermDays"] .loan-rates-filter-shell::after {
-  background-color: #f2f3f5 !important;
+  background-color: #ffffff !important;
 }
 
 #investmentDepositComparePrincipal,
@@ -5509,4 +5581,61 @@ h6 {
   font-size: 1.42rem !important;
   font-weight: 400 !important;
   line-height: 1.2;
+}
+
+body .bank-card-family-showcase,
+body .bank-product-card,
+body .bank-product-card-spotlight,
+body .bank-product-input-shell,
+body .bank-product-table-card,
+body .bank-product-fee-card,
+body .bank-fee-modal,
+body .bank-app-qr-modal,
+body .bank-app-qr-code-card,
+body .bank-app-redirect-shell,
+body .investment-page-panel,
+body .calculation-page-panel,
+body .investment-gold-table-panel,
+body .investment-gold-table-wrap,
+body .investment-stock-panel,
+body .investment-stock-table-wrap,
+body .calculation-card,
+body .need-calc-wrap,
+body .need-calc-schedule-wrap,
+body .need-calc-summary,
+body .deposit-calc-panel,
+body .investment-fund-panel,
+body .company-page-card,
+body .fund-toolbar,
+body .deposit-calc-summary,
+body .loan-offers-panel,
+body .deposit-offers-panel,
+body .deposit-offer-card,
+body .bank-wordmark-card,
+body .investment-deposit-compare-panel,
+body .compound-calc-panel,
+body .compound-calc-summary,
+body .real-calc-panel,
+body .real-calc-summary,
+body .loan-rates-table-panel,
+body .credit-card-spotlight,
+body .loan-rates-filter-shell,
+body .result-shell,
+body .credit-guidance-card,
+body .credit-opportunity-card,
+body .fund-filter-field,
+body .fund-table-body,
+body .tefas-search-input-wrap,
+body .investment-card,
+body .story-panel,
+body .intro-panel,
+body .compact-panel,
+body .card,
+body .auth-popover,
+body .header-mega-menu,
+body .header-mega-card,
+body .home-bank-wall,
+body .home-bank-wall-card,
+body .footer-shell {
+  border-radius: 4px !important;
 }

@@ -422,7 +422,7 @@ const INVESTMENT_FUND_DATA_FILES = Object.freeze({
   fee: "./assets/data/tefas-yat-fees.json",
   size: "./assets/data/tefas-yat-sizes.json",
 });
-const INVESTMENT_FUND_SOURCE_LABEL = "TEFAS Fon Karşılaştırma (yatırım fonları)";
+const INVESTMENT_FUND_SOURCE_LABEL = "TEFAS Fon Karşılaştırma verileri";
 const INVESTMENT_FUND_COLUMNS = Object.freeze({
   return: Object.freeze([
     Object.freeze({ key: "code", label: "Kod", align: "left", sortable: true }),
@@ -9227,6 +9227,9 @@ async function loadLocalStockSummaryPayload(options = {}) {
         typeof payload === "object" &&
         Array.isArray(payload.tables)
       ) {
+        if (!payload.source) {
+          payload.source = "local-file-fallback";
+        }
         return payload;
       }
     } catch (_error) {
@@ -9337,17 +9340,40 @@ function createStockSummaryEmptyPanel(message) {
 }
 
 function formatStockSummaryMeta(payload) {
+  const sourceLabel = formatStockSummarySource(payload);
   const payloadTimestamp = getMarketPayloadTimestamp(payload);
   if (!Number.isFinite(payloadTimestamp)) {
-    return "Güncelleme: veri tarihi alınamadı";
+    return `Güncelleme: veri tarihi alınamadı • ${sourceLabel}`;
   }
 
   const formattedTimestamp = formatGoldDateTime(new Date(payloadTimestamp).toISOString());
   if (!isMarketPayloadFresh(payload)) {
-    return `Güncelleme: ${formattedTimestamp} (son kayıt)`;
+    return `Güncelleme: ${formattedTimestamp} • ${sourceLabel} • son kayıt`;
   }
 
-  return `Güncelleme: ${formattedTimestamp}`;
+  return `Güncelleme: ${formattedTimestamp} • ${sourceLabel}`;
+}
+
+function formatStockSummarySource(payload) {
+  const normalizedSource = String(payload?.source || "").trim().toLowerCase();
+
+  if (normalizedSource === "live") {
+    return "Canlı veri";
+  }
+
+  if (normalizedSource === "cache") {
+    return "Backend önbelleği";
+  }
+
+  if (normalizedSource === "cache-stale") {
+    return "Son canlı veri";
+  }
+
+  if (normalizedSource === "local-fallback" || normalizedSource === "local-file-fallback") {
+    return "Yerel yedek";
+  }
+
+  return "Kaynak durumu bilinmiyor";
 }
 
 function getStockCellClassName(columnLabel, textValue) {

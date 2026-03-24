@@ -234,6 +234,7 @@ if FastAPI is not None:
     class StockSummaryResponse(BaseModel):
         """Stock summary payload with source metadata."""
 
+        source: str
         kaynak: str
         fetched_at_utc: str | None = None
         count: int
@@ -566,6 +567,7 @@ def create_app() -> FastAPI:
         "stock": {
             "fetched_at_unix": 0,
             "payload": {
+                "source": "none",
                 "kaynak": "Bigpara",
                 "fetched_at_utc": None,
                 "count": 0,
@@ -763,6 +765,7 @@ def create_app() -> FastAPI:
         )
         if should_use_cache:
             return StockSummaryResponse(
+                source=str(cached_payload.get("source", "cache")),
                 kaynak=str(cached_payload.get("kaynak", "Bigpara")),
                 fetched_at_utc=(
                     str(cached_payload.get("fetched_at_utc"))
@@ -782,6 +785,7 @@ def create_app() -> FastAPI:
 
             live_tables: list[dict[str, Any]] = [asdict(table) for table in live_table_objects]
             payload: dict[str, Any] = {
+                "source": "live",
                 "kaynak": "Bigpara",
                 "fetched_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                 "count": len(live_tables),
@@ -793,9 +797,23 @@ def create_app() -> FastAPI:
             }
             return StockSummaryResponse(**payload)
         except StockSummaryFetchError:
+            if cached_tables:
+                return StockSummaryResponse(
+                    source="cache-stale",
+                    kaynak=str(cached_payload.get("kaynak", "Bigpara")),
+                    fetched_at_utc=(
+                        str(cached_payload.get("fetched_at_utc"))
+                        if cached_payload.get("fetched_at_utc") is not None
+                        else None
+                    ),
+                    count=len(cached_tables),
+                    tables=cached_tables,
+                )
+
             fallback_payload: dict[str, Any] = _load_local_stock_snapshot(
                 "borsa_bigpara_gunun_ozeti_latest.json"
             )
+            fallback_payload["source"] = "local-fallback"
             return StockSummaryResponse(**fallback_payload)
 
     @app.get("/api/v1/tefas/funds", response_model=TefasFundsResponse)

@@ -938,7 +938,7 @@
 
     <section id="investmentPage" class="investment-page hidden" aria-live="polite" aria-modal="true">
       <div class="container investment-shell">
-        <h2 class="need-calc-page-heading investment-page-title">Banka Karşılaştırmaları</h2>
+        <h2 class="need-calc-page-heading investment-page-title">Karşılaştırma/Bilgiler</h2>
         <div class="investment-page-panel">
         <div class="subpage-tabs" role="tablist" aria-label="Yatırım sekmeleri">
           <button id="investmentSilverCard" class="subpage-tab investment-tab is-active" type="button" role="tab" aria-selected="true">
@@ -1116,13 +1116,25 @@
 
         <section id="investmentFundSection" class="investment-gold-section hidden" aria-live="polite">
           <div class="fund-page-shell">
-            <div class="company-page-card investment-fund-panel">
-              <div class="company-page-copy">
-                <h2 class="need-calc-page-heading investment-panel-heading fund-page-heading">
-                  Yatırım Fonları Karşılaştırması
-                </h2>
-              </div>
+            <h2 class="need-calc-page-heading investment-panel-heading fund-page-heading">
+              Yatırım Fonları Karşılaştırması
+            </h2>
 
+            <div class="fund-list-head">
+              <p id="investmentFundStatus" class="fund-status">Fon listesi hazırlanıyor...</p>
+              <div class="fund-meta-actions">
+                <p id="investmentFundUpdatedAt" class="fund-updated-at">Son güncelleme: -</p>
+                <button
+                  id="investmentFundRefreshButton"
+                  class="fund-refresh-button"
+                  type="button"
+                >
+                  Yenile
+                </button>
+              </div>
+            </div>
+
+            <div class="company-page-card investment-fund-panel">
               <div
                 class="fund-sort-tabs"
                 role="tablist"
@@ -1179,20 +1191,6 @@
                     placeholder="Fon kodu veya adıyla ara"
                   />
                 </label>
-              </div>
-
-              <div class="fund-list-head">
-                <p id="investmentFundStatus" class="fund-status">Fon listesi hazırlanıyor...</p>
-                <div class="fund-meta-actions">
-                  <p id="investmentFundUpdatedAt" class="fund-updated-at">Son güncelleme: -</p>
-                  <button
-                    id="investmentFundRefreshButton"
-                    class="fund-refresh-button"
-                    type="button"
-                  >
-                    Yenile
-                  </button>
-                </div>
               </div>
 
               <div id="investmentFundTable" class="fund-table is-return-mode">

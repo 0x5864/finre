@@ -1,45 +1,45 @@
 {
   "kaynak": "Kapalı Çarşı",
-  "fetched_at_utc": "2026-03-24T09:45:26+00:00",
+  "fetched_at_utc": "2026-03-24T16:36:40+00:00",
   "count": 5,
   "rows": [
     {
       "kaynak": "Kapalı Çarşı",
       "altin_adi": "Gram Altın",
-      "alis_fiyati": 6295.734,
-      "satis_fiyati": 6296.603,
-      "gunluk_degisim_yuzde": 0.3,
-      "guncellenme_tarihi": "2026-03-24T09:40:01.091Z"
+      "alis_fiyati": 6303.065,
+      "satis_fiyati": 6304.063,
+      "gunluk_degisim_yuzde": 0.42,
+      "guncellenme_tarihi": "2026-03-24T16:30:01.839Z"
     },
     {
       "kaynak": "Kapalı Çarşı",
       "altin_adi": "Çeyrek Altın",
-      "alis_fiyati": 10649.65,
-      "satis_fiyati": 10916.89,
-      "gunluk_degisim_yuzde": -1.14,
-      "guncellenme_tarihi": "2026-03-24T09:39:39.016Z"
+      "alis_fiyati": 10740.95,
+      "satis_fiyati": 11025.11,
+      "gunluk_degisim_yuzde": -0.16,
+      "guncellenme_tarihi": "2026-03-24T14:08:54.216Z"
     },
     {
       "kaynak": "Kapalı Çarşı",
       "altin_adi": "Yarım Altın",
-      "alis_fiyati": 21232.74,
-      "satis_fiyati": 21833.77,
-      "gunluk_degisim_yuzde": -1.14,
-      "guncellenme_tarihi": "2026-03-24T09:39:39.016Z"
+      "alis_fiyati": 21414.77,
+      "satis_fiyati": 22050.22,
+      "gunluk_degisim_yuzde": -0.16,
+      "guncellenme_tarihi": "2026-03-24T14:08:54.216Z"
     },
     {
       "kaynak": "Kapalı Çarşı",
       "altin_adi": "Cumhuriyet Altını",
-      "alis_fiyati": 44127.0,
-      "satis_fiyati": 44790.0,
-      "gunluk_degisim_yuzde": -0.56,
-      "guncellenme_tarihi": "2026-03-24T09:16:19.037Z"
+      "alis_fiyati": 44367.0,
+      "satis_fiyati": 45030.0,
+      "gunluk_degisim_yuzde": -0.03,
+      "guncellenme_tarihi": "2026-03-24T14:07:31.874Z"
     },
     {
       "kaynak": "ENUYGUN Finans",
       "altin_adi": "Altın (Ons/USD)",
-      "alis_fiyati": 4362.955233853007,
-      "satis_fiyati": 4359.087208008898,
+      "alis_fiyati": 4358.281680746999,
+      "satis_fiyati": 4354.652231845436,
       "gunluk_degisim_yuzde": null,
       "guncellenme_tarihi": null
     }

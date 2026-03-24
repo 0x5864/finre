@@ -8,6 +8,7 @@ import html
 import json
 from pathlib import Path
 import re
+import time
 from typing import Any
 
 import httpx
@@ -15,6 +16,35 @@ import httpx
 
 BIGPARA_STOCK_SUMMARY_URL: str = "https://bigpara.hurriyet.com.tr/borsa/gunun-ozeti/"
 TARGET_SOURCE_NAME: str = "Bigpara"
+BIGPARA_REQUEST_HEADERS: tuple[dict[str, str], ...] = (
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/136.0.0.0 Safari/537.36"
+        ),
+        "Accept": (
+            "text/html,application/xhtml+xml,application/xml;q=0.9,"
+            "image/avif,image/webp,*/*;q=0.8"
+        ),
+        "Accept-Language": "tr-TR,tr;q=0.9,en-US;q=0.8,en;q=0.7",
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache",
+        "Referer": "https://bigpara.hurriyet.com.tr/",
+    },
+    {
+        "User-Agent": (
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) "
+            "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 "
+            "Mobile/15E148 Safari/604.1"
+        ),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "tr-TR,tr;q=0.9,en;q=0.7",
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache",
+        "Referer": "https://bigpara.hurriyet.com.tr/",
+    },
+)
 TABLE_ORDER: tuple[str, ...] = (
     "BIST Endeksleri",
     "En Çok İşlem Görenler (TL)",
@@ -136,22 +166,23 @@ def export_stock_summary_tables(
 def _fetch_html(*, timeout_seconds: float) -> str:
     """Fetch the Bigpara stock summary page as HTML."""
 
-    try:
-        with httpx.Client(timeout=timeout_seconds, follow_redirects=True) as client:
-            response: httpx.Response = client.get(
-                BIGPARA_STOCK_SUMMARY_URL,
-                headers={
-                    "User-Agent": (
-                        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                        "AppleWebKit/537.36 (KHTML, like Gecko) "
-                        "Chrome/136.0.0.0 Safari/537.36"
-                    )
-                },
-            )
-            response.raise_for_status()
-            return response.text
-    except httpx.HTTPError as error:
-        raise StockSummaryFetchError("Bigpara borsa özeti alınamadı.") from error
+    last_error: Exception | None = None
+
+    for attempt_index, headers in enumerate(BIGPARA_REQUEST_HEADERS, start=1):
+        try:
+            with httpx.Client(timeout=timeout_seconds, follow_redirects=True, http2=True) as client:
+                response: httpx.Response = client.get(
+                    BIGPARA_STOCK_SUMMARY_URL,
+                    headers=headers,
+                )
+                response.raise_for_status()
+                return response.text
+        except httpx.HTTPError as error:
+            last_error = error
+            if attempt_index < len(BIGPARA_REQUEST_HEADERS):
+                time.sleep(0.35)
+
+    raise StockSummaryFetchError("Bigpara borsa özeti alınamadı.") from last_error
 
 
 def _extract_table_title(*, context_html: str) -> str | None:
