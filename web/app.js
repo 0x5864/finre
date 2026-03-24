@@ -123,7 +123,7 @@ const SECTION_LABELS = {
 const DEFAULT_API_BASE = "http://127.0.0.1:8000";
 const MAX_INPUT_NUMBER = 1_000_000_000;
 const FETCH_TIMEOUT_MS = 2500;
-const MARKET_REFRESH_INTERVAL_MS = 30_000;
+const MARKET_REFRESH_INTERVAL_MS = 60_000;
 const EMBEDDED_GOLD_FALLBACK_PAYLOAD = Object.freeze({
   kaynak: "Kapalı Çarşı",
   fetched_at_utc: "2026-03-15T10:16:52+00:00",
@@ -268,6 +268,57 @@ const EMBEDDED_FX_FALLBACK_PAYLOAD = Object.freeze({
     },
   ],
 });
+const EMBEDDED_STOCK_FALLBACK_PAYLOAD = Object.freeze({
+  kaynak: "Bigpara",
+  fetched_at_utc: "2026-03-23T12:00:00Z",
+  count: 4,
+  tables: [
+    {
+      title: "BIST Endeksleri",
+      columns: ["Kod", "Son", "Fark", "(%)"],
+      rows: [
+        { cells: ["XU100", "13.168", "120", "%0,9"] },
+        { cells: ["XU050", "11.851", "130", "%1,1"] },
+        { cells: ["XU030", "15.052", "205", "%1,4"] },
+        { cells: ["XUMAL", "18.146", "129", "%0,7"] },
+        { cells: ["XUSIN", "16.483", "28", "%0,2"] },
+      ],
+    },
+    {
+      title: "En Çok İşlem Görenler (TL)",
+      columns: ["Kod", "Hacim", "Dün", "Son", "(%)"],
+      rows: [
+        { cells: ["THYAO", "21.812.897.423", "289,50", "295,50", "%2,1"] },
+        { cells: ["ISCTR", "19.489.931.436", "13,95", "13,67", "%-2,0"] },
+        { cells: ["TUPRS", "19.335.254.333", "253,25", "255,00", "%0,7"] },
+        { cells: ["AKBNK", "18.883.768.558", "73,60", "73,10", "%-0,7"] },
+        { cells: ["ASELS", "15.536.730.675", "338,75", "353,25", "%4,3"] },
+      ],
+    },
+    {
+      title: "Borsa'da En Çok Artanlar",
+      columns: ["Kod", "Dün", "Son", "Fark", "(%)"],
+      rows: [
+        { cells: ["DURKN", "18,00", "19,80", "1,80", "%10,0"] },
+        { cells: ["PAGYO", "108,00", "118,80", "10,80", "%10,0"] },
+        { cells: ["MARKA", "35,42", "38,96", "3,54", "%10,0"] },
+        { cells: ["UCAYM", "26,82", "29,50", "2,68", "%10,0"] },
+        { cells: ["ARFYE", "25,02", "27,52", "2,50", "%10,0"] },
+      ],
+    },
+    {
+      title: "Borsa'da En Çok Azalanlar",
+      columns: ["Kod", "Dün", "Son", "Fark", "(%)"],
+      rows: [
+        { cells: ["MANAS", "28,00", "25,20", "-2,80", "%-10,0"] },
+        { cells: ["YYAPI", "1,50", "1,35", "-0,15", "%-10,0"] },
+        { cells: ["EFOR", "11,28", "10,16", "-1,12", "%-9,9"] },
+        { cells: ["KERVN", "3,99", "3,60", "-0,39", "%-9,8"] },
+        { cells: ["YESIL", "1,46", "1,32", "-0,14", "%-9,6"] },
+      ],
+    },
+  ],
+});
 const EMBEDDED_TEFAS_FALLBACK_ROWS = Object.freeze([
   {
     fon_kodu: "GRO",
@@ -366,6 +417,48 @@ const EMBEDDED_TEFAS_FALLBACK_ROWS = Object.freeze([
     bir_yillik_getiri: 50.4497,
   },
 ]);
+const INVESTMENT_FUND_DATA_FILES = Object.freeze({
+  return: "./assets/data/tefas-yat.json",
+  fee: "./assets/data/tefas-yat-fees.json",
+  size: "./assets/data/tefas-yat-sizes.json",
+});
+const INVESTMENT_FUND_SOURCE_LABEL = "TEFAS Fon Karşılaştırma (yatırım fonları)";
+const INVESTMENT_FUND_COLUMNS = Object.freeze({
+  return: Object.freeze([
+    Object.freeze({ key: "code", label: "Kod", align: "left", sortable: true }),
+    Object.freeze({ key: "name", label: "Fon Adı", align: "left", sortable: true }),
+    Object.freeze({ key: "oneMonth", label: "1 Ay", align: "right", sortable: true, format: "percent" }),
+    Object.freeze({ key: "threeMonth", label: "3 Ay", align: "right", sortable: true, format: "percent" }),
+    Object.freeze({ key: "sixMonth", label: "6 Ay", align: "right", sortable: true, format: "percent" }),
+    Object.freeze({ key: "oneYear", label: "1 Yıl", align: "right", sortable: true, format: "percent" }),
+    Object.freeze({ key: "threeYear", label: "3 Yıl", align: "right", sortable: true, format: "percent" }),
+    Object.freeze({ key: "fiveYear", label: "5 Yıl", align: "right", sortable: true, format: "percent" }),
+    Object.freeze({ key: "action", label: "", align: "right", sortable: false }),
+  ]),
+  fee: Object.freeze([
+    Object.freeze({ key: "code", label: "Kod", align: "left", sortable: true }),
+    Object.freeze({ key: "name", label: "Fon Adı", align: "left", sortable: true }),
+    Object.freeze({ key: "appliedFee", label: "Uyg. Yön. Ücreti", align: "right", sortable: true, format: "percent" }),
+    Object.freeze({ key: "prospectusFee", label: "İç Tüzük Ücreti", align: "right", sortable: true, format: "percent" }),
+    Object.freeze({ key: "annualReturn", label: "Yıllık Net Getiri", align: "right", sortable: true, format: "percent" }),
+    Object.freeze({ key: "maxExpense", label: "Azami Gider", align: "right", sortable: true, format: "percent" }),
+    Object.freeze({ key: "action", label: "", align: "right", sortable: false }),
+  ]),
+  size: Object.freeze([
+    Object.freeze({ key: "code", label: "Kod", align: "left", sortable: true }),
+    Object.freeze({ key: "name", label: "Fon Adı", align: "left", sortable: true }),
+    Object.freeze({ key: "startingPortfolio", label: "İlk Portföy", align: "right", sortable: true, format: "number0" }),
+    Object.freeze({ key: "endingPortfolio", label: "Son Portföy", align: "right", sortable: true, format: "number0" }),
+    Object.freeze({ key: "portfolioChange", label: "Portföy Değ.", align: "right", sortable: true, format: "percent" }),
+    Object.freeze({ key: "netReturn", label: "Net Getiri", align: "right", sortable: true, format: "percent" }),
+    Object.freeze({ key: "action", label: "", align: "right", sortable: false }),
+  ]),
+});
+const INVESTMENT_FUND_DEFAULT_SORT_STATE = Object.freeze({
+  return: Object.freeze({ key: "oneYear", direction: "desc" }),
+  fee: Object.freeze({ key: "appliedFee", direction: "asc" }),
+  size: Object.freeze({ key: "endingPortfolio", direction: "desc" }),
+});
 const LOAN_TYPE_CONFIG = {
   need: {
     title: "İhtiyaç Kredisi",
@@ -4877,10 +4970,21 @@ let layoutHeightLocked = false;
 let panelHeightsLocked = false;
 let suppressHashRouteSync = false;
 let suppressHeaderHover = false;
-let tefasFundTableLoaded = false;
-let tefasFundRows = [];
-let tefasFundSourceLabel = "bilinmiyor";
-let tefasFundFetchedAtUnix = 0;
+let investmentFundTableLoaded = false;
+let currentInvestmentFundDataSource = "none";
+let currentInvestmentFundFetchedAtUnix = 0;
+let investmentFundRefreshInFlight = false;
+let currentInvestmentFundSortMode = "return";
+const investmentFundRowsByMode = {
+  return: [],
+  fee: [],
+  size: [],
+};
+const investmentFundSortStateByMode = {
+  return: { ...INVESTMENT_FUND_DEFAULT_SORT_STATE.return },
+  fee: { ...INVESTMENT_FUND_DEFAULT_SORT_STATE.fee },
+  size: { ...INVESTMENT_FUND_DEFAULT_SORT_STATE.size },
+};
 let currentInvestmentSectionKey = "";
 let marketRefreshTimerId = null;
 let currentBankProfileName = "İş Bankası";
@@ -4978,6 +5082,8 @@ const ui = {
   investmentSilverCard: document.getElementById("investmentSilverCard"),
   investmentFxSection: document.getElementById("investmentFxSection"),
   investmentStockSection: document.getElementById("investmentStockSection"),
+  investmentStockGrid: document.getElementById("investmentStockGrid"),
+  investmentStockMeta: document.getElementById("investmentStockMeta"),
   investmentFundSection: document.getElementById("investmentFundSection"),
   investmentGoldSection: document.getElementById("investmentGoldSection"),
   investmentSilverSection: document.getElementById("investmentSilverSection"),
@@ -4987,11 +5093,16 @@ const ui = {
   investmentGoldMeta: document.getElementById("investmentGoldMeta"),
   investmentSilverBody: document.getElementById("investmentSilverBody"),
   investmentSilverMeta: document.getElementById("investmentSilverMeta"),
-  tefasFundBody: document.getElementById("tefasFundBody"),
-  tefasFundMeta: document.getElementById("tefasFundMeta"),
-  tefasFundSearchInput: document.getElementById("tefasFundSearchInput"),
-  tefasFundSearchClear: document.getElementById("tefasFundSearchClear"),
-  tefasFundSearchInfo: document.getElementById("tefasFundSearchInfo"),
+  investmentFundFounderFilter: document.getElementById("investmentFundFounderFilter"),
+  investmentFundTypeFilter: document.getElementById("investmentFundTypeFilter"),
+  investmentFundSearchInput: document.getElementById("investmentFundSearchInput"),
+  investmentFundStatus: document.getElementById("investmentFundStatus"),
+  investmentFundUpdatedAt: document.getElementById("investmentFundUpdatedAt"),
+  investmentFundRefreshButton: document.getElementById("investmentFundRefreshButton"),
+  investmentFundTable: document.getElementById("investmentFundTable"),
+  investmentFundTableHead: document.getElementById("investmentFundTableHead"),
+  investmentFundGrid: document.getElementById("investmentFundGrid"),
+  investmentFundSortTabs: document.querySelectorAll(".investment-fund-sort-tab"),
   calculationPage: document.getElementById("calculationPage"),
   calcBreadcrumbHome: document.getElementById("calcBreadcrumbHome"),
   calcNeedLoanCard: document.getElementById("calcNeedLoanCard"),
@@ -5151,6 +5262,11 @@ function preloadMarketTables() {
       EMBEDDED_GOLD_FALLBACK_PAYLOAD,
     );
     void loadGoldPriceTable({ silent: true });
+  }
+
+  if (ui.investmentStockGrid) {
+    renderStockSummaryTables(EMBEDDED_STOCK_FALLBACK_PAYLOAD);
+    void loadStockSummaryTables({ silent: true });
   }
 }
 
@@ -6124,19 +6240,55 @@ function setupLoanRatesUi() {
     });
   }
 
-  if (ui.tefasFundSearchInput) {
-    ui.tefasFundSearchInput.addEventListener("input", () => {
-      applyTefasFundFilter();
+  if (ui.investmentFundSearchInput) {
+    ui.investmentFundSearchInput.addEventListener("input", () => {
+      renderInvestmentFundTable();
     });
   }
 
-  if (ui.tefasFundSearchClear) {
-    ui.tefasFundSearchClear.addEventListener("click", () => {
-      if (ui.tefasFundSearchInput) {
-        ui.tefasFundSearchInput.value = "";
-        ui.tefasFundSearchInput.focus();
+  if (ui.investmentFundFounderFilter) {
+    ui.investmentFundFounderFilter.addEventListener("change", () => {
+      renderInvestmentFundTable();
+    });
+  }
+
+  if (ui.investmentFundTypeFilter) {
+    ui.investmentFundTypeFilter.addEventListener("change", () => {
+      renderInvestmentFundTable();
+    });
+  }
+
+  if (ui.investmentFundRefreshButton) {
+    ui.investmentFundRefreshButton.addEventListener("click", () => {
+      void loadTefasFundTable({ forceRefresh: true });
+    });
+  }
+
+  ui.investmentFundSortTabs?.forEach((tabButton) => {
+    tabButton.addEventListener("click", () => {
+      const nextMode = String(tabButton.dataset.fundSortMode || "return");
+      if (!(nextMode in INVESTMENT_FUND_COLUMNS)) {
+        return;
       }
-      applyTefasFundFilter();
+      currentInvestmentFundSortMode = nextMode;
+      syncInvestmentFundSortTabs();
+      syncInvestmentFundFilters();
+      renderInvestmentFundTable();
+    });
+  });
+
+  if (ui.investmentFundTableHead) {
+    ui.investmentFundTableHead.addEventListener("click", (event) => {
+      const buttonElement = event.target instanceof HTMLElement
+        ? event.target.closest("[data-fund-sort-key]")
+        : null;
+      if (!(buttonElement instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      const sortKey = String(buttonElement.dataset.fundSortKey || "");
+      updateInvestmentFundSortState(sortKey);
+      renderInvestmentFundTable();
     });
   }
 
@@ -7774,6 +7926,7 @@ function renderLoanRatesPage(tabKey = "need") {
   ui.loanRatesTabs?.forEach((tabElement) => {
     const isActive = String(tabElement.dataset.loanRatesTab || "") === resolvedTabKey;
     tabElement.classList.toggle("active", isActive);
+    tabElement.setAttribute("aria-selected", isActive ? "true" : "false");
   });
 
   if (ui.loanRatesTitle) {
@@ -8035,6 +8188,7 @@ function getCreditCardComparisonRows() {
   return HOME_BANK_WALL_BANKS.reduce((accumulator, bankName) => {
     const profile = buildBankProfileData(bankName);
     const products = [...profile.primaryProducts, ...profile.secondaryProducts];
+    const seenProductKeys = new Set();
 
     products.forEach((product) => {
       if (product.kind !== "creditcard") {
@@ -8069,13 +8223,57 @@ function getCreditCardComparisonRows() {
         return;
       }
 
-      accumulator.push({
+      const rowData = {
         bank: bankName,
         productTitle: product.title,
         highlightText: headlineText || "Kart bilgileri eklendikçe burada görünecek.",
         annualFee: annualFeeValue,
         annualFeeLabel: String(product.annualFeeLabel || "").trim(),
         applyHref: product.applyHref || product.detailHref || "",
+      };
+
+      accumulator.push(rowData);
+      seenProductKeys.add(
+        normalizeTefasSearchText(`${rowData.bank} ${rowData.productTitle}`),
+      );
+    });
+
+    const showcaseData = getBankCardFamilyShowcaseData(bankName);
+    (showcaseData?.groups || []).forEach((group) => {
+      (group?.cards || []).forEach((card) => {
+        const rowData = mapCreditCardShowcaseCardToComparisonRow(bankName, card);
+        const rowKey = normalizeTefasSearchText(`${rowData.bank} ${rowData.productTitle}`);
+
+        if (seenProductKeys.has(rowKey)) {
+          return;
+        }
+
+        const normalizedCardType = String(rowData.cardType || "").trim().toLowerCase();
+        const searchableText = normalizeTefasSearchText(
+          `${rowData.bank} ${rowData.productTitle} ${rowData.highlightText}`,
+        );
+        const annualFeeValue = Number(rowData.annualFee);
+        const isFeeFree = Boolean(rowData.isFeeFree) || annualFeeValue === 0;
+
+        if (normalizedQuery && !searchableText.includes(normalizedQuery)) {
+          return;
+        }
+
+        if (cardType !== "all") {
+          if (cardType === "free" && !isFeeFree) {
+            return;
+          }
+          if (cardType !== "free" && normalizedCardType !== cardType) {
+            return;
+          }
+        }
+
+        if (!matchesCreditCardFeeFilter(annualFee, annualFeeValue, isFeeFree)) {
+          return;
+        }
+
+        accumulator.push(rowData);
+        seenProductKeys.add(rowKey);
       });
     });
 
@@ -8085,6 +8283,74 @@ function getCreditCardComparisonRows() {
     const rightFee = Number.isFinite(rightRow.annualFee) ? rightRow.annualFee : Number.POSITIVE_INFINITY;
     return leftFee - rightFee;
   });
+}
+
+function mapCreditCardShowcaseCardToComparisonRow(bankName, cardData) {
+  const cardTitle = String(cardData?.title || "").trim();
+  const normalizedTitle = normalizeTefasSearchText(cardTitle);
+  const cardType = inferCreditCardTypeFromTitle(cardTitle);
+  const isFeeFree = normalizedTitle.includes("aidatsız") || normalizedTitle.includes("aidatsiz");
+
+  return {
+    bank: bankName,
+    productTitle: cardTitle || "Kredi Kartı",
+    highlightText: buildCreditCardHighlightText(cardTitle, cardType, isFeeFree),
+    cardType,
+    annualFee: isFeeFree ? 0 : Number.NaN,
+    annualFeeLabel: isFeeFree ? "Aidatsız" : "Ücret bilgisi bankada",
+    isFeeFree,
+    applyHref: String(cardData?.applyHref || cardData?.detailHref || "").trim(),
+  };
+}
+
+function inferCreditCardTypeFromTitle(cardTitle) {
+  const normalizedTitle = normalizeTefasSearchText(cardTitle);
+
+  if (
+    normalizedTitle.includes("mile") ||
+    normalizedTitle.includes("mil") ||
+    normalizedTitle.includes("fly") ||
+    normalizedTitle.includes("smiles")
+  ) {
+    return "miles";
+  }
+
+  if (
+    normalizedTitle.includes("öğrenci") ||
+    normalizedTitle.includes("ogrenci") ||
+    normalizedTitle.includes("genç") ||
+    normalizedTitle.includes("genc")
+  ) {
+    return "student";
+  }
+
+  if (normalizedTitle.includes("cashback") || normalizedTitle.includes("iade")) {
+    return "cashback";
+  }
+
+  return "rewards";
+}
+
+function buildCreditCardHighlightText(cardTitle, cardType, isFeeFree) {
+  if (isFeeFree) {
+    return "Aidatsız kullanım seçeneği sunar.";
+  }
+
+  if (cardType === "miles") {
+    return "Mil ve seyahat ayrıcalıkları sunar.";
+  }
+
+  if (cardType === "student") {
+    return "Genç kullanıcılar için tasarlanmıştır.";
+  }
+
+  if (cardType === "cashback") {
+    return "Harcamalarda iade ve kampanya odaklı kullanım sunar.";
+  }
+
+  return cardTitle
+    ? `${cardTitle} için kampanya ve kart ayrıcalıkları sunar.`
+    : "Kampanya ve kart ayrıcalıkları sunar.";
 }
 
 function matchesCreditCardFeeFilter(filterValue, annualFeeValue, isFeeFree) {
@@ -8315,6 +8581,7 @@ function openLoanRatesPage(options = {}) {
   if (updateHash) {
     updateRouteHash(buildLoanRatesHash(ui.loanRatesPage?.dataset.loanRatesTab || tabKey));
   }
+  window.scrollTo({ top: 0, behavior: "auto" });
 }
 
 function closeLoanRatesPage(options = {}) {
@@ -8399,7 +8666,7 @@ function openCalculationPage(options = {}) {
   if (updateHash) {
     updateRouteHash(buildCalculationHash(ui.calculationPage?.dataset.loanType || "need"));
   }
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({ top: 0, behavior: "auto" });
 }
 
 function closeCalculationPage(options = {}) {
@@ -8460,11 +8727,18 @@ function openInvestmentPage(options = {}) {
   setActiveHeaderNav("investment");
   if (initialSectionKey) {
     revealInvestmentSection(initialSectionKey, { updateHash: false, smoothScroll: false });
+    if (updateHash) {
+      updateRouteHash(buildInvestmentHash(initialSectionKey));
+    }
+    window.scrollTo({ top: 0, behavior: "auto" });
     return;
   }
+  const defaultSectionKey = "silver";
+  revealInvestmentSection(defaultSectionKey, { updateHash: false, smoothScroll: false });
   if (updateHash) {
-    updateRouteHash(buildInvestmentHash(currentInvestmentSectionKey || ui.investmentPage?.dataset.sectionKey || ""));
+    updateRouteHash(buildInvestmentHash(defaultSectionKey));
   }
+  window.scrollTo({ top: 0, behavior: "auto" });
 }
 
 function closeInvestmentPage(options = {}) {
@@ -8543,6 +8817,11 @@ function revealInvestmentSection(sectionKey, options = {}) {
   ui.investmentFundCard?.classList.toggle("is-active", isFundSection);
   ui.investmentGoldCard?.classList.toggle("is-active", isGoldSection);
   ui.investmentSilverCard?.classList.toggle("is-active", isSilverSection);
+  ui.investmentFxCard?.setAttribute("aria-selected", isFxSection ? "true" : "false");
+  ui.investmentStockCard?.setAttribute("aria-selected", isStockSection ? "true" : "false");
+  ui.investmentFundCard?.setAttribute("aria-selected", isFundSection ? "true" : "false");
+  ui.investmentGoldCard?.setAttribute("aria-selected", isGoldSection ? "true" : "false");
+  ui.investmentSilverCard?.setAttribute("aria-selected", isSilverSection ? "true" : "false");
   currentInvestmentSectionKey = String(sectionKey || "");
   if (ui.investmentPage) {
     ui.investmentPage.dataset.sectionKey = currentInvestmentSectionKey;
@@ -8556,13 +8835,17 @@ function revealInvestmentSection(sectionKey, options = {}) {
     void loadFxPriceTable({ forceRefresh: true });
   }
 
+  if (isStockSection) {
+    void loadStockSummaryTables({ forceRefresh: true });
+  }
+
   if (smoothScroll && isFxSection && ui.investmentFxSection) {
-    ui.investmentFxSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.scrollTo({ top: 0, behavior: "auto" });
     return;
   }
 
   if (smoothScroll && isStockSection && ui.investmentStockSection) {
-    ui.investmentStockSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.scrollTo({ top: 0, behavior: "auto" });
     return;
   }
 
@@ -8581,17 +8864,17 @@ function revealInvestmentSection(sectionKey, options = {}) {
   startMarketRefreshTimer();
 
   if (smoothScroll && isFundSection && ui.investmentFundSection) {
-    ui.investmentFundSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.scrollTo({ top: 0, behavior: "auto" });
     return;
   }
 
   if (smoothScroll && isGoldSection && ui.investmentGoldSection) {
-    ui.investmentGoldSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.scrollTo({ top: 0, behavior: "auto" });
     return;
   }
 
   if (smoothScroll && isSilverSection && ui.investmentSilverSection) {
-    ui.investmentSilverSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.scrollTo({ top: 0, behavior: "auto" });
   }
 }
 
@@ -8765,72 +9048,54 @@ function applyRouteFromHash() {
   setActiveHeaderNav("home");
 }
 
-async function loadTefasFundTable() {
-  const shouldReuseLoadedTefas =
-    tefasFundTableLoaded && tefasFundSourceLabel !== "local-fallback";
-  if (shouldReuseLoadedTefas || !ui.tefasFundBody) {
+async function loadTefasFundTable(options = {}) {
+  const { forceRefresh = false } = options;
+  if (
+    !forceRefresh &&
+    investmentFundTableLoaded &&
+    ui.investmentFundGrid &&
+    ui.investmentFundTableHead
+  ) {
+    syncInvestmentFundSortTabs();
+    syncInvestmentFundFilters();
+    renderInvestmentFundTable();
     return;
   }
 
-  ui.tefasFundBody.replaceChildren(createEmptyRow("TEFAS verisi yükleniyor..."));
-  if (ui.tefasFundMeta) {
-    ui.tefasFundMeta.textContent = "Veri çekiliyor...";
+  if (!ui.investmentFundGrid || !ui.investmentFundTableHead) {
+    return;
+  }
+
+  setInvestmentFundRefreshState(true);
+  renderInvestmentFundEmptyState("Fon verisi yükleniyor...");
+  if (ui.investmentFundStatus) {
+    ui.investmentFundStatus.textContent = forceRefresh
+      ? "Canlı TEFAS verisi yenileniyor..."
+      : "Backend üzerinden canlı TEFAS verisi okunuyor...";
   }
 
   try {
-    const apiBase = normalizeBaseUrl(ui.apiBase ? ui.apiBase.value : "");
-    const response = await fetchWithTimeout(
-      `${apiBase}/api/v1/tefas/funds?limit=12`,
-      {
-        method: "GET",
-        mode: "cors",
-        credentials: "omit",
-        referrerPolicy: "no-referrer",
-        headers: { Accept: "application/json" },
-      },
-      FETCH_TIMEOUT_MS,
-    );
+    const payload = await fetchInvestmentFundComparisonPayload({ forceRefresh });
 
-    if (!response.ok) {
-      throw new Error(`TEFAS data fetch failed: ${response.status}`);
-    }
+    investmentFundRowsByMode.return = payload.return_rows.map(mapInvestmentFundReturnRow);
+    investmentFundRowsByMode.fee = payload.fee_rows.map(mapInvestmentFundFeeRow);
+    investmentFundRowsByMode.size = payload.size_rows.map(mapInvestmentFundSizeRow);
+    currentInvestmentFundDataSource = String(payload.source || "none");
+    currentInvestmentFundFetchedAtUnix = Number(payload.fetched_at_unix || 0);
+    investmentFundTableLoaded = true;
 
-    const payload = await response.json();
-    const rows = Array.isArray(payload.funds) ? payload.funds : [];
-    if (rows.length === 0) {
-      throw new Error("TEFAS payload is empty");
+    syncInvestmentFundSortTabs();
+    syncInvestmentFundFilters();
+    renderInvestmentFundTable();
+  } catch (error) {
+    console.error(error);
+    renderInvestmentFundEmptyState("Fon verisi yüklenemedi.");
+    if (ui.investmentFundStatus) {
+      ui.investmentFundStatus.textContent = "Canlı TEFAS verisi alınamadı.";
     }
-
-    renderTefasFundTable(
-      rows,
-      String(payload.source || "bilinmiyor"),
-      Number(payload.fetched_at_unix || 0),
-    );
-    tefasFundTableLoaded = true;
-  } catch (_apiError) {
-    try {
-      const fallbackResponse = await fetchWithTimeout(
-        "../data/tefas_top12_2026-03-12.json",
-        {
-          method: "GET",
-          headers: { Accept: "application/json" },
-        },
-        1500,
-      );
-      if (!fallbackResponse.ok) {
-        throw new Error(`TEFAS fallback fetch failed: ${fallbackResponse.status}`);
-      }
-      const fallbackPayload = await fallbackResponse.json();
-      if (!Array.isArray(fallbackPayload) || fallbackPayload.length === 0) {
-        throw new Error("TEFAS fallback payload is empty");
-      }
-      renderTefasFundTable(fallbackPayload, "local-fallback", 0);
-      tefasFundTableLoaded = true;
-    } catch (error) {
-      console.error(error);
-      renderTefasFundTable(EMBEDDED_TEFAS_FALLBACK_ROWS, "local-fallback", 0);
-      tefasFundTableLoaded = true;
-    }
+    renderInvestmentFundUpdatedAt();
+  } finally {
+    setInvestmentFundRefreshState(false);
   }
 }
 
@@ -8865,10 +9130,265 @@ async function loadFxPriceTable(options = {}) {
   }
 }
 
+async function loadStockSummaryTables(options = {}) {
+  const { forceRefresh = false, silent = false } = options;
+  if (!ui.investmentStockGrid) {
+    return;
+  }
+
+  if (!silent) {
+    ui.investmentStockGrid.replaceChildren(
+      createStockSummaryEmptyPanel("Borsa verisi yükleniyor..."),
+    );
+    if (ui.investmentStockMeta) {
+      ui.investmentStockMeta.textContent = "Güncelleme: veri tarihi aranıyor";
+    }
+  }
+
+  try {
+    const payload = await fetchStockSummaryPayload({ forceRefresh });
+    const tables = Array.isArray(payload.tables) ? payload.tables : [];
+    if (tables.length === 0) {
+      throw new Error("Stock payload is empty");
+    }
+    renderStockSummaryTables(payload);
+  } catch (error) {
+    console.error(error);
+    if (!silent) {
+      ui.investmentStockGrid.replaceChildren(
+        createStockSummaryEmptyPanel("Güncel borsa verisi alınamadı."),
+      );
+      if (ui.investmentStockMeta) {
+        ui.investmentStockMeta.textContent = "Güncelleme: veri tarihi alınamadı";
+      }
+    }
+  }
+}
+
+async function fetchStockSummaryPayload(options = {}) {
+  const { forceRefresh = false } = options;
+  const apiBase = normalizeBaseUrl(ui.apiBase ? ui.apiBase.value : "");
+  const forceRefreshQuery = forceRefresh ? "?force_refresh=true" : "";
+  const localFallbackPayload = await loadLocalStockSummaryPayload({ forceRefresh });
+
+  try {
+    const apiResponse = await fetchWithTimeout(
+      `${apiBase}/api/v1/market/stocks/summary${forceRefreshQuery}`,
+      {
+        method: "GET",
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+      },
+      3000,
+    );
+    if (apiResponse.ok) {
+      const apiPayload = await apiResponse.json();
+      if (apiPayload && typeof apiPayload === "object" && Array.isArray(apiPayload.tables)) {
+        return apiPayload;
+      }
+    }
+  } catch (_error) {
+    // Fall back to local snapshot files.
+  }
+
+  if (localFallbackPayload) {
+    return localFallbackPayload;
+  }
+
+  throw new Error("Stock summary data file not found");
+}
+
+async function loadLocalStockSummaryPayload(options = {}) {
+  const { forceRefresh = false } = options;
+  const dateStamp = new Date().toISOString().slice(0, 10);
+  const cacheBust = forceRefresh ? `?t=${Date.now()}` : "";
+  const candidateUrls = [
+    `../data/borsa_bigpara_gunun_ozeti_latest.json${cacheBust}`,
+    `../data/borsa_bigpara_gunun_ozeti_${dateStamp}.json${cacheBust}`,
+  ];
+
+  for (const url of candidateUrls) {
+    try {
+      const response = await fetchWithTimeout(
+        url,
+        {
+          method: "GET",
+          cache: "no-store",
+          headers: { Accept: "application/json" },
+        },
+        1500,
+      );
+      if (!response.ok) {
+        continue;
+      }
+      const payload = await response.json();
+      if (
+        payload &&
+        typeof payload === "object" &&
+        Array.isArray(payload.tables)
+      ) {
+        return payload;
+      }
+    } catch (_error) {
+      // Try next candidate file.
+    }
+  }
+
+  return null;
+}
+
+function renderStockSummaryTables(payload) {
+  if (!ui.investmentStockGrid) {
+    return;
+  }
+
+  const tables = Array.isArray(payload?.tables)
+    ? payload.tables.filter((table) => table && typeof table === "object")
+    : [];
+
+  if (tables.length === 0) {
+    ui.investmentStockGrid.replaceChildren(
+      createStockSummaryEmptyPanel("Borsa verisi boş görünüyor."),
+    );
+    if (ui.investmentStockMeta) {
+      ui.investmentStockMeta.textContent = formatMarketPayloadMeta(payload, "Bigpara");
+    }
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+  tables.forEach((table) => {
+    fragment.append(createStockSummaryTablePanel(table));
+  });
+  ui.investmentStockGrid.replaceChildren(fragment);
+
+  if (ui.investmentStockMeta) {
+    ui.investmentStockMeta.textContent = formatStockSummaryMeta(payload);
+  }
+}
+
+function createStockSummaryTablePanel(table) {
+  const article = document.createElement("article");
+  article.className = "investment-stock-panel";
+
+  const head = document.createElement("div");
+  head.className = "investment-stock-head";
+
+  const title = document.createElement("h3");
+  title.textContent = String(table?.title || "Borsa Tablosu");
+  head.append(title);
+
+  const wrap = document.createElement("div");
+  wrap.className = "investment-stock-table-wrap";
+
+  const tableElement = document.createElement("table");
+  tableElement.className = "investment-stock-table";
+
+  const thead = document.createElement("thead");
+  const headRow = document.createElement("tr");
+  const columns = Array.isArray(table?.columns) ? table.columns : [];
+  columns.forEach((column) => {
+    const th = document.createElement("th");
+    th.textContent = String(column || "");
+    headRow.append(th);
+  });
+  thead.append(headRow);
+
+  const tbody = document.createElement("tbody");
+  const rows = Array.isArray(table?.rows) ? table.rows : [];
+  rows.forEach((row) => {
+    const tr = document.createElement("tr");
+    const cells = Array.isArray(row?.cells) ? row.cells : [];
+    cells.forEach((cellValue, index) => {
+      const td = document.createElement("td");
+      const textValue = String(cellValue || "");
+      td.textContent = textValue;
+      const columnLabel = String(columns[index] || "");
+      const cellClassName = getStockCellClassName(columnLabel, textValue);
+      if (cellClassName) {
+        td.classList.add(cellClassName);
+      }
+      tr.append(td);
+    });
+    tbody.append(tr);
+  });
+
+  tableElement.append(thead, tbody);
+  wrap.append(tableElement);
+  article.append(head, wrap);
+  return article;
+}
+
+function createStockSummaryEmptyPanel(message) {
+  const article = document.createElement("article");
+  article.className = "investment-stock-panel";
+
+  const tableWrap = document.createElement("div");
+  tableWrap.className = "investment-stock-table-wrap";
+
+  const tableElement = document.createElement("table");
+  tableElement.className = "investment-stock-table";
+  const tbody = document.createElement("tbody");
+  tbody.append(createEmptyRow(message, 1));
+  tableElement.append(tbody);
+  tableWrap.append(tableElement);
+  article.append(tableWrap);
+  return article;
+}
+
+function formatStockSummaryMeta(payload) {
+  const payloadTimestamp = getMarketPayloadTimestamp(payload);
+  if (!Number.isFinite(payloadTimestamp)) {
+    return "Güncelleme: veri tarihi alınamadı";
+  }
+
+  const formattedTimestamp = formatGoldDateTime(new Date(payloadTimestamp).toISOString());
+  if (!isMarketPayloadFresh(payload)) {
+    return `Güncelleme: ${formattedTimestamp} (son kayıt)`;
+  }
+
+  return `Güncelleme: ${formattedTimestamp}`;
+}
+
+function getStockCellClassName(columnLabel, textValue) {
+  const normalizedColumn = String(columnLabel || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9çğıöşü%]+/gi, " ")
+    .trim();
+  const shouldColorize = normalizedColumn.includes("%") || normalizedColumn.includes("fark");
+  if (!shouldColorize) {
+    return "";
+  }
+
+  const numericValue = parseStockCellNumericValue(textValue);
+  if (!Number.isFinite(numericValue)) {
+    return "";
+  }
+
+  if (numericValue > 0) {
+    return "up";
+  }
+  if (numericValue < 0) {
+    return "down";
+  }
+  return "";
+}
+
+function parseStockCellNumericValue(value) {
+  const normalizedValue = String(value || "")
+    .replaceAll(".", "")
+    .replaceAll("%", "")
+    .replaceAll(" ", "")
+    .replace(",", ".");
+  const numericValue = Number(normalizedValue);
+  return Number.isFinite(numericValue) ? numericValue : Number.NaN;
+}
+
 async function fetchFxPayload(options = {}) {
   const { forceRefresh = false } = options;
   const apiBase = normalizeBaseUrl(ui.apiBase ? ui.apiBase.value : "");
   const forceRefreshQuery = forceRefresh ? "?force_refresh=true" : "";
+  const localFallbackPayload = await loadLocalFxPayload({ forceRefresh });
 
   try {
     const apiResponse = await fetchWithTimeout(
@@ -8890,6 +9410,15 @@ async function fetchFxPayload(options = {}) {
     // Fall back to local snapshot files.
   }
 
+  if (localFallbackPayload) {
+    return localFallbackPayload;
+  }
+
+  throw new Error("FX data file not found");
+}
+
+async function loadLocalFxPayload(options = {}) {
+  const { forceRefresh = false } = options;
   const dateStamp = new Date().toISOString().slice(0, 10);
   const cacheBust = forceRefresh ? `?t=${Date.now()}` : "";
   const candidateUrls = [
@@ -8915,8 +9444,7 @@ async function fetchFxPayload(options = {}) {
       if (
         payload &&
         typeof payload === "object" &&
-        Array.isArray(payload.rows) &&
-        isMarketPayloadFresh(payload)
+        Array.isArray(payload.rows)
       ) {
         return payload;
       }
@@ -8925,7 +9453,7 @@ async function fetchFxPayload(options = {}) {
     }
   }
 
-  throw new Error("FX data file not found");
+  return null;
 }
 
 function renderFxPriceTable(rows, payload) {
@@ -8998,8 +9526,7 @@ function renderFxPriceTable(rows, payload) {
   ui.investmentFxBody.replaceChildren(fragment);
 
   if (ui.investmentFxMeta) {
-    const sourceLabel = String(payload.kaynak || "Kapalı Çarşı");
-    ui.investmentFxMeta.textContent = `Kaynak: ${sourceLabel}, ${formatCurrentDate()}`;
+    ui.investmentFxMeta.textContent = formatMarketPayloadMeta(payload);
   }
 }
 
@@ -9060,7 +9587,7 @@ async function fetchGoldPayload(options = {}) {
     // Fall back to local snapshot files.
   }
 
-  if (localFallbackPayload && isMarketPayloadFresh(localFallbackPayload)) {
+  if (localFallbackPayload) {
     return localFallbackPayload;
   }
 
@@ -9094,8 +9621,7 @@ async function loadLocalGoldPayload(options = {}) {
       if (
         payload &&
         typeof payload === "object" &&
-        Array.isArray(payload.rows) &&
-        isMarketPayloadFresh(payload)
+        Array.isArray(payload.rows)
       ) {
         return payload;
       }
@@ -9145,6 +9671,24 @@ function normalizeGoldRowName(value) {
     .trim();
 }
 
+function normalizeGoldBidAsk(row) {
+  const alisFiyati = Number(row?.alis_fiyati);
+  const satisFiyati = Number(row?.satis_fiyati);
+  if (!Number.isFinite(alisFiyati) || !Number.isFinite(satisFiyati)) {
+    return row;
+  }
+
+  if (satisFiyati >= alisFiyati) {
+    return row;
+  }
+
+  return {
+    ...row,
+    alis_fiyati: satisFiyati,
+    satis_fiyati: alisFiyati,
+  };
+}
+
 function getMarketPayloadTimestamp(payload) {
   if (!payload || typeof payload !== "object") {
     return Number.NaN;
@@ -9180,6 +9724,21 @@ function isMarketPayloadFresh(payload, maxAgeHours = 36) {
   return (Date.now() - payloadTimestamp) <= maxAgeMs;
 }
 
+function formatMarketPayloadMeta(payload, defaultSource = "Kapalıçarşı") {
+  const sourceLabel = String(payload?.kaynak || defaultSource).replaceAll("Kapalı Çarşı", "Kapalıçarşı");
+  const payloadTimestamp = getMarketPayloadTimestamp(payload);
+  if (!Number.isFinite(payloadTimestamp)) {
+    return `Kaynak: ${sourceLabel}`;
+  }
+
+  const formattedTimestamp = formatGoldDateTime(new Date(payloadTimestamp).toISOString());
+  if (!isMarketPayloadFresh(payload)) {
+    return `Kaynak: ${sourceLabel}, ${formattedTimestamp} (son kayıt)`;
+  }
+
+  return `Kaynak: ${sourceLabel}, ${formattedTimestamp}`;
+}
+
 function prepareGoldRows(rows) {
   const hiddenNameKeys = new Set([
     "ata altın",
@@ -9198,6 +9757,7 @@ function prepareGoldRows(rows) {
 
   return rows
     .filter((row) => row && typeof row === "object")
+    .map((row) => normalizeGoldBidAsk(row))
     .filter((row) => !hiddenNameKeys.has(normalizeGoldRowName(row.altin_adi)))
     .sort((leftRow, rightRow) => {
       const leftName = String(leftRow.altin_adi || "");
@@ -9274,8 +9834,7 @@ function renderGoldPriceTable(rows, payload) {
   ui.investmentGoldBody.replaceChildren(fragment);
 
   if (ui.investmentGoldMeta) {
-    const sourceLabel = String(payload.kaynak || "Kapalı Çarşı");
-    ui.investmentGoldMeta.textContent = `Kaynak: ${sourceLabel}, ${formatCurrentDate()}`;
+    ui.investmentGoldMeta.textContent = formatMarketPayloadMeta(payload);
   }
 }
 
@@ -9355,8 +9914,7 @@ function renderSilverPriceTable(rows, payload) {
       createEmptyRow("Kapalı Çarşı kaynağında gümüş satırı bulunamadı.", 7),
     );
     if (ui.investmentSilverMeta) {
-      const sourceLabel = String(payload.kaynak || "Kapalı Çarşı");
-      ui.investmentSilverMeta.textContent = `Kaynak: ${sourceLabel}`;
+      ui.investmentSilverMeta.textContent = formatMarketPayloadMeta(payload);
     }
     return;
   }
@@ -9412,15 +9970,14 @@ function renderSilverPriceTable(rows, payload) {
   ui.investmentSilverBody.replaceChildren(fragment);
 
   if (ui.investmentSilverMeta) {
-    const sourceLabel = String(payload.kaynak || "Kapalı Çarşı");
-    ui.investmentSilverMeta.textContent = `Kaynak: ${sourceLabel}`;
+    ui.investmentSilverMeta.textContent = formatMarketPayloadMeta(payload);
   }
 }
 
 function startMarketRefreshTimer() {
   stopMarketRefreshTimer();
 
-  if (!["fx", "gold"].includes(currentInvestmentSectionKey)) {
+  if (!["fx", "gold", "stock"].includes(currentInvestmentSectionKey)) {
     return;
   }
 
@@ -9439,6 +9996,10 @@ function startMarketRefreshTimer() {
       return;
     }
 
+    if (currentInvestmentSectionKey === "stock") {
+      void loadStockSummaryTables({ forceRefresh: true, silent: true });
+    }
+
   }, MARKET_REFRESH_INTERVAL_MS);
 }
 
@@ -9451,85 +10012,519 @@ function stopMarketRefreshTimer() {
   marketRefreshTimerId = null;
 }
 
-function renderTefasFundTable(rows, sourceLabel = "bilinmiyor", fetchedAtUnix = 0) {
-  tefasFundRows = Array.isArray(rows) ? rows.filter((row) => row && typeof row === "object") : [];
-  tefasFundSourceLabel = sourceLabel;
-  tefasFundFetchedAtUnix = fetchedAtUnix;
-  applyTefasFundFilter();
+async function fetchInvestmentFundDataFile(url) {
+  const response = await fetchWithTimeout(
+    url,
+    {
+      method: "GET",
+      cache: "no-store",
+      headers: { Accept: "application/json" },
+    },
+    2500,
+  );
+
+  if (!response.ok) {
+    throw new Error(`Fund data fetch failed: ${response.status}`);
+  }
+
+  const payload = await response.json();
+  const rows = Array.isArray(payload?.data) ? payload.data : [];
+  if (rows.length === 0) {
+    throw new Error("Fund payload is empty");
+  }
+  return rows;
 }
 
-function applyTefasFundFilter() {
-  if (!ui.tefasFundBody) {
+async function fetchInvestmentFundComparisonPayload(options = {}) {
+  const { forceRefresh = false } = options;
+  const apiBase = normalizeBaseUrl(ui.apiBase ? ui.apiBase.value : "");
+  const forceRefreshQuery = forceRefresh ? "?force_refresh=true" : "";
+
+  try {
+    const response = await fetchWithTimeout(
+      `${apiBase}/api/v1/tefas/comparison-funds${forceRefreshQuery}`,
+      {
+        method: "GET",
+        cache: "no-store",
+        headers: { Accept: "application/json" },
+      },
+      3500,
+    );
+    if (response.ok) {
+      const payload = await response.json();
+      if (isValidInvestmentFundComparisonPayload(payload)) {
+        return payload;
+      }
+    }
+  } catch (_error) {
+    // Fall through to local file snapshots.
+  }
+
+  const localPayload = await loadLocalInvestmentFundComparisonPayload();
+  if (localPayload) {
+    return localPayload;
+  }
+
+  throw new Error("Investment fund comparison payload could not be loaded");
+}
+
+function isValidInvestmentFundComparisonPayload(payload) {
+  return Boolean(
+    payload &&
+    typeof payload === "object" &&
+    Array.isArray(payload.return_rows) &&
+    Array.isArray(payload.fee_rows) &&
+    Array.isArray(payload.size_rows),
+  );
+}
+
+async function loadLocalInvestmentFundComparisonPayload() {
+  try {
+    const [returnRows, feeRows, sizeRows] = await Promise.all([
+      fetchInvestmentFundDataFile(INVESTMENT_FUND_DATA_FILES.return),
+      fetchInvestmentFundDataFile(INVESTMENT_FUND_DATA_FILES.fee),
+      fetchInvestmentFundDataFile(INVESTMENT_FUND_DATA_FILES.size),
+    ]);
+
+    return {
+      source: "local-file-fallback",
+      fetched_at_unix: 0,
+      return_count: returnRows.length,
+      fee_count: feeRows.length,
+      size_count: sizeRows.length,
+      return_rows: returnRows,
+      fee_rows: feeRows,
+      size_rows: sizeRows,
+    };
+  } catch (_error) {
+    return null;
+  }
+}
+
+function parseFundIdentity(rawName) {
+  const fullName = String(rawName || "").replace(/\s+/g, " ").trim();
+  const founderMatch = fullName.match(/^(.+?A\.Ş\.?)\s+(.+)$/i);
+  const founder = founderMatch ? founderMatch[1].trim() : fullName;
+  const shortName = founderMatch ? founderMatch[2].trim() : fullName;
+  return {
+    founder,
+    shortName,
+    fullName,
+  };
+}
+
+function parseNumericValue(value) {
+  if (typeof value === "number") {
+    return Number.isFinite(value) ? value : Number.NaN;
+  }
+
+  const normalizedValue = String(value ?? "")
+    .replace(/\./g, "")
+    .replace(",", ".")
+    .trim();
+  if (!normalizedValue) {
+    return Number.NaN;
+  }
+
+  const numericValue = Number(normalizedValue);
+  return Number.isFinite(numericValue) ? numericValue : Number.NaN;
+}
+
+function buildInvestmentFundBaseRow(row) {
+  const identity = parseFundIdentity(row?.FONUNVAN);
+  const code = String(row?.FONKODU || "").trim();
+  const fundType = String(row?.FONTURACIKLAMA || "").trim();
+  return {
+    code,
+    fullName: identity.fullName,
+    name: identity.shortName || identity.fullName || code,
+    founder: identity.founder,
+    fundType,
+    detailHref: code ? `https://www.tefas.gov.tr/FonAnaliz.aspx?FonKod=${code}` : "https://www.tefas.gov.tr/",
+    searchText: normalizeTefasSearchText([
+      code,
+      identity.fullName,
+      identity.shortName,
+      identity.founder,
+      fundType,
+    ].join(" ")),
+  };
+}
+
+function mapInvestmentFundReturnRow(row) {
+  const baseRow = buildInvestmentFundBaseRow(row);
+  return {
+    ...baseRow,
+    oneMonth: parseNumericValue(row?.GETIRI1A),
+    threeMonth: parseNumericValue(row?.GETIRI3A),
+    sixMonth: parseNumericValue(row?.GETIRI6A),
+    oneYear: parseNumericValue(row?.GETIRI1Y),
+    threeYear: parseNumericValue(row?.GETIRI3Y),
+    fiveYear: parseNumericValue(row?.GETIRI5Y),
+  };
+}
+
+function mapInvestmentFundFeeRow(row) {
+  const baseRow = buildInvestmentFundBaseRow(row);
+  return {
+    ...baseRow,
+    appliedFee: parseNumericValue(row?.UYGULANANYU1Y),
+    prospectusFee: parseNumericValue(row?.FONICTUZUKYU1G),
+    annualReturn: parseNumericValue(row?.YILLIKGETIRI),
+    maxExpense: parseNumericValue(row?.FONTOPGIDERKESORAN),
+  };
+}
+
+function mapInvestmentFundSizeRow(row) {
+  const baseRow = buildInvestmentFundBaseRow(row);
+  return {
+    ...baseRow,
+    startingPortfolio: parseNumericValue(row?.ILKPORTFOYDEGERI),
+    endingPortfolio: parseNumericValue(row?.SONPORTFOYDEGERI),
+    portfolioChange: parseNumericValue(row?.PORTBUYUKLUKDEGISIM),
+    netReturn: parseNumericValue(row?.NETGETIRIORANI),
+  };
+}
+
+function getCurrentInvestmentFundRows() {
+  return Array.isArray(investmentFundRowsByMode[currentInvestmentFundSortMode])
+    ? investmentFundRowsByMode[currentInvestmentFundSortMode]
+    : [];
+}
+
+function syncInvestmentFundSortTabs() {
+  ui.investmentFundSortTabs?.forEach((tabButton) => {
+    const tabMode = String(tabButton.dataset.fundSortMode || "");
+    const isActive = tabMode === currentInvestmentFundSortMode;
+    tabButton.classList.toggle("active", isActive);
+    tabButton.setAttribute("aria-selected", isActive ? "true" : "false");
+  });
+}
+
+function syncInvestmentFundFilters() {
+  populateInvestmentFundFilter(
+    ui.investmentFundFounderFilter,
+    getCurrentInvestmentFundRows().map((row) => row.founder),
+    "Tüm kurucular",
+  );
+  populateInvestmentFundFilter(
+    ui.investmentFundTypeFilter,
+    getCurrentInvestmentFundRows().map((row) => row.fundType),
+    "Tüm fon türleri",
+  );
+}
+
+function populateInvestmentFundFilter(selectElement, values, defaultLabel) {
+  if (!(selectElement instanceof HTMLSelectElement)) {
     return;
   }
 
-  const queryText = String(ui.tefasFundSearchInput ? ui.tefasFundSearchInput.value : "").trim();
-  const normalizedQuery = normalizeTefasSearchText(queryText);
+  const currentValue = selectElement.value;
+  const uniqueValues = Array.from(
+    new Set(
+      values
+        .map((value) => String(value || "").trim())
+        .filter(Boolean),
+    ),
+  ).sort((leftValue, rightValue) => leftValue.localeCompare(rightValue, "tr"));
 
-  const filteredRows = tefasFundRows.filter((row) => {
-    if (!normalizedQuery) {
-      return true;
-    }
+  selectElement.innerHTML = "";
 
-    const fundCode = normalizeTefasSearchText(row.fon_kodu);
-    const fundName = normalizeTefasSearchText(row.fon_unvani);
-    return fundCode.includes(normalizedQuery) || fundName.includes(normalizedQuery);
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = defaultLabel;
+  selectElement.append(defaultOption);
+
+  uniqueValues.forEach((value) => {
+    const optionElement = document.createElement("option");
+    optionElement.value = value;
+    optionElement.textContent = value;
+    selectElement.append(optionElement);
   });
 
-  renderTefasFundRows(filteredRows, queryText);
+  selectElement.value = uniqueValues.includes(currentValue) ? currentValue : "";
 }
 
-function renderTefasFundRows(rows, queryText = "") {
-  if (!ui.tefasFundBody) {
+function updateInvestmentFundSortState(sortKey) {
+  const columns = INVESTMENT_FUND_COLUMNS[currentInvestmentFundSortMode] || [];
+  const sortableColumn = columns.find((column) => column.key === sortKey && column.sortable);
+  if (!sortableColumn) {
     return;
   }
 
-  const hasSearchQuery = queryText.length > 0;
-  if (rows.length === 0) {
-    ui.tefasFundBody.replaceChildren(
-      createEmptyRow(
-        hasSearchQuery ? "Aramana uygun fon bulunamadı." : "TEFAS verisi şu an boş görünüyor.",
-      ),
-    );
+  const currentSortState = investmentFundSortStateByMode[currentInvestmentFundSortMode];
+  if (currentSortState.key === sortKey) {
+    currentSortState.direction = currentSortState.direction === "asc" ? "desc" : "asc";
+    return;
+  }
+
+  currentSortState.key = sortKey;
+  currentSortState.direction = sortableColumn.align === "right" ? "desc" : "asc";
+}
+
+function getFilteredInvestmentFundRows() {
+  const founderFilter = String(ui.investmentFundFounderFilter?.value || "").trim();
+  const fundTypeFilter = String(ui.investmentFundTypeFilter?.value || "").trim();
+  const queryText = String(ui.investmentFundSearchInput?.value || "").trim();
+  const normalizedQuery = normalizeTefasSearchText(queryText);
+
+  return getCurrentInvestmentFundRows().filter((row) => {
+    if (founderFilter && row.founder !== founderFilter) {
+      return false;
+    }
+    if (fundTypeFilter && row.fundType !== fundTypeFilter) {
+      return false;
+    }
+    if (normalizedQuery && !String(row.searchText || "").includes(normalizedQuery)) {
+      return false;
+    }
+    return true;
+  });
+}
+
+function sortInvestmentFundRows(rows) {
+  const sortState = investmentFundSortStateByMode[currentInvestmentFundSortMode];
+  const directionFactor = sortState.direction === "asc" ? 1 : -1;
+  return [...rows].sort((leftRow, rightRow) => {
+    const leftValue = leftRow?.[sortState.key];
+    const rightValue = rightRow?.[sortState.key];
+    const leftNumber = Number(leftValue);
+    const rightNumber = Number(rightValue);
+
+    if (Number.isFinite(leftNumber) && Number.isFinite(rightNumber)) {
+      return (leftNumber - rightNumber) * directionFactor;
+    }
+
+    const leftText = String(leftValue || "");
+    const rightText = String(rightValue || "");
+    return leftText.localeCompare(rightText, "tr") * directionFactor;
+  });
+}
+
+function renderInvestmentFundTable() {
+  if (!ui.investmentFundGrid || !ui.investmentFundTableHead || !ui.investmentFundTable) {
+    return;
+  }
+
+  const filteredRows = sortInvestmentFundRows(getFilteredInvestmentFundRows());
+  const totalCount = getCurrentInvestmentFundRows().length;
+
+  ui.investmentFundTable.classList.remove("is-return-mode", "is-fee-mode", "is-size-mode");
+  ui.investmentFundTable.classList.add(`is-${currentInvestmentFundSortMode}-mode`);
+
+  renderInvestmentFundTableHead();
+
+  if (filteredRows.length === 0) {
+    renderInvestmentFundEmptyState("Filtreye uygun fon bulunamadı.");
   } else {
     const fragment = document.createDocumentFragment();
-    rows.forEach((row) => {
-      const tr = document.createElement("tr");
-      appendCell(tr, String(row.fon_kodu || "-"));
-      appendCell(tr, String(row.fon_unvani || "-"), "tefas-cell-left");
-      appendCell(tr, formatTefasNumber(row.fiyat, 6), "tefas-cell-right");
-      appendCell(tr, formatTefasNumber(row.portfoy_buyuklugu, 0), "tefas-cell-right");
-      appendCell(tr, formatTefasReturn(row.bir_aylik_getiri));
-      appendCell(tr, formatTefasReturn(row.bir_yillik_getiri));
-      fragment.append(tr);
+    filteredRows.forEach((row) => {
+      fragment.append(createInvestmentFundRow(row));
     });
-    ui.tefasFundBody.replaceChildren(fragment);
+    ui.investmentFundGrid.replaceChildren(fragment);
   }
 
-  const totalCount = tefasFundRows.length;
-  const visibleCount = rows.length;
-  const firstRow = rows[0] || tefasFundRows[0];
-  const referenceDate = tefasFundFetchedAtUnix > 0
-    ? formatTefasUnixDate(tefasFundFetchedAtUnix)
-    : formatTefasDate(firstRow?.tarih_ms);
+  if (ui.investmentFundStatus) {
+    ui.investmentFundStatus.textContent = `${filteredRows.length} / ${totalCount} fon gösteriliyor. ${formatInvestmentFundSourceStatus(currentInvestmentFundDataSource)}`;
+  }
+  renderInvestmentFundUpdatedAt();
+}
 
-  if (ui.tefasFundMeta) {
-    ui.tefasFundMeta.textContent = referenceDate !== "-"
-      ? `Güncelleme: ${referenceDate}`
-      : "Güncelleme: veri tarihi alınamadı";
+function formatInvestmentFundSourceStatus(source) {
+  switch (String(source || "")) {
+    case "tefas-live":
+      return "Kaynak: Canlı TEFAS verisi.";
+    case "cache":
+      return "Kaynak: Backend önbelleği.";
+    case "cache-stale":
+      return "Kaynak: Son başarılı canlı veri.";
+    case "local-fallback":
+      return "Kaynak: Backend yerel yedeği.";
+    case "local-file-fallback":
+      return `Kaynak: ${INVESTMENT_FUND_SOURCE_LABEL}.`;
+    default:
+      return `Kaynak: ${INVESTMENT_FUND_SOURCE_LABEL}.`;
+  }
+}
+
+function renderInvestmentFundUpdatedAt() {
+  if (!ui.investmentFundUpdatedAt) {
+    return;
   }
 
-  if (ui.tefasFundSearchInfo) {
-    if (hasSearchQuery) {
-      ui.tefasFundSearchInfo.textContent = `"${queryText}" için ${visibleCount} fon bulundu.`;
-    } else {
-      ui.tefasFundSearchInfo.textContent = "";
+  ui.investmentFundUpdatedAt.textContent = formatInvestmentFundUpdatedAtText({
+    source: currentInvestmentFundDataSource,
+    fetchedAtUnix: currentInvestmentFundFetchedAtUnix,
+  });
+}
+
+function formatInvestmentFundUpdatedAtText({ source, fetchedAtUnix }) {
+  const numericTimestamp = Number(fetchedAtUnix);
+  if (Number.isFinite(numericTimestamp) && numericTimestamp > 0) {
+    return `Son güncelleme: ${formatInvestmentFundDateTime(numericTimestamp)}`;
+  }
+
+  if (String(source || "") === "local-file-fallback") {
+    return "Son güncelleme: Yerel yedek veri gösteriliyor.";
+  }
+
+  return "Son güncelleme: bilinmiyor";
+}
+
+function formatInvestmentFundDateTime(unixTimestamp) {
+  const numericTimestamp = Number(unixTimestamp);
+  if (!Number.isFinite(numericTimestamp) || numericTimestamp <= 0) {
+    return "-";
+  }
+
+  return new Intl.DateTimeFormat("tr-TR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(numericTimestamp * 1000));
+}
+
+function setInvestmentFundRefreshState(isLoading) {
+  investmentFundRefreshInFlight = Boolean(isLoading);
+  if (!(ui.investmentFundRefreshButton instanceof HTMLButtonElement)) {
+    return;
+  }
+
+  ui.investmentFundRefreshButton.disabled = investmentFundRefreshInFlight;
+  ui.investmentFundRefreshButton.textContent = investmentFundRefreshInFlight
+    ? "Yenileniyor..."
+    : "Yenile";
+}
+
+function renderInvestmentFundTableHead() {
+  if (!ui.investmentFundTableHead) {
+    return;
+  }
+
+  const columns = INVESTMENT_FUND_COLUMNS[currentInvestmentFundSortMode] || [];
+  const sortState = investmentFundSortStateByMode[currentInvestmentFundSortMode];
+  const fragment = document.createDocumentFragment();
+
+  columns.forEach((column) => {
+    const cell = document.createElement("div");
+    if (!column.sortable) {
+      cell.className = "fund-table-cell";
+      fragment.append(cell);
+      return;
     }
+
+    const buttonElement = document.createElement("button");
+    buttonElement.type = "button";
+    buttonElement.className = `fund-head-button${column.align === "right" ? " is-number" : ""}`;
+    buttonElement.dataset.fundSortKey = column.key;
+
+    const isActive = sortState.key === column.key;
+    if (isActive) {
+      buttonElement.classList.add("is-active");
+    }
+
+    const innerElement = document.createElement("span");
+    innerElement.className = "fund-head-inner";
+
+    const labelElement = document.createElement("span");
+    labelElement.textContent = column.label;
+    innerElement.append(labelElement);
+
+    const arrowElement = document.createElement("span");
+    arrowElement.className = "fund-head-arrow";
+    arrowElement.textContent = isActive && sortState.direction === "asc" ? "▲" : "▼";
+    innerElement.append(arrowElement);
+
+    buttonElement.append(innerElement);
+    cell.append(buttonElement);
+    fragment.append(cell);
+  });
+
+  ui.investmentFundTableHead.replaceChildren(fragment);
+}
+
+function createInvestmentFundRow(row) {
+  const rowElement = document.createElement("div");
+  rowElement.className = "fund-table-row";
+
+  const columns = INVESTMENT_FUND_COLUMNS[currentInvestmentFundSortMode] || [];
+  columns.forEach((column) => {
+    const cell = document.createElement("div");
+    cell.className = "fund-table-cell";
+
+    if (column.key === "code") {
+      cell.classList.add("fund-code-cell");
+      cell.textContent = String(row.code || "-");
+      rowElement.append(cell);
+      return;
+    }
+
+    if (column.key === "name") {
+      cell.classList.add("fund-name-cell");
+      const mainElement = document.createElement("span");
+      mainElement.className = "fund-name-main";
+      mainElement.textContent = String(row.name || row.fullName || "-");
+      cell.append(mainElement);
+
+      const metaElement = document.createElement("span");
+      metaElement.className = "fund-founder-cell";
+      metaElement.textContent = `${row.founder} • ${row.fundType}`;
+      cell.append(metaElement);
+      rowElement.append(cell);
+      return;
+    }
+
+    if (column.key === "action") {
+      cell.classList.add("fund-action-cell");
+      const linkElement = document.createElement("a");
+      linkElement.className = "fund-detail-link";
+      linkElement.href = String(row.detailHref || "https://www.tefas.gov.tr/");
+      linkElement.target = "_blank";
+      linkElement.rel = "noopener noreferrer";
+      linkElement.textContent = "İncele";
+      cell.append(linkElement);
+      rowElement.append(cell);
+      return;
+    }
+
+    cell.classList.add("fund-number-cell");
+    const numericValue = Number(row[column.key]);
+    if (Number.isFinite(numericValue)) {
+      if (numericValue > 0) {
+        cell.classList.add("is-positive");
+      }
+      if (numericValue < 0) {
+        cell.classList.add("is-negative");
+      }
+    }
+    cell.textContent = formatInvestmentFundValue(row[column.key], column.format);
+    rowElement.append(cell);
+  });
+
+  return rowElement;
+}
+
+function renderInvestmentFundEmptyState(message) {
+  if (!ui.investmentFundGrid) {
+    return;
   }
 
-  if (ui.tefasFundSearchClear) {
-    ui.tefasFundSearchClear.disabled = !hasSearchQuery;
+  const emptyElement = document.createElement("div");
+  emptyElement.className = "empty-state fund-empty-state";
+  emptyElement.textContent = message;
+  ui.investmentFundGrid.replaceChildren(emptyElement);
+}
+
+function formatInvestmentFundValue(value, formatType = "text") {
+  if (formatType === "percent") {
+    return formatInvestmentFundPercent(value);
   }
+  if (formatType === "number0") {
+    return formatTefasNumber(value, 0);
+  }
+  return String(value || "-");
 }
 
 function normalizeTefasSearchText(value) {
@@ -9697,6 +10692,20 @@ function formatTefasReturn(value) {
   }).format(numericValue);
 
   return `${formatted}%`;
+}
+
+function formatInvestmentFundPercent(value) {
+  const numericValue = Number(value);
+  if (!Number.isFinite(numericValue)) {
+    return "-";
+  }
+
+  const formatted = new Intl.NumberFormat("tr-TR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(numericValue);
+
+  return `%${formatted}`;
 }
 
 function formatTefasDate(rawTimestamp) {
@@ -10053,8 +11062,9 @@ function revealLoanCalculator(loanType, options = {}) {
   }
 
   const typeConfig = LOAN_TYPE_CONFIG[resolvedLoanType] || LOAN_TYPE_CONFIG.need;
-  document.querySelectorAll(".calculation-card").forEach((cardElement) => {
-    cardElement.classList.remove("is-active");
+  document.querySelectorAll(".calculation-tab").forEach((tabElement) => {
+    tabElement.classList.remove("is-active");
+    tabElement.setAttribute("aria-selected", "false");
   });
   const activeCardByType = {
     need: ui.calcNeedLoanCard,
@@ -10067,6 +11077,7 @@ function revealLoanCalculator(loanType, options = {}) {
   const activeCard = activeCardByType[resolvedLoanType] || ui.calcNeedLoanCard;
   if (activeCard) {
     activeCard.classList.add("is-active");
+    activeCard.setAttribute("aria-selected", "true");
   }
 
   if (resolvedLoanType === "deposit") {

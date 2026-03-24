@@ -328,8 +328,8 @@ def _build_ons_usd_row(*, payload: dict[str, Any]) -> GoldPriceRow | None:
     return GoldPriceRow(
         kaynak="ENUYGUN Finans",
         altin_adi=ONS_USD_DISPLAY_NAME,
-        alis_fiyati=ons_alis_try / usd_alis_try,
-        satis_fiyati=ons_satis_try / usd_satis_try,
+        alis_fiyati=ons_alis_try / usd_satis_try,
+        satis_fiyati=ons_satis_try / usd_alis_try,
         gunluk_degisim_yuzde=_as_optional_float(ons_symbol.get("dailyChangePercent")),
         guncellenme_tarihi=_as_optional_text(ons_symbol.get("dataUpdatedAt")),
     )

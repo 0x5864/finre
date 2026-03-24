@@ -11,8 +11,15 @@ import httpx
 
 TEFAS_ENDPOINT: str = "https://www.tefas.gov.tr/api/DB/BindHistoryInfo"
 TEFAS_COMPARISON_ENDPOINT: str = "https://www.tefas.gov.tr/api/DB/BindComparisonFundReturns"
+TEFAS_COMPARISON_FEES_ENDPOINT: str = (
+    "https://www.tefas.gov.tr/api/DB/BindComparisonManagementFees"
+)
+TEFAS_COMPARISON_SIZES_ENDPOINT: str = (
+    "https://www.tefas.gov.tr/api/DB/BindComparisonFundSizes"
+)
 TEFAS_DEFAULT_LOOKBACK_DAYS: int = 7
 TEFAS_HISTORY_LOOKBACK_DAYS: int = 400
+TEFAS_COMPARISON_LOOKBACK_DAYS: int = 30
 TEFAS_MAX_LIMIT: int = 100
 MS_IN_DAY: int = 86_400_000
 
@@ -69,6 +76,12 @@ def fetch_tefas_rows(
 def build_tefas_comparison_payload() -> dict[str, str]:
     """Build payload for TEFAS comparison endpoint with period returns enabled."""
 
+    return build_tefas_comparison_returns_payload()
+
+
+def build_tefas_comparison_returns_payload() -> dict[str, str]:
+    """Build payload for TEFAS returns comparison endpoint."""
+
     return {
         "calismatipi": "2",
         "fontip": "YAT",
@@ -79,8 +92,48 @@ def build_tefas_comparison_payload() -> dict[str, str]:
         "bittarih": "",
         "fonturkod": "",
         "fonunvantip": "",
-        "strperiod": "1,0,0,0,1,0,0",
-        "islemdurum": "",
+        "strperiod": "1,1,1,1,1,1,1",
+        "islemdurum": "1",
+    }
+
+
+def build_tefas_comparison_fee_payload() -> dict[str, str]:
+    """Build payload for TEFAS management fee comparison endpoint."""
+
+    return {
+        "fontip": "YAT",
+        "sfontur": "",
+        "kurucukod": "",
+        "fongrup": "",
+        "fonturkod": "",
+        "fonunvantip": "",
+        "islemdurum": "1",
+    }
+
+
+def build_tefas_comparison_size_payload(
+    *,
+    today: date | None = None,
+    lookback_days: int = TEFAS_COMPARISON_LOOKBACK_DAYS,
+) -> dict[str, str]:
+    """Build payload for TEFAS fund size comparison endpoint."""
+
+    reference_date: date = today or date.today()
+    safe_lookback_days: int = max(1, lookback_days)
+    start_date: date = reference_date - timedelta(days=safe_lookback_days)
+
+    return {
+        "calismatipi": "1",
+        "fontip": "YAT",
+        "sfontur": "",
+        "kurucukod": "",
+        "fongrup": "",
+        "bastarih": start_date.strftime("%d.%m.%Y"),
+        "bittarih": reference_date.strftime("%d.%m.%Y"),
+        "fonturkod": "",
+        "fonunvantip": "",
+        "strperiod": "1,1,1,1,1,1,1",
+        "islemdurum": "1",
     }
 
 
@@ -90,6 +143,61 @@ def fetch_tefas_comparison_rows(
 ) -> list[dict[str, Any]]:
     """Fetch TEFAS comparison rows that include 1-month and 1-year return columns."""
 
+    return fetch_tefas_comparison_return_rows(timeout_seconds=timeout_seconds)
+
+
+def fetch_tefas_comparison_return_rows(
+    *,
+    timeout_seconds: float = 8.0,
+) -> list[dict[str, Any]]:
+    """Fetch TEFAS comparison rows for normal investment fund returns."""
+
+    return _fetch_tefas_comparison_rows(
+        endpoint=TEFAS_COMPARISON_ENDPOINT,
+        payload=build_tefas_comparison_returns_payload(),
+        timeout_seconds=timeout_seconds,
+    )
+
+
+def fetch_tefas_comparison_fee_rows(
+    *,
+    timeout_seconds: float = 8.0,
+) -> list[dict[str, Any]]:
+    """Fetch TEFAS comparison rows for management fees."""
+
+    return _fetch_tefas_comparison_rows(
+        endpoint=TEFAS_COMPARISON_FEES_ENDPOINT,
+        payload=build_tefas_comparison_fee_payload(),
+        timeout_seconds=timeout_seconds,
+    )
+
+
+def fetch_tefas_comparison_size_rows(
+    *,
+    timeout_seconds: float = 8.0,
+    today: date | None = None,
+    lookback_days: int = TEFAS_COMPARISON_LOOKBACK_DAYS,
+) -> list[dict[str, Any]]:
+    """Fetch TEFAS comparison rows for fund sizes."""
+
+    return _fetch_tefas_comparison_rows(
+        endpoint=TEFAS_COMPARISON_SIZES_ENDPOINT,
+        payload=build_tefas_comparison_size_payload(
+            today=today,
+            lookback_days=lookback_days,
+        ),
+        timeout_seconds=timeout_seconds,
+    )
+
+
+def _fetch_tefas_comparison_rows(
+    *,
+    endpoint: str,
+    payload: dict[str, str],
+    timeout_seconds: float,
+) -> list[dict[str, Any]]:
+    """Fetch one TEFAS comparison dataset as a normalized row list."""
+
     headers: dict[str, str] = {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         "Accept": "application/json",
@@ -98,9 +206,9 @@ def fetch_tefas_comparison_rows(
     try:
         with httpx.Client(timeout=timeout_seconds, follow_redirects=True) as client:
             response: httpx.Response = client.post(
-                TEFAS_COMPARISON_ENDPOINT,
+                endpoint,
                 headers=headers,
-                data=build_tefas_comparison_payload(),
+                data=payload,
             )
             response.raise_for_status()
             body: Any = response.json()

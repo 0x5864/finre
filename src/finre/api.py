@@ -11,19 +11,35 @@ from typing import Any
 
 from finre.answer_mapping import AssessmentInputError, build_profile_from_answers
 from finre.assessment import run_assessment
-from finre.gold_prices import GoldPriceFetchError, fetch_gold_prices
+from finre.gold_prices import (
+    GoldPriceFetchError,
+    GoldPriceRow,
+    export_gold_rows,
+    fetch_gold_prices,
+)
 from finre.kapali_carsi_prices import (
+    FxPriceRow,
     MarketPriceFetchError,
+    export_market_rows,
     fetch_kapali_carsi_fx_prices,
 )
 from finre.question_bank import load_question_bank
 from finre.scoring import FinancialProfile
+from finre.stock_summary import (
+    StockSummaryFetchError,
+    StockSummaryTable,
+    export_stock_summary_tables,
+    fetch_stock_summary_tables,
+)
 from finre.storage import create_session, get_session, init_storage, save_answers
 from finre.tefas import (
     TefasFetchError,
     extract_tefas_returns_map,
     enrich_tefas_rows_with_returns,
+    fetch_tefas_comparison_fee_rows,
+    fetch_tefas_comparison_return_rows,
     fetch_tefas_comparison_rows,
+    fetch_tefas_comparison_size_rows,
     fetch_tefas_rows,
     normalize_tefas_rows,
 )
@@ -147,6 +163,19 @@ if FastAPI is not None:
         funds: list[TefasFundItemResponse]
 
 
+    class TefasComparisonFundsResponse(BaseModel):
+        """Combined TEFAS comparison payload for return, fee, and size tables."""
+
+        source: str
+        fetched_at_unix: int
+        return_count: int
+        fee_count: int
+        size_count: int
+        return_rows: list[dict[str, Any]]
+        fee_rows: list[dict[str, Any]]
+        size_rows: list[dict[str, Any]]
+
+
     class GoldPriceItemResponse(BaseModel):
         """One normalized gold market row."""
 
@@ -188,6 +217,29 @@ if FastAPI is not None:
         rows: list[FxPriceItemResponse]
 
 
+    class StockSummaryRowResponse(BaseModel):
+        """One stock summary table row."""
+
+        cells: list[str]
+
+
+    class StockSummaryTableResponse(BaseModel):
+        """One stock summary table block."""
+
+        title: str
+        columns: list[str]
+        rows: list[StockSummaryRowResponse]
+
+
+    class StockSummaryResponse(BaseModel):
+        """Stock summary payload with source metadata."""
+
+        kaynak: str
+        fetched_at_utc: str | None = None
+        count: int
+        tables: list[StockSummaryTableResponse]
+
+
 def _tefas_cache_ttl_seconds() -> int:
     """Return TEFAS cache TTL from env with safe defaults."""
 
@@ -216,10 +268,66 @@ def _tefas_fallback_path() -> Path:
     return Path(__file__).resolve().parents[2] / "data" / "tefas_top12_2026-03-12.json"
 
 
+def _tefas_comparison_snapshot_path(file_name: str) -> Path:
+    """Return one TEFAS comparison snapshot path."""
+
+    return Path(__file__).resolve().parents[2] / "data" / file_name
+
+
 def _market_fallback_path(file_name: str) -> Path:
     """Return one local market snapshot path."""
 
     return Path(__file__).resolve().parents[2] / "data" / file_name
+
+
+def _market_output_dir() -> Path:
+    """Return local market snapshot output directory."""
+
+    return Path(__file__).resolve().parents[2] / "data"
+
+
+def _persist_gold_snapshot(*, live_rows: list[GoldPriceRow]) -> None:
+    """Write local gold snapshot files from live rows."""
+
+    export_gold_rows(rows=live_rows, output_dir=_market_output_dir())
+
+
+def _persist_fx_snapshot(*, live_rows: list[FxPriceRow]) -> None:
+    """Write local FX snapshot files from live rows."""
+
+    export_market_rows(
+        rows=live_rows,
+        output_dir=_market_output_dir(),
+        file_prefix="doviz_kapali_carsi",
+    )
+
+
+def _persist_stock_snapshot(*, live_tables: list[StockSummaryTable]) -> None:
+    """Write local stock summary snapshot files from parsed tables."""
+
+    export_stock_summary_tables(
+        tables=live_tables,
+        output_dir=_market_output_dir(),
+    )
+
+
+def _persist_tefas_comparison_snapshot(
+    *,
+    file_name: str,
+    fetched_at_unix: int,
+    rows: list[dict[str, Any]],
+) -> None:
+    """Write one local TEFAS comparison snapshot file."""
+
+    snapshot_path: Path = _tefas_comparison_snapshot_path(file_name)
+    payload: dict[str, Any] = {
+        "source": "tefas-live",
+        "fetched_at_unix": fetched_at_unix,
+        "count": len(rows),
+        "rows": rows,
+    }
+    with snapshot_path.open("w", encoding="utf-8") as handle:
+        json.dump(payload, handle, ensure_ascii=False, indent=2)
 
 
 def _load_local_tefas_snapshot(limit: int) -> list[dict[str, Any]]:
@@ -284,6 +392,129 @@ def _load_local_market_snapshot(file_name: str) -> dict[str, Any]:
     }
 
 
+def _load_local_stock_snapshot(file_name: str) -> dict[str, Any]:
+    """Load one local stock summary snapshot payload if it exists."""
+
+    snapshot_path: Path = _market_fallback_path(file_name)
+    if not snapshot_path.exists():
+        return {"kaynak": "Bigpara", "fetched_at_utc": None, "count": 0, "tables": []}
+
+    try:
+        with snapshot_path.open("r", encoding="utf-8") as handle:
+            payload: Any = json.load(handle)
+    except (OSError, ValueError):
+        return {"kaynak": "Bigpara", "fetched_at_utc": None, "count": 0, "tables": []}
+
+    if not isinstance(payload, dict):
+        return {"kaynak": "Bigpara", "fetched_at_utc": None, "count": 0, "tables": []}
+
+    tables: list[dict[str, Any]] = []
+    raw_tables: Any = payload.get("tables", [])
+    if isinstance(raw_tables, list):
+        for raw_table in raw_tables:
+            if not isinstance(raw_table, dict):
+                continue
+            columns: list[str] = []
+            raw_columns: Any = raw_table.get("columns", [])
+            if isinstance(raw_columns, list):
+                columns = [str(column) for column in raw_columns]
+
+            rows: list[dict[str, list[str]]] = []
+            raw_rows: Any = raw_table.get("rows", [])
+            if isinstance(raw_rows, list):
+                for raw_row in raw_rows:
+                    if isinstance(raw_row, dict):
+                        raw_cells: Any = raw_row.get("cells", [])
+                        if isinstance(raw_cells, list):
+                            rows.append({"cells": [str(cell) for cell in raw_cells]})
+
+            tables.append(
+                {
+                    "title": str(raw_table.get("title", "")),
+                    "columns": columns,
+                    "rows": rows,
+                }
+            )
+
+    return {
+        "kaynak": str(payload.get("kaynak", "Bigpara")),
+        "fetched_at_utc": (
+            str(payload.get("fetched_at_utc"))
+            if payload.get("fetched_at_utc") is not None
+            else None
+        ),
+        "count": len(tables),
+        "tables": tables,
+    }
+
+
+def _load_local_tefas_comparison_snapshot(file_name: str) -> dict[str, Any]:
+    """Load one local TEFAS comparison snapshot payload if it exists."""
+
+    snapshot_path: Path = _tefas_comparison_snapshot_path(file_name)
+    if not snapshot_path.exists():
+        return {"fetched_at_unix": 0, "count": 0, "rows": []}
+
+    try:
+        with snapshot_path.open("r", encoding="utf-8") as handle:
+            payload: Any = json.load(handle)
+    except (OSError, ValueError):
+        return {"fetched_at_unix": 0, "count": 0, "rows": []}
+
+    fetched_at_unix: int = 0
+    raw_rows: Any = []
+    if isinstance(payload, dict):
+        raw_fetched_at: Any = payload.get("fetched_at_unix", 0)
+        try:
+            fetched_at_unix = int(raw_fetched_at)
+        except (TypeError, ValueError):
+            fetched_at_unix = 0
+        raw_rows = payload.get("rows", payload.get("data", []))
+
+    rows: list[dict[str, Any]] = []
+    if isinstance(raw_rows, list):
+        for raw_row in raw_rows:
+            if isinstance(raw_row, dict):
+                rows.append(dict(raw_row))
+
+    return {
+        "fetched_at_unix": fetched_at_unix,
+        "count": len(rows),
+        "rows": rows,
+    }
+
+
+def _build_tefas_comparison_payload(
+    *,
+    source: str,
+    fetched_at_unix: int,
+    return_rows: list[dict[str, Any]],
+    fee_rows: list[dict[str, Any]],
+    size_rows: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Build one normalized TEFAS comparison response payload."""
+
+    return {
+        "source": source,
+        "fetched_at_unix": fetched_at_unix,
+        "return_count": len(return_rows),
+        "fee_count": len(fee_rows),
+        "size_count": len(size_rows),
+        "return_rows": return_rows,
+        "fee_rows": fee_rows,
+        "size_rows": size_rows,
+    }
+
+
+def _has_tefas_comparison_rows(payload: dict[str, Any]) -> bool:
+    """Return whether any comparison table has at least one row."""
+
+    raw_return_rows: Any = payload.get("return_rows", [])
+    raw_fee_rows: Any = payload.get("fee_rows", [])
+    raw_size_rows: Any = payload.get("size_rows", [])
+    return bool(raw_return_rows or raw_fee_rows or raw_size_rows)
+
+
 def create_app() -> FastAPI:
     """Create and configure the FastAPI application."""
 
@@ -303,6 +534,16 @@ def create_app() -> FastAPI:
         "source": "none",
         "funds": [],
     }
+    app.state.tefas_comparison_cache = {
+        "fetched_at_unix": 0,
+        "payload": _build_tefas_comparison_payload(
+            source="none",
+            fetched_at_unix=0,
+            return_rows=[],
+            fee_rows=[],
+            size_rows=[],
+        ),
+    }
     app.state.market_cache = {
         "gold": {
             "fetched_at_unix": 0,
@@ -320,6 +561,15 @@ def create_app() -> FastAPI:
                 "fetched_at_utc": None,
                 "count": 0,
                 "rows": [],
+            },
+        },
+        "stock": {
+            "fetched_at_unix": 0,
+            "payload": {
+                "kaynak": "Bigpara",
+                "fetched_at_utc": None,
+                "count": 0,
+                "tables": [],
             },
         },
     }
@@ -404,8 +654,14 @@ def create_app() -> FastAPI:
             )
 
         try:
+            live_row_objects = fetch_gold_prices()
+            try:
+                _persist_gold_snapshot(live_rows=live_row_objects)
+            except OSError:
+                pass
+
             live_rows: list[dict[str, Any]] = [
-                asdict(row) for row in fetch_gold_prices()
+                asdict(row) for row in live_row_objects
             ]
             payload: dict[str, Any] = {
                 "kaynak": "Kapalı Çarşı",
@@ -458,8 +714,14 @@ def create_app() -> FastAPI:
             )
 
         try:
+            live_row_objects = fetch_kapali_carsi_fx_prices()
+            try:
+                _persist_fx_snapshot(live_rows=live_row_objects)
+            except OSError:
+                pass
+
             live_rows: list[dict[str, Any]] = [
-                asdict(row) for row in fetch_kapali_carsi_fx_prices()
+                asdict(row) for row in live_row_objects
             ]
             payload: dict[str, Any] = {
                 "kaynak": "Kapalı Çarşı",
@@ -477,6 +739,64 @@ def create_app() -> FastAPI:
                 "doviz_kapali_carsi_latest.json"
             )
             return FxPricesResponse(**fallback_payload)
+
+    @app.get("/api/v1/market/stocks/summary", response_model=StockSummaryResponse)
+    def market_stock_summary(
+        force_refresh: bool = Query(default=False),
+    ) -> StockSummaryResponse:
+        """Return Bigpara stock summary tables with short-lived in-memory cache."""
+
+        now_unix: int = int(time.time())
+        cache_ttl: int = _market_cache_ttl_seconds()
+        cache_entry: dict[str, Any] = app.state.market_cache["stock"]
+        cached_payload: dict[str, Any] = dict(cache_entry.get("payload", {}))
+        cached_tables: list[dict[str, Any]] = []
+        raw_cached_tables: Any = cached_payload.get("tables", [])
+        if isinstance(raw_cached_tables, list):
+            for table in raw_cached_tables:
+                if isinstance(table, dict):
+                    cached_tables.append(dict(table))
+
+        cache_age_seconds: int = now_unix - int(cache_entry.get("fetched_at_unix", 0))
+        should_use_cache: bool = (
+            not force_refresh and bool(cached_tables) and cache_age_seconds < cache_ttl
+        )
+        if should_use_cache:
+            return StockSummaryResponse(
+                kaynak=str(cached_payload.get("kaynak", "Bigpara")),
+                fetched_at_utc=(
+                    str(cached_payload.get("fetched_at_utc"))
+                    if cached_payload.get("fetched_at_utc") is not None
+                    else None
+                ),
+                count=len(cached_tables),
+                tables=cached_tables,
+            )
+
+        try:
+            live_table_objects: list[StockSummaryTable] = fetch_stock_summary_tables()
+            try:
+                _persist_stock_snapshot(live_tables=live_table_objects)
+            except OSError:
+                pass
+
+            live_tables: list[dict[str, Any]] = [asdict(table) for table in live_table_objects]
+            payload: dict[str, Any] = {
+                "kaynak": "Bigpara",
+                "fetched_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                "count": len(live_tables),
+                "tables": live_tables,
+            }
+            app.state.market_cache["stock"] = {
+                "fetched_at_unix": now_unix,
+                "payload": payload,
+            }
+            return StockSummaryResponse(**payload)
+        except StockSummaryFetchError:
+            fallback_payload: dict[str, Any] = _load_local_stock_snapshot(
+                "borsa_bigpara_gunun_ozeti_latest.json"
+            )
+            return StockSummaryResponse(**fallback_payload)
 
     @app.get("/api/v1/tefas/funds", response_model=TefasFundsResponse)
     def tefas_funds(
@@ -614,6 +934,107 @@ def create_app() -> FastAPI:
             raise HTTPException(
                 status_code=502,
                 detail="TEFAS verisi su anda alinmiyor.",
+            )
+
+    @app.get(
+        "/api/v1/tefas/comparison-funds",
+        response_model=TefasComparisonFundsResponse,
+    )
+    def tefas_comparison_funds(
+        force_refresh: bool = Query(default=False),
+    ) -> TefasComparisonFundsResponse:
+        """Return combined TEFAS comparison data for normal investment funds."""
+
+        now_unix: int = int(time.time())
+        cache_ttl: int = _tefas_cache_ttl_seconds()
+        cache_entry: dict[str, Any] = app.state.tefas_comparison_cache
+        cached_payload: dict[str, Any] = dict(cache_entry.get("payload", {}))
+        cache_age_seconds: int = now_unix - int(cache_entry.get("fetched_at_unix", 0))
+
+        should_use_cache: bool = (
+            not force_refresh
+            and _has_tefas_comparison_rows(cached_payload)
+            and cache_age_seconds < cache_ttl
+        )
+        if should_use_cache:
+            return TefasComparisonFundsResponse(
+                **{
+                    **cached_payload,
+                    "source": "cache",
+                }
+            )
+
+        try:
+            return_rows: list[dict[str, Any]] = fetch_tefas_comparison_return_rows()
+            fee_rows: list[dict[str, Any]] = fetch_tefas_comparison_fee_rows()
+            size_rows: list[dict[str, Any]] = fetch_tefas_comparison_size_rows()
+
+            try:
+                _persist_tefas_comparison_snapshot(
+                    file_name="tefas_yat_returns_latest.json",
+                    fetched_at_unix=now_unix,
+                    rows=return_rows,
+                )
+                _persist_tefas_comparison_snapshot(
+                    file_name="tefas_yat_fees_latest.json",
+                    fetched_at_unix=now_unix,
+                    rows=fee_rows,
+                )
+                _persist_tefas_comparison_snapshot(
+                    file_name="tefas_yat_sizes_latest.json",
+                    fetched_at_unix=now_unix,
+                    rows=size_rows,
+                )
+            except OSError:
+                pass
+
+            payload: dict[str, Any] = _build_tefas_comparison_payload(
+                source="tefas-live",
+                fetched_at_unix=now_unix,
+                return_rows=return_rows,
+                fee_rows=fee_rows,
+                size_rows=size_rows,
+            )
+            app.state.tefas_comparison_cache = {
+                "fetched_at_unix": now_unix,
+                "payload": payload,
+            }
+            return TefasComparisonFundsResponse(**payload)
+        except TefasFetchError:
+            if _has_tefas_comparison_rows(cached_payload):
+                return TefasComparisonFundsResponse(
+                    **{
+                        **cached_payload,
+                        "source": "cache-stale",
+                    }
+                )
+
+            return_snapshot: dict[str, Any] = _load_local_tefas_comparison_snapshot(
+                "tefas_yat_returns_latest.json"
+            )
+            fee_snapshot: dict[str, Any] = _load_local_tefas_comparison_snapshot(
+                "tefas_yat_fees_latest.json"
+            )
+            size_snapshot: dict[str, Any] = _load_local_tefas_comparison_snapshot(
+                "tefas_yat_sizes_latest.json"
+            )
+            local_payload: dict[str, Any] = _build_tefas_comparison_payload(
+                source="local-fallback",
+                fetched_at_unix=max(
+                    int(return_snapshot.get("fetched_at_unix", 0)),
+                    int(fee_snapshot.get("fetched_at_unix", 0)),
+                    int(size_snapshot.get("fetched_at_unix", 0)),
+                ),
+                return_rows=list(return_snapshot.get("rows", [])),
+                fee_rows=list(fee_snapshot.get("rows", [])),
+                size_rows=list(size_snapshot.get("rows", [])),
+            )
+            if _has_tefas_comparison_rows(local_payload):
+                return TefasComparisonFundsResponse(**local_payload)
+
+            raise HTTPException(
+                status_code=502,
+                detail="TEFAS karsilastirma verisi su anda alinmiyor.",
             )
 
     @app.post("/api/v1/sessions", response_model=SessionCreateResponse)

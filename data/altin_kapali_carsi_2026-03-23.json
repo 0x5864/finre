@@ -1,0 +1,47 @@
+{
+  "kaynak": "Kapalı Çarşı",
+  "fetched_at_utc": "2026-03-23T21:11:07+00:00",
+  "count": 5,
+  "rows": [
+    {
+      "kaynak": "Kapalı Çarşı",
+      "altin_adi": "Gram Altın",
+      "alis_fiyati": 6276.761,
+      "satis_fiyati": 6277.887,
+      "gunluk_degisim_yuzde": 0.0,
+      "guncellenme_tarihi": "2026-03-23T21:03:51.153Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "altin_adi": "Çeyrek Altın",
+      "alis_fiyati": 10757.95,
+      "satis_fiyati": 11042.45,
+      "gunluk_degisim_yuzde": 0.0,
+      "guncellenme_tarihi": "2026-03-23T14:05:38.531Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "altin_adi": "Yarım Altın",
+      "alis_fiyati": 21448.66,
+      "satis_fiyati": 22084.91,
+      "gunluk_degisim_yuzde": 0.0,
+      "guncellenme_tarihi": "2026-03-23T14:05:38.531Z"
+    },
+    {
+      "kaynak": "Kapalı Çarşı",
+      "altin_adi": "Cumhuriyet Altını",
+      "alis_fiyati": 44397.0,
+      "satis_fiyati": 45042.0,
+      "gunluk_degisim_yuzde": -4.35,
+      "guncellenme_tarihi": "2026-03-23T14:12:46.196Z"
+    },
+    {
+      "kaynak": "ENUYGUN Finans",
+      "altin_adi": "Altın (Ons/USD)",
+      "alis_fiyati": 4346.261469933185,
+      "satis_fiyati": 4345.684983314794,
+      "gunluk_degisim_yuzde": null,
+      "guncellenme_tarihi": null
+    }
+  ]
+}

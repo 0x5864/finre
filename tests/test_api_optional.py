@@ -188,6 +188,129 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(payload["count"], 1)
         self.assertEqual(payload["funds"][0]["fon_kodu"], "ZZZ")
 
+    def test_tefas_comparison_funds_returns_live_data(self) -> None:
+        """Comparison route should return combined live TEFAS data."""
+
+        return_rows: list[dict[str, Any]] = [{"FONKODU": "AAA", "FONUNVAN": "ORNEK A"}]
+        fee_rows: list[dict[str, Any]] = [{"FONKODU": "AAA", "FONUNVAN": "ORNEK A"}]
+        size_rows: list[dict[str, Any]] = [{"FONKODU": "AAA", "FONUNVAN": "ORNEK A"}]
+
+        with patch(
+            "finre.api.fetch_tefas_comparison_return_rows",
+            return_value=return_rows,
+        ), patch(
+            "finre.api.fetch_tefas_comparison_fee_rows",
+            return_value=fee_rows,
+        ), patch(
+            "finre.api.fetch_tefas_comparison_size_rows",
+            return_value=size_rows,
+        ), patch("finre.api._persist_tefas_comparison_snapshot"):
+            response = self.client.get("/api/v1/tefas/comparison-funds?force_refresh=true")
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["source"], "tefas-live")
+        self.assertEqual(payload["return_count"], 1)
+        self.assertEqual(payload["fee_count"], 1)
+        self.assertEqual(payload["size_count"], 1)
+        self.assertEqual(payload["return_rows"][0]["FONKODU"], "AAA")
+
+    def test_tefas_comparison_funds_uses_cache_when_fresh(self) -> None:
+        """Comparison route should serve fresh in-memory cache."""
+
+        self.client.app.state.tefas_comparison_cache = {
+            "fetched_at_unix": 999_999_999_999,
+            "payload": {
+                "source": "tefas-live",
+                "fetched_at_unix": 999_999_999_999,
+                "return_count": 1,
+                "fee_count": 1,
+                "size_count": 1,
+                "return_rows": [{"FONKODU": "AAA"}],
+                "fee_rows": [{"FONKODU": "BBB"}],
+                "size_rows": [{"FONKODU": "CCC"}],
+            },
+        }
+
+        with patch(
+            "finre.api.fetch_tefas_comparison_return_rows",
+            side_effect=AssertionError("live fetch should not run"),
+        ):
+            response = self.client.get("/api/v1/tefas/comparison-funds")
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["source"], "cache")
+        self.assertEqual(payload["return_rows"][0]["FONKODU"], "AAA")
+
+    def test_tefas_comparison_funds_uses_stale_cache_when_live_fetch_fails(self) -> None:
+        """Comparison route should serve stale cache when provider fails."""
+
+        self.client.app.state.tefas_comparison_cache = {
+            "fetched_at_unix": 1,
+            "payload": {
+                "source": "tefas-live",
+                "fetched_at_unix": 1,
+                "return_count": 1,
+                "fee_count": 1,
+                "size_count": 1,
+                "return_rows": [{"FONKODU": "AAA"}],
+                "fee_rows": [{"FONKODU": "BBB"}],
+                "size_rows": [{"FONKODU": "CCC"}],
+            },
+        }
+
+        with patch(
+            "finre.api.fetch_tefas_comparison_return_rows",
+            side_effect=TefasFetchError("provider failed"),
+        ):
+            response = self.client.get("/api/v1/tefas/comparison-funds?force_refresh=true")
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["source"], "cache-stale")
+        self.assertEqual(payload["fee_rows"][0]["FONKODU"], "BBB")
+
+    def test_tefas_comparison_funds_uses_local_fallback_when_needed(self) -> None:
+        """Comparison route should serve local snapshots when live data is unavailable."""
+
+        local_snapshots: list[dict[str, Any]] = [
+            {"fetched_at_unix": 111, "count": 1, "rows": [{"FONKODU": "AAA"}]},
+            {"fetched_at_unix": 222, "count": 1, "rows": [{"FONKODU": "BBB"}]},
+            {"fetched_at_unix": 333, "count": 1, "rows": [{"FONKODU": "CCC"}]},
+        ]
+
+        with patch(
+            "finre.api.fetch_tefas_comparison_return_rows",
+            side_effect=TefasFetchError("provider failed"),
+        ), patch(
+            "finre.api._load_local_tefas_comparison_snapshot",
+            side_effect=local_snapshots,
+        ):
+            response = self.client.get("/api/v1/tefas/comparison-funds?force_refresh=true")
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["source"], "local-fallback")
+        self.assertEqual(payload["fetched_at_unix"], 333)
+        self.assertEqual(payload["size_rows"][0]["FONKODU"], "CCC")
+
+    def test_tefas_comparison_funds_returns_502_when_all_sources_fail(self) -> None:
+        """Comparison route should return 502 if live, cache, and fallback are empty."""
+
+        empty_snapshot: dict[str, Any] = {"fetched_at_unix": 0, "count": 0, "rows": []}
+
+        with patch(
+            "finre.api.fetch_tefas_comparison_return_rows",
+            side_effect=TefasFetchError("provider failed"),
+        ), patch(
+            "finre.api._load_local_tefas_comparison_snapshot",
+            side_effect=[empty_snapshot, empty_snapshot, empty_snapshot],
+        ):
+            response = self.client.get("/api/v1/tefas/comparison-funds?force_refresh=true")
+
+        self.assertEqual(response.status_code, 502)
+
 
 if __name__ == "__main__":
     unittest.main()

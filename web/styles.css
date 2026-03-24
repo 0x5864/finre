@@ -110,36 +110,35 @@ button {
 }
 
 .header-nav {
-  align-self: stretch;
+  align-self: end;
   justify-self: center;
   position: relative;
+  bottom: 15px;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  align-items: center;
+  align-items: end;
   width: min(100%, 36rem);
-  gap: 0;
+  gap: 0.32rem;
   margin-top: 0;
-  padding: 0;
+  margin-bottom: 0;
+  margin-left: -10px;
+  margin-right: -10px;
+  padding: 0 10px;
   border: 0;
+  border-bottom: 0;
   background: transparent;
-  box-shadow: none;
+  box-shadow: inset 0 -2px 0 #542539;
 }
 
 .header-nav-item {
   position: relative;
   display: flex;
-  align-items: stretch;
-  min-height: 100%;
+  align-items: flex-end;
+  min-height: auto;
 }
 
 .header-nav-item + .header-nav-item::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 1rem;
-  bottom: 1rem;
-  width: 1px;
-  background: #dde3ea;
+  display: none;
 }
 
 .header-nav-trigger {
@@ -148,15 +147,22 @@ button {
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: 100%;
-  padding: 0 0.9rem;
-  border-radius: 0;
-  font-size: 1.16rem;
-  font-weight: 700;
-  color: #42536b;
+  min-height: 38px;
+  padding: 0 0.95rem;
+  border: 1px solid #542539;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  margin-bottom: 0;
+  background: #542539;
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: #ffffff;
   letter-spacing: -0.01em;
   text-transform: none;
-  transition: color 0.18s ease, background-color 0.18s ease;
+  transition:
+    color 0.18s ease,
+    background-color 0.18s ease,
+    border-color 0.18s ease;
 }
 
 .header-nav-trigger::before {
@@ -164,17 +170,7 @@ button {
 }
 
 .header-nav-trigger::after {
-  content: "";
-  position: absolute;
-  left: 1.2rem;
-  right: 1.2rem;
-  bottom: 0.72rem;
-  height: 2px;
-  border-radius: 999px;
-  background: #243958;
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 0.2s ease;
+  display: none;
 }
 
 .header-nav-trigger:hover,
@@ -182,7 +178,8 @@ button {
 .header-nav-item.menu-open .header-nav-trigger,
 .header-nav-item:focus-within .header-nav-trigger {
   color: #ffffff;
-  background: #243958;
+  background: #542539;
+  border-color: #542539;
 }
 
 .header-nav-trigger:hover::before,
@@ -193,16 +190,18 @@ button {
 }
 
 .header-nav-trigger.is-active {
-  color: #ffffff;
-  background: #243958;
+  color: #243958;
+  background: #fefefe;
+  border-color: #542539;
 }
 
 .header-nav-trigger.is-active:hover,
 .header-nav-trigger.is-active:focus-visible,
 .header-nav-item.menu-open .header-nav-trigger.is-active,
 .header-nav-item:focus-within .header-nav-trigger.is-active {
-  color: #ffffff;
-  background: #243958;
+  color: #243958;
+  background: #fefefe;
+  border-color: #542539;
 }
 
 .header-nav-trigger.is-active::before {
@@ -217,19 +216,26 @@ button {
 }
 
 .header-nav-trigger.is-active::after {
-  background: transparent;
-  transform: scaleX(1);
+  display: block;
+  content: "";
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  height: 2px;
+  background: #fefefe;
 }
 
 body.suppress-header-hover .header-nav-item:hover .header-nav-trigger,
 body.suppress-header-hover .header-nav-item:focus-within .header-nav-trigger {
-  background: transparent;
-  color: #42536b;
+  background: #542539;
+  color: #ffffff;
+  border-color: #542539;
 }
 
 body.suppress-header-hover .header-nav-item:hover .header-nav-trigger::after,
 body.suppress-header-hover .header-nav-item:focus-within .header-nav-trigger::after {
-  transform: scaleX(0);
+  display: none;
 }
 
 .header-mega-menu {
@@ -383,16 +389,16 @@ body.suppress-header-hover .header-nav-item:focus-within .header-mega-menu {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 42px;
+  min-height: 38px;
   border: none;
   border-radius: 10px;
-  padding: 0.4rem 0.95rem;
-  background: #32445e;
+  padding: 0 0.95rem;
+  background: #542539;
   color: #fff;
   font-size: 0.9rem;
-  font-weight: 700;
+  font-weight: 400;
   cursor: pointer;
-  box-shadow: 0 8px 18px rgba(50, 68, 94, 0.3);
+  box-shadow: 0 8px 18px rgba(84, 37, 57, 0.24);
 }
 
 .header-cta:hover {
@@ -1251,9 +1257,9 @@ body.suppress-header-hover .header-nav-item:focus-within .header-mega-menu {
   align-items: center;
   justify-content: center;
   min-height: 42px;
-  border: 1px solid #1873db;
+  border: 1px solid #243958;
   border-radius: 10px;
-  background: #1f81f0;
+  background: #243958;
   color: #ffffff;
   font-size: 0.92rem;
   font-weight: 400;
@@ -1270,9 +1276,9 @@ body.suppress-header-hover .header-nav-item:focus-within .header-mega-menu {
 }
 
 .bank-product-action:hover {
-  background: #166fd4;
+  background: #1e3146;
   transform: translateY(-1px);
-  box-shadow: 0 10px 20px rgba(31, 129, 240, 0.16);
+  box-shadow: 0 10px 20px rgba(36, 57, 88, 0.16);
 }
 
 .bank-product-empty {
@@ -1784,7 +1790,7 @@ body.subpage-open {
 }
 
 .calculation-page[data-loan-type="deposit"] #calcDepositCard.calculation-card.is-active {
-  background: #ecf4fa;
+  background: #fefefe;
 }
 
 .calculation-page[data-loan-type="compound"] {
@@ -1816,6 +1822,45 @@ body.subpage-open .header-inner {
 .investment-shell {
   padding-top: 0.7rem;
   padding-bottom: 1.2rem;
+}
+
+.investment-page-panel {
+  border: 1px solid #c5d6ea;
+  border-radius: 12px;
+  background: #fefefe;
+  padding: 0.85rem;
+}
+
+.calculation-page-panel {
+  border: 1px solid #c5d6ea;
+  border-radius: 12px;
+  background: #fefefe;
+  padding: 0.85rem;
+}
+
+.calculation-page-panel .subpage-tabs {
+  margin-bottom: 0.85rem;
+}
+
+.calculation-page-panel .need-calc-wrap {
+  margin-top: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.investment-page-title {
+  margin-bottom: 1rem;
+}
+
+.calculation-page-title {
+  margin-bottom: 1rem;
+}
+
+.investment-page-panel .subpage-tabs {
+  margin-bottom: 0.85rem;
 }
 
 .subpage-breadcrumb {
@@ -1854,6 +1899,103 @@ body.subpage-open .header-inner {
   margin: 0 0 1rem;
 }
 
+.loan-rates-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.32rem;
+  margin: 0 0 0.85rem;
+  padding: 0 10px;
+  margin-left: -10px;
+  margin-right: -10px;
+  border-bottom: 0;
+  box-shadow: inset 0 -2px 0 #542539;
+}
+
+.subpage-tabs {
+  display: grid;
+  gap: 0.32rem;
+  margin: 0 0 0.95rem;
+  padding: 0 10px;
+  margin-left: -10px;
+  margin-right: -10px;
+  border-bottom: 0;
+  box-shadow: inset 0 -2px 0 #542539;
+}
+
+.subpage-tabs[aria-label="Hesaplama sekmeleri"] {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.subpage-tabs[aria-label="Yatırım sekmeleri"] {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.loan-tab {
+  min-height: 38px;
+  border: 1px solid #542539;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  background: #542539;
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.loan-tab:hover,
+.loan-tab:focus-visible {
+  border-color: #542539;
+  background: #542539;
+  color: #ffffff;
+}
+
+.loan-tab.active {
+  border-color: #542539;
+  background: #fefefe;
+  color: #243958;
+  box-shadow: none;
+}
+
+.subpage-tab {
+  min-height: 38px;
+  border: 1px solid #542539;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  background: #542539;
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.subpage-tab:hover,
+.subpage-tab:focus-visible {
+  border-color: #542539;
+  background: #542539;
+  color: #ffffff;
+}
+
+.subpage-tab.is-active {
+  border-color: #542539;
+  background: #fefefe;
+  color: #243958;
+  box-shadow: none;
+}
+
 .calculation-title {
   margin: 0 0 1.15rem;
   color: #101824;
@@ -1876,7 +2018,7 @@ body.subpage-open .header-inner {
 .investment-card {
   aspect-ratio: 1 / 1;
   min-height: 170px;
-  background: #ecf4fa;
+  background: #fefefe;
 }
 
 .investment-card-trigger.is-active {
@@ -1929,7 +2071,7 @@ body.subpage-open .header-inner {
 .investment-gold-card {
   border: 1px solid #d8e0ea;
   border-radius: 8px;
-  background: #ecf4fa;
+  background: #fefefe;
   padding: 0.72rem;
   display: grid;
   gap: 0.45rem;
@@ -2048,7 +2190,7 @@ body.subpage-open .header-inner {
   align-items: center;
   gap: 0.7rem;
   flex-wrap: wrap;
-  background: #ecf4fa;
+  background: #fefefe;
   border-radius: 8px;
   padding: 0.75rem;
 }
@@ -2175,6 +2317,47 @@ body.subpage-open .header-inner {
   font-size: 0.83rem;
 }
 
+@media (max-width: 1100px) {
+  .fund-toolbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fund-filter-search {
+    grid-column: 1 / -1;
+  }
+
+  .fund-table {
+    overflow-x: auto;
+  }
+
+  .fund-table-head,
+  .fund-table-row {
+    min-width: 980px;
+  }
+}
+
+@media (max-width: 900px) {
+  .company-page-card {
+    gap: 0.8rem;
+  }
+
+  .fund-toolbar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fund-sort-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    gap: 0.28rem;
+  }
+
+  .fund-sort-tab {
+    min-height: 38px;
+    padding: 0 0.7rem;
+    font-size: 0.88rem;
+  }
+}
+
 .investment-gold-table th:nth-child(4),
 .investment-gold-table th:nth-child(5),
 .investment-gold-table th:nth-child(6),
@@ -2218,7 +2401,7 @@ body.subpage-open .header-inner {
 .investment-stock-panel {
   border: 1px solid #b8c8dc;
   border-radius: 10px;
-  background: #ecf4fa;
+  background: #fefefe;
   padding: 0.8rem;
   display: grid;
   gap: 0.7rem;
@@ -2244,83 +2427,52 @@ body.subpage-open .header-inner {
   font-size: 0.86rem;
 }
 
-.investment-stock-list {
-  display: grid;
+.investment-stock-table-wrap {
+  overflow-x: auto;
 }
 
-.investment-stock-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: 0.75rem;
+.investment-stock-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 420px;
+}
+
+.investment-stock-table th,
+.investment-stock-table td {
   border-top: 1px solid #e3e9f1;
-  padding: 0.6rem 0;
+  padding: 0.66rem 0.45rem;
+  text-align: right;
+  color: #203048;
+  font-size: 0.93rem;
+  white-space: nowrap;
 }
 
-.investment-stock-row:first-child {
-  border-top: 1px solid #d7e0ec;
-}
-
-.investment-stock-name-wrap {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  min-width: 0;
-}
-
-.investment-stock-logo {
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
-  background: #edf2fa;
-  color: #32445e;
-  font-size: 0.66rem;
+.investment-stock-table th {
+  color: #607189;
+  font-size: 0.82rem;
   font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  letter-spacing: 0.03em;
-  flex: 0 0 auto;
+  background: #f7f9fc;
 }
 
-.investment-stock-name {
-  margin: 0;
-  color: #101824;
-  font-size: 1.01rem;
-  font-weight: 500;
-}
-
-.investment-stock-meta {
-  margin: 0.15rem 0 0;
-  color: #71809a;
-  font-size: 0.85rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-}
-
-.investment-stock-price {
-  margin: 0;
+.investment-stock-table th:first-child,
+.investment-stock-table td:first-child {
+  text-align: left;
+  font-weight: 700;
   color: #13253f;
-  font-size: 1.02rem;
-  font-weight: 500;
-  white-space: nowrap;
 }
 
-.investment-stock-change {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 500;
-  white-space: nowrap;
+.investment-stock-table tbody tr:first-child td {
+  border-top-color: #d7e0ec;
 }
 
-.investment-stock-change.up {
-  color: #1f9d4e;
+.investment-stock-table td.up {
+  color: #117a3f;
+  font-weight: 700;
 }
 
-.investment-stock-change.down {
-  color: #cc3d3d;
+.investment-stock-table td.down {
+  color: #b42318;
+  font-weight: 700;
 }
 
 .calculation-card {
@@ -2537,13 +2689,17 @@ body.subpage-open .header-inner {
   margin: 0 0 0.7rem;
   color: #203048;
   font-size: 1.55rem;
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.2;
 }
 
 .need-calc-stack {
   display: grid;
   gap: 0.65rem;
+  border: 1px solid #c5d6ea;
+  border-radius: 12px;
+  background: #f2f3f5;
+  padding: 0.85rem;
 }
 
 .need-calc-tabs {
@@ -2573,7 +2729,7 @@ body.subpage-open .header-inner {
 
 .need-calc-tab.active,
 .need-calc-tab[aria-selected="true"] {
-  background: var(--calc-highlight-bg);
+  background: #f2f3f5;
   border-color: #b8c8dc;
   color: #1f2f46;
 }
@@ -2585,7 +2741,7 @@ body.subpage-open .header-inner {
 .need-calc-block {
   border: none;
   border-radius: 0;
-  background: var(--calc-highlight-bg);
+  background: transparent;
   padding: 0;
 }
 
@@ -2791,28 +2947,400 @@ body.subpage-open .header-inner {
 .investment-deposit-panel {
   border: 1px solid #d7e0ec;
   border-radius: 10px;
-  background: #ecf4fa;
+  background: #fefefe;
   padding: 0.9rem;
 }
 
 .investment-fund-panel {
   border: 1px solid #d7e0ec;
   border-radius: 10px;
-  background: #ecf4fa;
+  background: #fefefe;
   padding: 0.9rem;
+}
+
+.fund-page-shell {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.company-page-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.company-page-copy {
+  display: grid;
+  gap: 0.32rem;
+}
+
+.fund-page-heading {
+  margin-bottom: 0;
+}
+
+.fund-page-copy-text {
+  margin: 0;
+  color: #5f6c80;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.fund-sort-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, max-content));
+  align-items: end;
+  gap: 0.32rem;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  padding: 0 10px;
+  margin-left: -10px;
+  margin-right: -10px;
+  border-bottom: 0;
+  box-shadow: inset 0 -2px 0 #542539;
+}
+
+.fund-sort-tab {
+  min-height: 40px;
+  border: 1px solid #542539;
+  border-bottom: none;
+  border-radius: 7px 7px 0 0;
+  background: #542539;
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  padding: 0 1.1rem;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.fund-sort-tab:hover,
+.fund-sort-tab:focus-visible {
+  border-color: #542539;
+  background: #542539;
+  color: #ffffff;
+}
+
+.fund-sort-tab.active {
+  border-color: #542539;
+  background: #fefefe;
+  color: #243958;
+  box-shadow: none;
+}
+
+.fund-toolbar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid #d7c5ce;
+  border-radius: 12px;
+  background: #fbf8fa;
+}
+
+.fund-filter-field {
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  gap: 0.34rem;
+  padding: 0.8rem 0.85rem 0.85rem;
+  border: 1px solid #decfd6;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #ffffff 0%, #fdf8fa 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.fund-filter-field-select::after {
+  content: "";
+  position: absolute;
+  right: 1.18rem;
+  bottom: 1.38rem;
+  width: 0.6rem;
+  height: 0.36rem;
+  background: #5a3d4a;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  pointer-events: none;
+}
+
+.fund-filter-field span {
+  color: #5a3d4a;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.fund-filter-field select,
+.fund-filter-field input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  min-height: 44px;
+  border: 1px solid #d4c4cb;
+  border-radius: 8px;
+  background: #fffefe;
+  color: #24364e;
+  font: inherit;
+  font-size: 0.94rem;
+  padding: 0 0.92rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(84, 37, 57, 0.04);
+}
+
+.fund-filter-field select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.2rem;
+}
+
+.fund-filter-field select:focus,
+.fund-filter-field input:focus {
+  outline: none;
+  border-color: #7d5667;
+  box-shadow: 0 0 0 3px rgba(84, 37, 57, 0.12);
+}
+
+.fund-filter-search {
+  min-width: 0;
+}
+
+.fund-list-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  padding: 0.9rem 1rem 0.85rem;
+  border: 1px solid #d7c5ce;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  background: #ffffff;
+}
+
+.fund-status {
+  margin: 0;
+  color: #5b6474;
+  font-size: 0.88rem;
+}
+
+.fund-meta-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.fund-updated-at {
+  margin: 0;
+  color: #6a6270;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.fund-refresh-button {
+  min-height: 36px;
+  border: 1px solid #b79daa;
+  border-radius: 8px;
+  background: #f7eef2;
+  color: #542539;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  padding: 0 0.95rem;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.fund-refresh-button:hover:not(:disabled) {
+  border-color: #8c6776;
+  background: #f1e3e9;
+  transform: translateY(-1px);
+}
+
+.fund-refresh-button:disabled {
+  cursor: wait;
+  opacity: 0.62;
+}
+
+.fund-table {
+  border: 1px solid #d7c5ce;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.fund-table.is-return-mode {
+  --fund-grid-template: 62px minmax(260px, 1fr) 80px 80px 80px 80px 80px 80px 112px;
+}
+
+.fund-table.is-fee-mode {
+  --fund-grid-template: 62px minmax(260px, 1fr) 112px 112px 104px 104px 112px;
+}
+
+.fund-table.is-size-mode {
+  --fund-grid-template: 62px minmax(260px, 1fr) 128px 128px 96px 96px 112px;
+}
+
+.fund-table-head,
+.fund-table-row {
+  display: grid;
+  grid-template-columns: var(--fund-grid-template);
+}
+
+.fund-table-head {
+  border-bottom: 1px solid #e5d8de;
+  background: #f8f1f4;
+}
+
+.fund-head-button {
+  width: 100%;
+  min-height: 50px;
+  border: none;
+  background: transparent;
+  color: #5b4550;
+  font: inherit;
+  font-size: 0.81rem;
+  font-weight: 700;
+  text-align: left;
+  padding: 0.8rem 0.78rem;
+  cursor: pointer;
+}
+
+.fund-head-button.is-active {
+  color: #542539;
+}
+
+.fund-head-button.is-number {
+  text-align: right;
+}
+
+.fund-head-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+}
+
+.fund-head-arrow {
+  font-size: 0.68rem;
+  opacity: 0.55;
+}
+
+.fund-head-button.is-active .fund-head-arrow {
+  opacity: 1;
+}
+
+.fund-table-body {
+  display: grid;
+}
+
+.fund-table-row {
+  align-items: stretch;
+  border-top: 1px solid #f0e5ea;
+}
+
+.fund-table-row:first-child {
+  border-top: none;
+}
+
+.fund-table-row:hover {
+  background: #fcf8fa;
+}
+
+.fund-table-cell {
+  min-width: 0;
+  padding: 0.88rem 0.78rem;
+  color: #24364e;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.fund-code-cell {
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.fund-name-cell {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.fund-name-main {
+  color: #203149;
+  font-weight: 600;
+}
+
+.fund-founder-cell {
+  color: #7a6972;
+  font-size: 0.8rem;
+}
+
+.fund-number-cell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.fund-number-cell.is-positive {
+  color: #1d6f46;
+}
+
+.fund-number-cell.is-negative {
+  color: #a34a4a;
+}
+
+.fund-action-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.fund-detail-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  border: 1px solid #b79daa;
+  border-radius: 8px;
+  background: #f7eef2;
+  color: #542539;
+  font-size: 0.83rem;
+  font-weight: 600;
+  padding: 0 0.9rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.fund-detail-link:hover {
+  border-color: #8c6776;
+  background: #f1e3e9;
+}
+
+.empty-state.fund-empty-state {
+  padding: 1.15rem 1rem;
+  color: #607189;
+  font-size: 0.92rem;
+  text-align: center;
 }
 
 .investment-gold-table-shell {
   border: 1px solid #d7e0ec;
   border-radius: 10px;
-  background: #ecf4fa;
+  background: #fefefe;
   padding: 0.9rem;
 }
 
 .investment-fx-panel {
   border: 1px solid #d7e0ec;
   border-radius: 10px;
-  background: #ecf4fa;
+  background: #fefefe;
   padding: 0.9rem;
 }
 
@@ -2859,7 +3387,7 @@ body.subpage-open .header-inner {
   align-items: end;
   border: 1px solid #b8c8dc;
   border-radius: 8px;
-  background: #ecf4fa;
+  background: #f2f3f5;
   padding: 0.65rem;
 }
 
@@ -3093,7 +3621,13 @@ body.subpage-open .header-inner {
 }
 
 .investment-deposit-compare-filters {
-  margin-bottom: 0.9rem;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 0;
+  background: #f2f3f5;
+  border-radius: 10px;
+  padding: 0.7rem 0.7rem 0.9rem;
+  align-items: start;
 }
 
 .tefas-cell-left {
@@ -3132,7 +3666,7 @@ body.subpage-open .header-inner {
   align-items: end;
   border: 1px solid #b8c8dc;
   border-radius: 8px;
-  background: #ecf4fa;
+  background: #f2f3f5;
   padding: 0.65rem;
 }
 
@@ -3162,7 +3696,7 @@ body.subpage-open .header-inner {
   gap: 0.55rem;
   border: 1px solid #b8c8dc;
   border-radius: 8px;
-  background: #ecf4fa;
+  background: #f2f3f5;
   padding: 0.65rem;
 }
 
@@ -3173,7 +3707,7 @@ body.subpage-open .header-inner {
   align-items: end;
   border: 1px solid #b8c8dc;
   border-radius: 8px;
-  background: #ecf4fa;
+  background: #f2f3f5;
   padding: 0.65rem;
 }
 
@@ -3194,7 +3728,7 @@ body.subpage-open .header-inner {
   gap: 0.7rem;
   border: 1px solid #b8c8dc;
   border-radius: 10px;
-  background: #ecf4fa;
+  background: #fefefe;
   padding: 0.75rem;
 }
 
@@ -3373,6 +3907,57 @@ body.subpage-open .header-inner {
   overflow: hidden;
 }
 
+.loan-rates-filter-field[for="investmentDepositComparePrincipal"] {
+  background: #f2f3f5;
+  border-radius: 10px;
+  padding: 0.7rem;
+}
+
+.loan-rates-filter-field[for="investmentDepositCompareTermDays"] {
+  background: #f2f3f5;
+  border-radius: 10px;
+  padding: 0.7rem;
+}
+
+.investment-deposit-compare-filters .loan-rates-filter-field {
+  align-self: stretch;
+}
+
+.loan-rates-filter-field[for="investmentDepositComparePrincipal"] .loan-rates-filter-shell {
+  background: #f2f3f5;
+  border-color: #d7dde6;
+  box-shadow: none;
+}
+
+.loan-rates-filter-field[for="investmentDepositCompareTermDays"] .loan-rates-filter-shell {
+  background: #f2f3f5;
+  border-color: #d7dde6;
+  box-shadow: none;
+}
+
+.loan-rates-filter-field[for="investmentDepositComparePrincipal"] .loan-rates-filter-shell input,
+.loan-rates-filter-field[for="investmentDepositCompareTermDays"] .loan-rates-filter-shell select,
+.loan-rates-filter-field[for="investmentDepositComparePrincipal"] .loan-rates-filter-shell em {
+  background: #f2f3f5;
+}
+
+#investmentDepositComparePrincipal,
+#investmentDepositCompareTermDays,
+.loan-rates-filter-field[for="investmentDepositComparePrincipal"] .loan-rates-filter-shell,
+.loan-rates-filter-field[for="investmentDepositCompareTermDays"] .loan-rates-filter-shell,
+.loan-rates-filter-field[for="investmentDepositComparePrincipal"] .loan-rates-filter-shell em,
+.loan-rates-filter-field[for="investmentDepositCompareTermDays"] .loan-rates-filter-shell::after {
+  background-color: #f2f3f5 !important;
+}
+
+#investmentDepositComparePrincipal,
+#investmentDepositCompareTermDays {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  box-shadow: none;
+}
+
 .loan-rates-filter-shell input,
 .loan-rates-filter-shell select {
   width: 100%;
@@ -3445,9 +4030,9 @@ body.subpage-open .header-inner {
   min-height: 34px;
   min-width: 88px;
   padding: 0.35rem 0.85rem;
-  border: 1px solid #1873db;
+  border: 1px solid #243958;
   border-radius: 8px;
-  background: #1f81f0;
+  background: #243958;
   color: #ffffff;
   font: inherit;
   font-size: 0.86rem;
@@ -3461,9 +4046,9 @@ body.subpage-open .header-inner {
 }
 
 .loan-apply-btn:hover {
-  background: #166fd4;
+  background: #1e3146;
   transform: translateY(-1px);
-  box-shadow: 0 8px 16px rgba(31, 129, 240, 0.14);
+  box-shadow: 0 8px 16px rgba(36, 57, 88, 0.14);
 }
 
 .credit-card-highlight-cell {
@@ -4622,8 +5207,13 @@ body.question-format .consent-check {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .loan-rates-tabs {
+  .loan-rates-tabs,
+  .subpage-tabs[aria-label="Yatırım sekmeleri"] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .subpage-tabs[aria-label="Hesaplama sekmeleri"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .credit-card-spotlight-grid {
