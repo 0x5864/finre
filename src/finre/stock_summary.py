@@ -10,6 +10,7 @@ from pathlib import Path
 import re
 import time
 from typing import Any
+import unicodedata
 
 import httpx
 
@@ -65,6 +66,26 @@ CELL_PATTERN: re.Pattern[str] = re.compile(
 )
 HEADING_PATTERN: re.Pattern[str] = re.compile(
     r"<h[1-6][^>]*>(.*?)</h[1-6]>",
+    flags=re.IGNORECASE | re.DOTALL,
+)
+CAPTION_PATTERN: re.Pattern[str] = re.compile(
+    r"<h3[^>]*class=\"caption\"[^>]*>(.*?)</h3>",
+    flags=re.IGNORECASE | re.DOTALL,
+)
+THEAD_LIST_PATTERN: re.Pattern[str] = re.compile(
+    r"<div[^>]*class=\"tHead\"[^>]*>.*?<ul>(.*?)</ul>.*?</div>",
+    flags=re.IGNORECASE | re.DOTALL,
+)
+TBODY_BLOCK_PATTERN: re.Pattern[str] = re.compile(
+    r"<div[^>]*class=\"tBody\"[^>]*>(.*?)</div>",
+    flags=re.IGNORECASE | re.DOTALL,
+)
+LIST_ROW_PATTERN: re.Pattern[str] = re.compile(
+    r"<ul[^>]*>(.*?)</ul>",
+    flags=re.IGNORECASE | re.DOTALL,
+)
+LIST_CELL_PATTERN: re.Pattern[str] = re.compile(
+    r"<li[^>]*>(.*?)</li>",
     flags=re.IGNORECASE | re.DOTALL,
 )
 TAG_PATTERN: re.Pattern[str] = re.compile(r"<[^>]+>")
@@ -132,8 +153,81 @@ def parse_stock_summary_tables(*, html_text: str) -> list[StockSummaryTable]:
         tables_by_title[title] for title in TABLE_ORDER if title in tables_by_title
     ]
     if not ordered_tables:
+        ordered_tables = _parse_stock_tables_from_div_blocks(html_text=html_text)
+    if not ordered_tables:
         raise StockSummaryFetchError("Bigpara borsa özet tabloları ayrıştırılamadı.")
     return ordered_tables
+
+
+def _parse_stock_tables_from_div_blocks(*, html_text: str) -> list[StockSummaryTable]:
+    """Parse stock summary tables from div-based markup blocks."""
+
+    tables_by_title: dict[str, StockSummaryTable] = {}
+    caption_matches: list[re.Match[str]] = list(CAPTION_PATTERN.finditer(html_text))
+    if not caption_matches:
+        return []
+
+    for index, match in enumerate(caption_matches):
+        raw_title: str = _clean_html_text(match.group(1))
+        mapped_title: str | None = _map_table_title(raw_title=raw_title)
+        if mapped_title is None or mapped_title in tables_by_title:
+            continue
+
+        start: int = match.end()
+        end: int = caption_matches[index + 1].start() if index + 1 < len(caption_matches) else len(html_text)
+        block_html: str = html_text[start:end]
+
+        headers: list[str] = _extract_div_table_headers(block_html=block_html)
+        rows: list[StockSummaryRow] = _extract_div_table_rows(block_html=block_html)
+        if not headers or not rows:
+            continue
+
+        tables_by_title[mapped_title] = StockSummaryTable(
+            title=mapped_title,
+            columns=headers,
+            rows=rows,
+        )
+
+        if len(tables_by_title) == len(TABLE_ORDER):
+            break
+
+    return [tables_by_title[title] for title in TABLE_ORDER if title in tables_by_title]
+
+
+def _extract_div_table_headers(*, block_html: str) -> list[str]:
+    """Extract column headers from a div-based table block."""
+
+    match: re.Match[str] | None = THEAD_LIST_PATTERN.search(block_html)
+    if match is None:
+        return []
+
+    header_html: str = match.group(1)
+    headers: list[str] = []
+    for cell_match in LIST_CELL_PATTERN.finditer(header_html):
+        cell_text: str = _clean_html_text(cell_match.group(1))
+        headers.append(cell_text)
+    return headers
+
+
+def _extract_div_table_rows(*, block_html: str) -> list[StockSummaryRow]:
+    """Extract rows from a div-based table block."""
+
+    body_match: re.Match[str] | None = TBODY_BLOCK_PATTERN.search(block_html)
+    if body_match is None:
+        return []
+
+    body_html: str = body_match.group(1)
+    rows: list[StockSummaryRow] = []
+    for row_match in LIST_ROW_PATTERN.finditer(body_html):
+        row_html: str = row_match.group(1)
+        cells: list[str] = [
+            _clean_html_text(cell_match.group(1))
+            for cell_match in LIST_CELL_PATTERN.finditer(row_html)
+        ]
+        if not any(cell for cell in cells):
+            continue
+        rows.append(StockSummaryRow(cells=cells))
+    return rows
 
 
 def export_stock_summary_tables(
@@ -170,7 +264,7 @@ def _fetch_html(*, timeout_seconds: float) -> str:
 
     for attempt_index, headers in enumerate(BIGPARA_REQUEST_HEADERS, start=1):
         try:
-            with httpx.Client(timeout=timeout_seconds, follow_redirects=True, http2=True) as client:
+            with httpx.Client(timeout=timeout_seconds, follow_redirects=True) as client:
                 response: httpx.Response = client.get(
                     BIGPARA_STOCK_SUMMARY_URL,
                     headers=headers,
@@ -219,6 +313,8 @@ def _normalize_title(value: str) -> str:
     """Normalize Turkish heading text for stable comparisons."""
 
     text: str = value.lower()
+    text = unicodedata.normalize("NFKD", text)
+    text = "".join(ch for ch in text if not unicodedata.combining(ch))
     translation_map: dict[int, str] = str.maketrans(
         {
             "ç": "c",
@@ -246,9 +342,8 @@ def _parse_table_html(*, table_html: str, title: str) -> StockSummaryTable | Non
             _clean_html_text(cell_html)
             for cell_html in CELL_PATTERN.findall(row_match.group(1))
         ]
-        filtered_cells: list[str] = [cell for cell in cells if cell]
-        if filtered_cells:
-            parsed_rows.append(filtered_cells)
+        if any(cell for cell in cells):
+            parsed_rows.append(cells)
 
     if len(parsed_rows) < 2:
         return None

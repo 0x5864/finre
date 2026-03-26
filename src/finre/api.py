@@ -777,7 +777,9 @@ def create_app() -> FastAPI:
             )
 
         try:
-            live_table_objects: list[StockSummaryTable] = fetch_stock_summary_tables()
+            live_table_objects: list[StockSummaryTable] = fetch_stock_summary_tables(
+                timeout_seconds=2.5,
+            )
             try:
                 _persist_stock_snapshot(live_tables=live_table_objects)
             except OSError:
